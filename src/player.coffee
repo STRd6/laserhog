@@ -1,7 +1,6 @@
 Player = (I={}) ->
-  GRAVITY = Point(0, 2)
   MAX_SHIELD = 64
-  INVULNERABILITY_DURATION = 32
+  INVULNERABILITY_DURATION = 1
   PLAYER_COLORS = [
     "#00F"
     "#F00"
@@ -18,14 +17,21 @@ Player = (I={}) ->
     cooldown: 0
     destructable: true
     disabled: 0
-    excludedModules: ["Movable"]
+    falling: true
+    gravity: Point(0, 3600)
     height: 24
     invulnerable: INVULNERABILITY_DURATION
+    jumping: false
+    lastDirection: 1
     mobile: true
     opaque: true
+    positionRemainder: Point(0, 0)
+    recoil: 240
     score: 0
     shielding: false
     shieldStrength: MAX_SHIELD
+    shieldStrengthMax: MAX_SHIELD
+    shooting: false
     speed: 6
     solid: true
     velocity: Point(0, 0)
@@ -39,112 +45,6 @@ Player = (I={}) ->
   I.sprite = null
 
   I.color = PLAYER_COLORS[I.controller]
-  actionDown = engine.controller(I.controller).actionDown
-
-  jumping = false
-  falling = true
-  lastDirection = 1
-  shooting = false
-
-  PHYSICS =
-    platform: () ->
-      I.shielding = false
-      shooting = false
-
-      if jumping
-        I.velocity.y += GRAVITY.scale(0.5).y
-      else if falling
-        I.velocity.y += GRAVITY.y
-      else
-        if actionDown "A"
-          jumping = true
-          I.velocity.y = -7 * GRAVITY.y - 2
-        else if actionDown "C"
-          if I.shieldStrength > 0
-            I.shielding = true
-            I.shieldStrength -= 1
-          else
-            I.disabled = 96
-
-      unless I.shielding || I.disabled
-        I.shieldStrength = I.shieldStrength.approach(MAX_SHIELD, 0.25)
-
-        # Move around based on input
-        if actionDown "right"
-          I.velocity.x += 2
-          lastDirection = 1
-        if actionDown "left"
-          I.velocity.x -= 2
-          lastDirection = -1
-        unless actionDown("A")
-          jumping = false
-
-        shooting = actionDown("B")
-
-        ###
-          if actionDown "up"
-            shooting = true
-          if actionDown "down"
-            shooting = true
-        ###
-
-      if I.shielding || !(actionDown("left") || actionDown("right"))
-        I.velocity.x = I.velocity.x.approach(0, 2)
-
-      I.velocity.x = I.velocity.x.clamp(-8, 8)
-
-  physics = PHYSICS.platform
-
-  particleSizes = [2, 8, 4, 6]
-
-  drawHud = (canvas) ->
-    screenPadding = 5
-    hudWidth = 80
-    hudHeight = 40
-    hudMargin = 10
-
-    canvas.withTransform Matrix.translation(I.controller * (hudWidth + hudMargin) + screenPadding, 0), (canvas) ->
-      canvas.clearRect(0, 0, hudWidth, hudHeight)
-
-      color = Color(I.color)
-      color.a 0.5
-
-      canvas.fillColor color
-      canvas.fillRoundRect 0, -5, hudWidth, hudHeight
-
-      canvas.fillColor "#FFF"
-      canvas.fillText "PLAYER #{I.controller + 1}", 5, 12
-      canvas.fillText "SCORE: #{I.score}", 5, 28
-
-  laserParticleEffects = (target) ->
-    engine.add
-      class: "Emitter"
-      duration: 10
-      sprite: Sprite.EMPTY
-      velocity: Point(0, 0)
-      particleCount: 9
-      batchSize: 5
-      x: target.x
-      y: target.y
-      generator:
-        color: Color(255, 0, 0, 0.5)
-        duration: 3
-        height: (n) ->
-          particleSizes.wrap(n)
-        maxSpeed: 5
-        velocity: (n) ->
-          Point.fromAngle(Random.angle()).scale(rand(5) + 1)
-        width: (n) ->
-          particleSizes.wrap(n)
-
-    engine.add
-      class: "Light"
-      radius: 50
-      x: target.x
-      y: target.y
-      duration: 3
-      shadows:false
-      step: "I.radius = I.radius / 2"
 
   beams = []
 
@@ -154,7 +54,8 @@ Player = (I={}) ->
       hitObject = nearestHit.object
 
     if endPoint
-      laserParticleEffects(endPoint)
+      # TODO
+      # laserParticleEffects(endPoint)
     else
       endPoint = direction.norm().scale(1000).add(sourcePoint)
 
@@ -175,8 +76,8 @@ Player = (I={}) ->
   shieldGradient = (strength, context) ->
     radgrad = context.createRadialGradient(4, -4, 0, 0, 0, 16)
 
-    a = 0.75 * strength / MAX_SHIELD
-    edgeAlpha = 0.75 + 0.25 * strength / MAX_SHIELD
+    a = 0.75 * strength / I.shieldStrengthMax
+    edgeAlpha = 0.75 + 0.25 * strength / I.shieldStrengthMax
 
     radgrad.addColorStop(0, "rgba(255, 255, 255, #{a})")
 
@@ -188,8 +89,6 @@ Player = (I={}) ->
     radgrad
 
   self = GameObject(I).extend
-    drawHUD: drawHud
-
     solid: ->
       true
 
@@ -210,6 +109,8 @@ Player = (I={}) ->
         canvas.strokeColor("#000")
         canvas.drawLine(beam[0].x, beam[0].y, beam[1].x, beam[1].y, 2.25)
 
+  self.unbind ".Movable"
+
   self.on "draw", (canvas) ->
     if I.shielding
       canvas.drawCircle
@@ -218,101 +119,74 @@ Player = (I={}) ->
         radius: 16
         color: shieldGradient(I.shieldStrength, canvas.context())
 
-    # TODO: Move beams to top layer
+  self.on "overlay", (canvas) ->
     beams.each (beam) ->
-      canvas.strokeColor(I.color)
-      canvas.drawLine(beam[0].x, beam[0].y, beam[1].x, beam[1].y, 2)
+      canvas.drawLine
+        color: I.color
+        start: beam[0]
+        end: beam[1]
+        width: 2
 
-  self.on "update", ->
+  self.cooldown "cooldown"
+  self.cooldown "disabled"
+  self.cooldown "invulnerable"
+
+  self.on "update", (elapsedTime) ->
     beams = []
-    I.cooldown -= 1 if I.cooldown > 0
-    I.disabled -= 1 if I.disabled > 0
-    I.invulnerable -= 1 if I.invulnerable > 0
 
     if I.disabled
       I.velocity = I.velocity.add(Point.fromAngle(Random.angle()).scale(rand(4)))
 
     if engine.collides(self.bounds(0, 1), self)
-      falling = false
+      I.falling = false
     else
-      falling = true
+      I.falling = true
 
-    physics()
+    self.physics(elapsedTime)
+    self.processInput(elapsedTime)
+
+    # Store distance remainders
+    xDist = I.velocity.x * elapsedTime + I.positionRemainder.x
+    truncatedDistance = xDist.truncate()
+    I.positionRemainder.x = xDist - truncatedDistance
 
     #TODO Reduct the # of calls to collides
-    I.velocity.x.abs().times ->
-      if !engine.collides(self.bounds(I.velocity.x.sign(), 0), self)
+    truncatedDistance.abs().times ->
+      if !engine.collides(self.bounds(truncatedDistance.sign(), 0), self)
         I.x += I.velocity.x.sign()
       else
         I.velocity.x = 0
 
     #TODO Reduct the # of calls to collides
-    I.velocity.y.abs().times ->
+    yMoves = (I.velocity.y * elapsedTime).abs()
+    yMoves.times ->
       if !engine.collides(self.bounds(0, I.velocity.y.sign()), self)
         I.y += I.velocity.y.sign()
       else
         I.velocity.y = 0
-        jumping = false
+        I.jumping = false
 
-    if mouseDown.left
-      shootDirection = mousePosition.subtract(I)
-    else if shooting
+    if I.shooting
       shootX = 0
       shootY = 0
 
-      if actionDown "left"
-        shootX += -1
-      if actionDown "right"
-        shootX += 1
+      p = self.controllerPosition().norm()
 
-      if actionDown "up"
-        shootY += -1
-      if actionDown "down"
-        shootY += 1
-
-      if shootY == 0 && shootX == 0
-        shootDirection = Point(lastDirection, 0)
+      if p.x is 0 and p.y is 0
+        shootDirection = Point(I.lastDirection, 0)
       else
-        shootDirection = Point(shootX, shootY)
+        shootDirection = p
 
     if shootDirection && (I.cooldown == 0)
-      I.cooldown += 15
-      Sound.play("laser")
-      I.velocity = I.velocity.add(shootDirection.norm().scale(-8))
+      I.cooldown += 0.5
 
-      engine.add
-        class: "Light"
-        intensity: 0.75
-        radius: 100
-        x: I.x + I.width/2 + I.velocity.x
-        y: I.y + I.height/2 + I.velocity.y
-        duration: 6
-        shadows: false
-        step: "I.radius = I.radius / 4"
+      Sound.play("laser")
+      I.velocity = I.velocity.add(shootDirection.norm().scale(-I.recoil))
 
       center = self.centeredBounds()
       fireBeam(center, shootDirection, self)
 
-    if (I.disabled % 4) == 3
-      engine.add
-        class: "Emitter"
-        duration: 5
-        sprite: Sprite.EMPTY
-        velocity: Point(0, 0)
-        particleCount: 9
-        batchSize: 5
-        x: I.x
-        y: I.y
-        generator:
-          color: I.color
-          duration: 15
-          height: (n) ->
-            particleSizes.rand()
-          maxSpeed: 5
-          velocity: (n) ->
-            Point.fromAngle(Random.angle()).scale(rand(3) + 2)
-          width: (n) ->
-            particleSizes.rand()
+    # TODO Disabled particles
 
     I.x = I.x.clamp(I.width/2, App.width - I.width/2)
 
@@ -322,36 +196,21 @@ Player = (I={}) ->
   self.on 'destroy', ->
     Sound.play("hit")
 
-    engine.add
-      class: "Emitter"
-      duration: 10
-      sprite: Sprite.EMPTY
-      velocity: Point(0, 0)
-      particleCount: 15
-      batchSize: 5
-      x: I.width / 2 + I.x
-      y: I.height / 2 + I.y
-      generator:
-        color: "rgba(200, 140, 235, 0.7)"
-        duration: 3
-        height: (n) ->
-          particleSizes.wrap(n) * 3
-        maxSpeed: 35
-        velocity: (n) ->
-          Point.fromAngle(Random.angle()).scale(rand(5) + 5)
-        width: (n) ->
-          particleSizes.wrap(n) * 3
-
     # Respawn
     engine.add Object.extend({}, I,
       x: [0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 480, 512, 544, 576, 608].rand()
       y: [0, -2 * I.height, -4 * I.height, -6 * I.height, -8 * I.height, -10 * I.height].rand()
+      velocity: Point(0, 0)
       disabled: 0
       invulnerable: INVULNERABILITY_DURATION
-      shieldStrength: MAX_SHIELD
+      shieldStrength: I.shieldStrengthMax
     )
 
     I.active = false
 
-  self
+  self.include "Player.Controller"
+  self.include "Player.HUD"
+  self.include "Player.Input"
+  self.include "Player.Physics"
 
+  self
