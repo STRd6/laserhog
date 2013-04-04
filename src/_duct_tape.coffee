@@ -5,3 +5,13 @@ Number::truncate = ->
     Math.ceil(this)
   else
     this
+
+Point::abs = ->
+  Point
+    x: @x.abs()
+    y: @y.abs()
+
+Point::snap = (n) ->
+  Point
+    x: @x.snap(n)
+    y: @y.snap(n)

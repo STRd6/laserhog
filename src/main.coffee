@@ -33,12 +33,17 @@ engine.collides = (bounds, sourceObject) ->
   engine.objects().inject false, (collided, object) ->
     collided || (object.solid?() && (object != sourceObject) && object.collides(bounds))
 
-# engine.on "overlay", (canvas) ->
-#   controller = engine.controller()
-#   controller.drawDebug(canvas)
+engine.on "overlay", (canvas) ->
+  controller = engine.controller()
+  controller.drawDebug(canvas)
+
+engine.include Editor
 
 engine.on "update", ->
   if justPressed.enter
     engine.pause()
+
+Music.volume 0#.5
+Music.play("TheApogee")
 
 engine.start()

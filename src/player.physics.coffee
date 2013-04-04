@@ -1,5 +1,5 @@
 Player.Physics = (I, self) ->
-  VELOCITY_MAX_X = 300
+  VELOCITY_MAX_X = 500
 
   PHYSICS =
     platform: (dt) ->

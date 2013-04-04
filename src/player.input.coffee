@@ -5,9 +5,9 @@ Player.Input = (I, self) ->
     I.shielding = false
     I.shooting = false
 
-    acc = 300 #(pixels / s^2)
+    acc = 750 #(pixels / s^2)
     dec = 3000 #(pixels / s^2)
-    friction = 1000 #(pixels / s^2)
+    friction = 2000 #(pixels / s^2)
 
     jumpImpulse = -600
 
@@ -15,11 +15,10 @@ Player.Input = (I, self) ->
 
     # Can only jump or shield from ground
     unless I.jumping or I.falling
-      # TODO Name actions rather than buttons
-      if self.actionDown "A"
+      if self.actionDown "jump"
         I.jumping = true
         I.velocity.y = jumpImpulse
-      else if self.actionDown "B"
+      else if self.actionDown "shield"
         if I.shieldStrength > 0
           I.shielding = true
           I.shieldStrength -= 1
@@ -29,20 +28,20 @@ Player.Input = (I, self) ->
     unless I.shielding or I.disabled
       I.shieldStrength = I.shieldStrength.approach(I.shieldStrengthMax, 0.25)
 
+      # Move around based on controller
       if sign = p.x.sign()
         if I.velocity.x.sign() != sign
-          debugger
           I.velocity.x += dec * sign * dt
         else
-          # Move around based on controller
           I.velocity.x += acc * sign * dt
 
         I.lastDirection = sign
 
-      unless self.actionDown("A")
+      unless self.actionDown "jump"
         I.jumping = false
 
-      I.shooting = self.actionDown("C")
+      I.shooting = self.actionDown "shoot"
 
     if I.shielding or !(p.x)
+      # TODO get friction from ground
       I.velocity.x = I.velocity.x.approach(0, friction * dt) # Friction
