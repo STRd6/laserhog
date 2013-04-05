@@ -13,7 +13,7 @@ end
 
 task :build do
   main_file = "src/main.coffee"
-  src_files = (Dir["src/*.coffee"] - [main_file]) + [main_file]
+  src_files = (Dir["src/**/*.coffee"] - [main_file]) + [main_file]
 
   sh "mkdir -p build"
   sh "coffee", "-bcj", "build/src.js", *src_files
@@ -57,7 +57,7 @@ end
 
 # Compiles all sources separately to tmp so we can see good line numbers for errors
 task :compile_for_errors do
-  sh "coffee -o tmp -c src/*.coffee"
+  sh "coffee -o tmp -c src/*.coffee src/**/*.coffee"
 end
 
 def dist_name
