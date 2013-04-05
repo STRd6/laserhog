@@ -3,4 +3,7 @@ Base = (I={}) ->
     solid: ->
       I.solid
 
+    addImpulse: (impulse) ->
+      I.velocity = I.velocity.add(impulse)
+
   return self

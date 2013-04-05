@@ -12,8 +12,8 @@ Editor = (I, self) ->
 
     x: x.snap(snap)
     y: y.snap(snap)
-    width: extent.x
-    height: extent.y
+    width: extent.x.snap(2 * snap)
+    height: extent.y.snap(2 * snap)
 
   self.on "update", ->
     if justPressed.esc

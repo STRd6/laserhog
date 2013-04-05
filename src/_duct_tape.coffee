@@ -15,3 +15,6 @@ Point::snap = (n) ->
   Point
     x: @x.snap(n)
     y: @y.snap(n)
+
+Point::angle = ->
+  Math.atan2(@y, @x)

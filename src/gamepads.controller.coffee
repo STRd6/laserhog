@@ -4,7 +4,7 @@ Gamepads.Controller = (I={}) ->
 
   MAX_BUFFER = 0.03
   AXIS_MAX = 1 - MAX_BUFFER
-  DEAD_ZONE = AXIS_MAX * 0.2
+  DEAD_ZONE = AXIS_MAX * 0.25
   TRIP_HIGH = AXIS_MAX * 0.75
   TRIP_LOW = AXIS_MAX * 0.5
 
@@ -126,17 +126,17 @@ Gamepads.Controller = (I={}) ->
           color: I.debugColor
           text: axis
           x: 0
-          y: i * lineHeight
+          y: (i + 1) * lineHeight
 
       self.buttons().each (button, i) ->
         canvas.drawText
           color: I.debugColor
           text: "#{i}:"
           x: 230
-          y: i * lineHeight
+          y: (i + 1) * lineHeight
 
         canvas.drawText
           color: I.debugColor
           text: button
           x: 250
-          y: i * lineHeight
+          y: (i + 1) * lineHeight

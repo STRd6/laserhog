@@ -2,7 +2,7 @@ Player.Controller = (I, self) ->
   Object.reverseMerge I,
     controls:
       jump: "A"
-      shield: "B"
+      shield: "RT"
       shoot: "X"
 
   actionDown: (name) ->
@@ -11,4 +11,3 @@ Player.Controller = (I, self) ->
 
   controllerPosition: ->
     engine.controller(I.controller).position()
-

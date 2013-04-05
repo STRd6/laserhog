@@ -21,13 +21,16 @@ Player.Input = (I, self) ->
       else if self.actionDown "shield"
         if I.shieldStrength > 0
           I.shielding = true
-          I.shieldStrength -= 1
         else
-          I.disabled = 3
+          I.disabled = 2
+
+    # Short hop check
+    if I.jumping
+      unless self.actionDown "jump"
+        if I.velocity.y <= -500
+          I.velocity.y += 250
 
     unless I.shielding or I.disabled
-      I.shieldStrength = I.shieldStrength.approach(I.shieldStrengthMax, 0.25)
-
       # Move around based on controller
       if sign = p.x.sign()
         if I.velocity.x.sign() != sign
