@@ -32,6 +32,7 @@ $ ->
   ###
   window.mouseDown = {}
   window.mousePressed = {}
+  window.mouseReleased = {}
   window.mousePosition = Point(0, 0)
 
   prevButtonsDown = {}
@@ -59,9 +60,13 @@ $ ->
 
   window.updateMouse = ->
     window.mousePressed = {}
+    window.mouseReleased = {}
 
     for button, value of mouseDown
       mousePressed[button] = value unless prevButtonsDown[button]
+
+    for button, value of mouseDown
+      mouseReleased[button] = !value if prevButtonsDown[button]
 
     prevButtonsDown = {}
     for button, value of mouseDown

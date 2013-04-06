@@ -12816,34 +12816,6 @@ window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitReq
 var ARENA_WIDTH, Base, Beam, Block, Camera, CameraTarget, Drawable, Editor, Movable, NineSlice, Player, Weapon, canvas, oldCamera, p1,
   __slice = [].slice;
 
-Number.prototype.truncate = function() {
-  if (this > 0) {
-    return Math.floor(this);
-  } else if (this < 0) {
-    return Math.ceil(this);
-  } else {
-    return this;
-  }
-};
-
-Point.prototype.abs = function() {
-  return Point({
-    x: this.x.abs(),
-    y: this.y.abs()
-  });
-};
-
-Point.prototype.snap = function(n) {
-  return Point({
-    x: this.x.snap(n),
-    y: this.y.snap(n)
-  });
-};
-
-Point.prototype.angle = function() {
-  return Math.atan2(this.y, this.x);
-};
-
 Base = function(I) {
   var self;
   if (I == null) {
@@ -12958,6 +12930,352 @@ CameraTarget = function(I) {
   });
   return self;
 };
+
+Editor = function(I, self) {
+  var currentTool;
+  Object.reverseMerge(I, {
+    editMode: false,
+    selectedObject: null
+  });
+  currentTool = Editor.Tool.Create();
+  self.on("update", function() {
+    var camera, worldPosition;
+    if (justPressed.esc) {
+      I.editMode = !I.editMode;
+    }
+    if (I.editMode) {
+      engine.I.backgroundColor = "#EEA";
+      camera = engine.camera();
+      worldPosition = camera.screenToWorld(mousePosition);
+      currentTool.updatePosition(worldPosition);
+      if (mousePressed.left) {
+        currentTool.pressed(worldPosition);
+      }
+      if (mouseReleased.left) {
+        return currentTool.released(worldPosition);
+      }
+    } else {
+      return engine.I.backgroundColor = "#FFF";
+    }
+  });
+  self.on("draw", function(canvas) {
+    return currentTool.draw(canvas);
+  });
+  return {};
+};
+
+Editor.Tool = function(I) {
+  if (I == null) {
+    I = {};
+  }
+  return GameObject(I).extend({
+    pressed: function(worldPoint) {},
+    released: function(worldPoint) {},
+    updatePosition: function(worldPoint) {
+      return I.currentPosition = worldPoint;
+    },
+    draw: function(canvas) {}
+  });
+};
+
+Editor.Tool.Create = function(I) {
+  var clickStart, rect, self, snap;
+  if (I == null) {
+    I = {};
+  }
+  clickStart = void 0;
+  snap = 8;
+  rect = function(start, end) {
+    var extent, x, y, _ref;
+    _ref = Point.centroid(start, end), x = _ref.x, y = _ref.y;
+    extent = end.subtract(start).abs();
+    return {
+      x: x.snap(snap),
+      y: y.snap(snap),
+      width: extent.x.snap(2 * snap),
+      height: extent.y.snap(2 * snap)
+    };
+  };
+  self = Editor.Tool(I).extend({
+    pressed: function(worldPoint) {
+      return clickStart = worldPoint.snap(snap);
+    },
+    released: function(worldPoint) {
+      engine.add("Block", rect(clickStart, worldPoint.snap(snap)));
+      return clickStart = void 0;
+    },
+    draw: function(canvas) {
+      return canvas.withTransform(engine.camera().transform(), function(canvas) {
+        var r;
+        if (clickStart) {
+          r = rect(clickStart, I.currentPosition);
+          return canvas.drawRect({
+            x: r.x - r.width / 2,
+            y: r.y - r.height / 2,
+            width: r.width,
+            height: r.height,
+            color: "rgba(255, 0, 255, 0.5)"
+          });
+        }
+      });
+    }
+  });
+  return self;
+};
+
+NineSlice = function(I, self) {
+  self.unbind("draw");
+  return self.on("draw", function(canvas) {
+    return canvas.withTransform(Matrix.translation(-I.width / 2, -I.height / 2), function() {
+      var height, image, n, size, width, _ref;
+      if (image = I.sprite.image) {
+        size = 8;
+        n = 3;
+        if (!I.patterns) {
+          I.patterns = [];
+          n.times(function(x) {
+            return n.times(function(y) {
+              var patternCanvas, patternContext;
+              patternCanvas = document.createElement('canvas');
+              patternCanvas.width = patternCanvas.height = size;
+              patternContext = patternCanvas.getContext("2d");
+              patternContext.drawImage(image, size * x, size * y, size, size, 0, 0, size, size);
+              return I.patterns[x + 3 * y] = patternContext.createPattern(patternCanvas, "repeat");
+            });
+          });
+        }
+        _ref = I.sprite, width = _ref.width, height = _ref.height;
+        canvas.drawRect({
+          x: 0,
+          y: 0,
+          width: size,
+          height: size,
+          color: I.patterns[0]
+        });
+        canvas.drawRect({
+          x: size,
+          y: 0,
+          width: I.width - 2 * size,
+          height: size,
+          color: I.patterns[1]
+        });
+        canvas.drawRect({
+          x: I.width - size,
+          y: 0,
+          width: size,
+          height: size,
+          color: I.patterns[2]
+        });
+        canvas.drawRect({
+          x: 0,
+          y: size,
+          width: size,
+          height: I.height - 2 * size,
+          color: I.patterns[3]
+        });
+        canvas.drawRect({
+          x: size,
+          y: size,
+          width: I.width - 2 * size,
+          height: I.height - 2 * size,
+          color: I.patterns[4]
+        });
+        canvas.drawRect({
+          x: I.width - size,
+          y: size,
+          width: size,
+          height: I.height - 2 * size,
+          color: I.patterns[5]
+        });
+        canvas.drawRect({
+          x: 0,
+          y: I.height - size,
+          width: size,
+          height: size,
+          color: I.patterns[6]
+        });
+        canvas.drawRect({
+          x: size,
+          y: I.height - size,
+          width: I.width - 2 * size,
+          height: size,
+          color: I.patterns[7]
+        });
+        return canvas.drawRect({
+          x: I.width - size,
+          y: I.height - size,
+          width: size,
+          height: size,
+          color: I.patterns[8]
+        });
+      } else {
+        return canvas.drawRect({
+          x: 0,
+          y: 0,
+          width: I.width,
+          height: I.height,
+          color: I.color
+        });
+      }
+    });
+  });
+};
+
+Number.prototype.truncate = function() {
+  if (this > 0) {
+    return Math.floor(this);
+  } else if (this < 0) {
+    return Math.ceil(this);
+  } else {
+    return this;
+  }
+};
+
+Point.prototype.abs = function() {
+  return Point({
+    x: this.x.abs(),
+    y: this.y.abs()
+  });
+};
+
+Point.prototype.snap = function(n) {
+  return Point({
+    x: this.x.snap(n),
+    y: this.y.snap(n)
+  });
+};
+
+Point.prototype.angle = function() {
+  return Math.atan2(this.y, this.x);
+};
+
+oldCamera = Camera;
+
+Camera = function(I) {
+  var currentObject, currentType, focusOn, followTypes, moduleName, objectFilters, self, transformFilters, _i, _len, _ref;
+  if (I == null) {
+    I = {};
+  }
+  Object.reverseMerge(I, {
+    cameraBounds: Rectangle({
+      x: 0,
+      y: 0,
+      width: App.width,
+      height: App.height
+    }),
+    screen: Rectangle({
+      x: 0,
+      y: 0,
+      width: App.width,
+      height: App.height
+    }),
+    deadzone: Point(0, 0),
+    zoom: 1,
+    transform: Matrix(),
+    x: App.width / 2,
+    y: App.height / 2,
+    velocity: Point.ZERO,
+    maxSpeed: 25,
+    t90: 2
+  });
+  currentType = "centered";
+  currentObject = null;
+  objectFilters = [];
+  transformFilters = [];
+  focusOn = function(object, elapsedTime) {
+    var c, dampingFactor, delta, force, objectCenter, target;
+    dampingFactor = 2;
+    c = elapsedTime * 3.75 / I.t90;
+    if (c >= 1) {
+      self.position(target);
+      return I.velocity = Point.ZERO;
+    } else {
+      objectCenter = object.center();
+      target = objectCenter;
+      delta = target.subtract(self.position());
+      force = delta.subtract(I.velocity.scale(dampingFactor));
+      self.changePosition(I.velocity.scale(c).clamp(I.maxSpeed));
+      return I.velocity = I.velocity.add(force.scale(c));
+    }
+  };
+  followTypes = {
+    centered: function(object, elapsedTime) {
+      I.deadzone = Point(0, 0);
+      return focusOn(object, elapsedTime);
+    },
+    topdown: function(object, elapsedTime) {
+      var helper;
+      helper = Math.max(I.screen.width, I.screen.height) / 4;
+      I.deadzone = Point(helper, helper);
+      return focusOn(object, elapsedTime);
+    },
+    platformer: function(object, elapsedTime) {
+      var height, width;
+      width = I.screen.width / 8;
+      height = I.screen.height / 3;
+      I.deadzone = Point(width, height);
+      return focusOn(object, elapsedTime);
+    }
+  };
+  self = Core(I).extend({
+    follow: function(object, type) {
+      if (type == null) {
+        type = "centered";
+      }
+      currentObject = object;
+      return currentType = type;
+    },
+    objectFilterChain: function(fn) {
+      return objectFilters.push(fn);
+    },
+    transformFilterChain: function(fn) {
+      return transformFilters.push(fn);
+    },
+    screenToWorld: function(point) {
+      return self.transform().inverse().transformPoint(point);
+    }
+  });
+  self.attrAccessor("transform");
+  self.bind("afterUpdate", function(elapsedTime) {
+    if (currentObject) {
+      followTypes[currentType](currentObject, elapsedTime);
+    }
+    I.x = I.x.clamp(I.cameraBounds.left + I.screen.width / 2, I.cameraBounds.right - I.screen.width / 2);
+    I.y = I.y.clamp(I.cameraBounds.top + I.screen.height / 2, I.cameraBounds.bottom - I.screen.height / 2);
+    return I.transform = Matrix.translate(I.screen.width / 2 - I.x, I.screen.height / 2 - I.y);
+  });
+  self.bind("draw", function(canvas, objects) {
+    return canvas.withTransform(Matrix.translate(I.screen.x, I.screen.y), function(canvas) {
+      var transform;
+      canvas.clip(0, 0, I.screen.width, I.screen.height);
+      objects = objectFilters.pipeline(objects);
+      transform = transformFilters.pipeline(self.transform().copy());
+      canvas.withTransform(transform, function(canvas) {
+        self.trigger("beforeDraw", canvas);
+        return objects.invoke("draw", canvas);
+      });
+      return self.trigger('flash', canvas);
+    });
+  });
+  self.bind("overlay", function(canvas, objects) {
+    return canvas.withTransform(Matrix.translate(I.screen.x, I.screen.y), function(canvas) {
+      canvas.clip(0, 0, I.screen.width, I.screen.height);
+      objects = objectFilters.pipeline(objects);
+      return objects.invoke("trigger", "overlay", canvas);
+    });
+  });
+  self.include("Bounded");
+  _ref = Camera.defaultModules;
+  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+    moduleName = _ref[_i];
+    self.include("Camera." + moduleName);
+  }
+  return self;
+};
+
+Camera.defaultModules = ["ZSort", "Zoom", "Rotate", "Shake", "Flash", "Fade"];
+
+Object.extend(Camera, oldCamera);
 
 /**
 The Drawable module is used to provide a simple draw method to the including
@@ -13143,66 +13461,100 @@ Drawable = function(I, self) {
   };
 };
 
-Editor = function(I, self) {
-  var clickStart, rect, snap;
-  Object.reverseMerge(I, {
-    editMode: false,
-    tool: "create"
-  });
-  clickStart = void 0;
-  snap = 8;
-  rect = function() {
-    var camera, extent, p, x, y, _ref;
-    camera = engine.camera();
-    p = camera.screenToWorld(mousePosition).snap(snap);
-    _ref = Point.centroid(clickStart, p), x = _ref.x, y = _ref.y;
-    extent = p.subtract(clickStart).abs();
-    return {
-      x: x.snap(snap),
-      y: y.snap(snap),
-      width: extent.x.snap(2 * snap),
-      height: extent.y.snap(2 * snap)
-    };
+/**
+The <code>Collision</code> module provides some simple collision detection methods to engine.
+
+@name Collision
+@fieldOf Engine
+@module
+@param {Object} I Instance variables
+@param {Object} self Reference to the engine
+*/
+
+
+Engine.Collision = function(I, self) {
+  return {
+    /**
+    Detects collisions between a bounds and the game objects.
+    
+    @name collides
+    @methodOf Engine#
+    @param bounds The bounds to check collisions with.
+    @param [sourceObject] An object to exclude from the results.
+    @returns {Boolean} true if the bounds object collides with any of the game objects, false otherwise.
+    */
+
+    collides: function(bounds, sourceObject, selector) {
+      if (selector == null) {
+        selector = ".solid";
+      }
+      return self.find(selector).inject(false, function(collided, object) {
+        return collided || (object !== sourceObject) && object.collides(bounds);
+      });
+    },
+    /**
+    Detects collisions between a bounds and the game objects.
+    Returns an array of objects colliding with the bounds provided.
+    
+    @name collidesWith
+    @methodOf Engine#
+    @param bounds The bounds to check collisions with.
+    @param [sourceObject] An object to exclude from the results.
+    @returns {Array} An array of objects that collide with the given bounds.
+    */
+
+    collidesWith: function(bounds, sourceObject) {
+      var collided;
+      collided = [];
+      self.objects().each(function(object) {
+        if (!object.solid()) {
+          return;
+        }
+        if (object !== sourceObject && object.collides(bounds)) {
+          return collided.push(object);
+        }
+      });
+      if (collided.length) {
+        return collided;
+      }
+    },
+    /**
+    Detects collisions between a ray and the game objects.
+    
+    @name rayCollides
+    @methodOf Engine#
+    @param source The origin point
+    @param direction A point representing the direction of the ray
+    @param [sourceObject] An object to exclude from the results.
+    @param [selector] A selector to choos which objects in the engine to collide with
+    */
+
+    rayCollides: function(_arg) {
+      var direction, hits, nearestDistance, nearestHit, selector, source, sourceObject;
+      source = _arg.source, direction = _arg.direction, sourceObject = _arg.sourceObject, selector = _arg.selector;
+      if (selector == null) {
+        selector = "";
+      }
+      hits = self.find(selector).map(function(object) {
+        var hit;
+        hit = (object !== sourceObject) && Collision.rayRectangle(source, direction, object.centeredBounds());
+        if (hit) {
+          hit.object = object;
+        }
+        return hit;
+      });
+      nearestDistance = Infinity;
+      nearestHit = null;
+      hits.each(function(hit) {
+        var d;
+        if (hit && (d = hit.distance(source)) < nearestDistance) {
+          nearestDistance = d;
+          return nearestHit = hit;
+        }
+      });
+      return nearestHit;
+    }
   };
-  self.on("update", function() {
-    var camera, p;
-    if (justPressed.esc) {
-      I.editMode = !I.editMode;
-    }
-    if (I.editMode) {
-      engine.I.backgroundColor = "#EEA";
-      if (mouseDown.left) {
-        if (!clickStart) {
-          camera = engine.camera();
-          return clickStart = camera.screenToWorld(mousePosition).snap(snap);
-        }
-      } else {
-        if (clickStart) {
-          p = mousePosition;
-          engine.add("Block", rect());
-          return clickStart = void 0;
-        }
-      }
-    } else {
-      return engine.I.backgroundColor = "#FFF";
-    }
-  });
-  self.on("draw", function(canvas) {
-    return canvas.withTransform(engine.camera().transform(), function(canvas) {
-      var r;
-      if (clickStart) {
-        r = rect();
-        return canvas.drawRect({
-          x: r.x - r.width / 2,
-          y: r.y - r.height / 2,
-          width: r.width,
-          height: r.height,
-          color: "rgba(255, 0, 255, 0.5)"
-        });
-      }
-    });
-  });
-  return {};
 };
 
 Gamepads.Controller = function(I) {
@@ -13393,6 +13745,7 @@ $(function() {
   var buttonName, buttonNames, prevButtonsDown;
   window.mouseDown = {};
   window.mousePressed = {};
+  window.mouseReleased = {};
   window.mousePosition = Point(0, 0);
   prevButtonsDown = {};
   buttonNames = {
@@ -13418,10 +13771,17 @@ $(function() {
   return window.updateMouse = function() {
     var button, value, _results;
     window.mousePressed = {};
+    window.mouseReleased = {};
     for (button in mouseDown) {
       value = mouseDown[button];
       if (!prevButtonsDown[button]) {
         mousePressed[button] = value;
+      }
+    }
+    for (button in mouseDown) {
+      value = mouseDown[button];
+      if (prevButtonsDown[button]) {
+        mouseReleased[button] = !value;
       }
     }
     prevButtonsDown = {};
@@ -13494,327 +13854,198 @@ Movable = function(I, self) {
   });
 };
 
-NineSlice = function(I, self) {
-  self.unbind("draw");
-  return self.on("draw", function(canvas) {
-    return canvas.withTransform(Matrix.translation(-I.width / 2, -I.height / 2), function() {
-      var height, image, n, size, width, _ref;
-      if (image = I.sprite.image) {
-        size = 8;
-        n = 3;
-        if (!I.patterns) {
-          I.patterns = [];
-          n.times(function(x) {
-            return n.times(function(y) {
-              var patternCanvas, patternContext;
-              patternCanvas = document.createElement('canvas');
-              patternCanvas.width = patternCanvas.height = size;
-              patternContext = patternCanvas.getContext("2d");
-              patternContext.drawImage(image, size * x, size * y, size, size, 0, 0, size, size);
-              return I.patterns[x + 3 * y] = patternContext.createPattern(patternCanvas, "repeat");
-            });
-          });
-        }
-        _ref = I.sprite, width = _ref.width, height = _ref.height;
-        canvas.drawRect({
-          x: 0,
-          y: 0,
-          width: size,
-          height: size,
-          color: I.patterns[0]
-        });
-        canvas.drawRect({
-          x: size,
-          y: 0,
-          width: I.width - 2 * size,
-          height: size,
-          color: I.patterns[1]
-        });
-        canvas.drawRect({
-          x: I.width - size,
-          y: 0,
-          width: size,
-          height: size,
-          color: I.patterns[2]
-        });
-        canvas.drawRect({
-          x: 0,
-          y: size,
-          width: size,
-          height: I.height - 2 * size,
-          color: I.patterns[3]
-        });
-        canvas.drawRect({
-          x: size,
-          y: size,
-          width: I.width - 2 * size,
-          height: I.height - 2 * size,
-          color: I.patterns[4]
-        });
-        canvas.drawRect({
-          x: I.width - size,
-          y: size,
-          width: size,
-          height: I.height - 2 * size,
-          color: I.patterns[5]
-        });
-        canvas.drawRect({
-          x: 0,
-          y: I.height - size,
-          width: size,
-          height: size,
-          color: I.patterns[6]
-        });
-        canvas.drawRect({
-          x: size,
-          y: I.height - size,
-          width: I.width - 2 * size,
-          height: size,
-          color: I.patterns[7]
-        });
-        return canvas.drawRect({
-          x: I.width - size,
-          y: I.height - size,
-          width: size,
-          height: size,
-          color: I.patterns[8]
-        });
-      } else {
-        return canvas.drawRect({
-          x: 0,
-          y: 0,
-          width: I.width,
-          height: I.height,
-          color: I.color
-        });
-      }
-    });
-  });
-};
-
-oldCamera = Camera;
-
-Camera = function(I) {
-  var currentObject, currentType, focusOn, followTypes, moduleName, objectFilters, self, transformFilters, _i, _len, _ref;
-  if (I == null) {
-    I = {};
-  }
-  Object.reverseMerge(I, {
-    cameraBounds: Rectangle({
-      x: 0,
-      y: 0,
-      width: App.width,
-      height: App.height
-    }),
-    screen: Rectangle({
-      x: 0,
-      y: 0,
-      width: App.width,
-      height: App.height
-    }),
-    deadzone: Point(0, 0),
-    zoom: 1,
-    transform: Matrix(),
-    x: App.width / 2,
-    y: App.height / 2,
-    velocity: Point.ZERO,
-    maxSpeed: 25,
-    t90: 2
-  });
-  currentType = "centered";
-  currentObject = null;
-  objectFilters = [];
-  transformFilters = [];
-  focusOn = function(object, elapsedTime) {
-    var c, dampingFactor, delta, force, objectCenter, target;
-    dampingFactor = 2;
-    c = elapsedTime * 3.75 / I.t90;
-    if (c >= 1) {
-      self.position(target);
-      return I.velocity = Point.ZERO;
-    } else {
-      objectCenter = object.center();
-      target = objectCenter;
-      delta = target.subtract(self.position());
-      force = delta.subtract(I.velocity.scale(dampingFactor));
-      self.changePosition(I.velocity.scale(c).clamp(I.maxSpeed));
-      return I.velocity = I.velocity.add(force.scale(c));
-    }
-  };
-  followTypes = {
-    centered: function(object, elapsedTime) {
-      I.deadzone = Point(0, 0);
-      return focusOn(object, elapsedTime);
-    },
-    topdown: function(object, elapsedTime) {
-      var helper;
-      helper = Math.max(I.screen.width, I.screen.height) / 4;
-      I.deadzone = Point(helper, helper);
-      return focusOn(object, elapsedTime);
-    },
-    platformer: function(object, elapsedTime) {
-      var height, width;
-      width = I.screen.width / 8;
-      height = I.screen.height / 3;
-      I.deadzone = Point(width, height);
-      return focusOn(object, elapsedTime);
-    }
-  };
-  self = Core(I).extend({
-    follow: function(object, type) {
-      if (type == null) {
-        type = "centered";
-      }
-      currentObject = object;
-      return currentType = type;
-    },
-    objectFilterChain: function(fn) {
-      return objectFilters.push(fn);
-    },
-    transformFilterChain: function(fn) {
-      return transformFilters.push(fn);
-    },
-    screenToWorld: function(point) {
-      return self.transform().inverse().transformPoint(point);
-    }
-  });
-  self.attrAccessor("transform");
-  self.bind("afterUpdate", function(elapsedTime) {
-    if (currentObject) {
-      followTypes[currentType](currentObject, elapsedTime);
-    }
-    I.x = I.x.clamp(I.cameraBounds.left + I.screen.width / 2, I.cameraBounds.right - I.screen.width / 2);
-    I.y = I.y.clamp(I.cameraBounds.top + I.screen.height / 2, I.cameraBounds.bottom - I.screen.height / 2);
-    return I.transform = Matrix.translate(I.screen.width / 2 - I.x, I.screen.height / 2 - I.y);
-  });
-  self.bind("draw", function(canvas, objects) {
-    return canvas.withTransform(Matrix.translate(I.screen.x, I.screen.y), function(canvas) {
-      var transform;
-      canvas.clip(0, 0, I.screen.width, I.screen.height);
-      objects = objectFilters.pipeline(objects);
-      transform = transformFilters.pipeline(self.transform().copy());
-      canvas.withTransform(transform, function(canvas) {
-        self.trigger("beforeDraw", canvas);
-        return objects.invoke("draw", canvas);
-      });
-      return self.trigger('flash', canvas);
-    });
-  });
-  self.bind("overlay", function(canvas, objects) {
-    return canvas.withTransform(Matrix.translate(I.screen.x, I.screen.y), function(canvas) {
-      canvas.clip(0, 0, I.screen.width, I.screen.height);
-      objects = objectFilters.pipeline(objects);
-      return objects.invoke("trigger", "overlay", canvas);
-    });
-  });
-  self.include("Bounded");
-  _ref = Camera.defaultModules;
-  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-    moduleName = _ref[_i];
-    self.include("Camera." + moduleName);
-  }
-  return self;
-};
-
-Camera.defaultModules = ["ZSort", "Zoom", "Rotate", "Shake", "Flash", "Fade"];
-
-Object.extend(Camera, oldCamera);
-
 /**
-The <code>Collision</code> module provides some simple collision detection methods to engine.
+The Sprite class provides a way to load images for use in games.
 
-@name Collision
-@fieldOf Engine
-@module
-@param {Object} I Instance variables
-@param {Object} self Reference to the engine
+By default, images are loaded asynchronously. A proxy object is
+returned immediately. Even though it has a draw method it will not
+draw anything to the screen until the image has been loaded.
+
+@name Sprite
+@constructor
 */
 
 
-Engine.Collision = function(I, self) {
-  return {
-    /**
-    Detects collisions between a bounds and the game objects.
-    
-    @name collides
-    @methodOf Engine#
-    @param bounds The bounds to check collisions with.
-    @param [sourceObject] An object to exclude from the results.
-    @returns {Boolean} true if the bounds object collides with any of the game objects, false otherwise.
-    */
-
-    collides: function(bounds, sourceObject, selector) {
-      if (selector == null) {
-        selector = ".solid";
-      }
-      return self.find(selector).inject(false, function(collided, object) {
-        return collided || (object !== sourceObject) && object.collides(bounds);
-      });
-    },
-    /**
-    Detects collisions between a bounds and the game objects.
-    Returns an array of objects colliding with the bounds provided.
-    
-    @name collidesWith
-    @methodOf Engine#
-    @param bounds The bounds to check collisions with.
-    @param [sourceObject] An object to exclude from the results.
-    @returns {Array} An array of objects that collide with the given bounds.
-    */
-
-    collidesWith: function(bounds, sourceObject) {
-      var collided;
-      collided = [];
-      self.objects().each(function(object) {
-        if (!object.solid()) {
-          return;
-        }
-        if (object !== sourceObject && object.collides(bounds)) {
-          return collided.push(object);
-        }
-      });
-      if (collided.length) {
-        return collided;
-      }
-    },
-    /**
-    Detects collisions between a ray and the game objects.
-    
-    @name rayCollides
-    @methodOf Engine#
-    @param source The origin point
-    @param direction A point representing the direction of the ray
-    @param [sourceObject] An object to exclude from the results.
-    @param [selector] A selector to choos which objects in the engine to collide with
-    */
-
-    rayCollides: function(_arg) {
-      var direction, hits, nearestDistance, nearestHit, selector, source, sourceObject;
-      source = _arg.source, direction = _arg.direction, sourceObject = _arg.sourceObject, selector = _arg.selector;
-      if (selector == null) {
-        selector = "";
-      }
-      hits = self.find(selector).map(function(object) {
-        var hit;
-        hit = (object !== sourceObject) && Collision.rayRectangle(source, direction, object.centeredBounds());
-        if (hit) {
-          hit.object = object;
-        }
-        return hit;
-      });
-      nearestDistance = Infinity;
-      nearestHit = null;
-      hits.each(function(hit) {
-        var d;
-        if (hit && (d = hit.distance(source)) < nearestDistance) {
-          nearestDistance = d;
-          return nearestHit = hit;
-        }
-      });
-      return nearestHit;
-    }
+(function() {
+  var LoaderProxy, Sprite, spriteCache;
+  LoaderProxy = function() {
+    return {
+      draw: function() {},
+      fill: function() {},
+      frame: function() {},
+      update: function() {},
+      width: null,
+      height: null,
+      image: null
+    };
   };
-};
+  spriteCache = {};
+  Sprite = function(image, sourceX, sourceY, width, height) {
+    sourceX || (sourceX = 0);
+    sourceY || (sourceY = 0);
+    width || (width = image.width);
+    height || (height = image.height);
+    return {
+      /**
+      Draw this sprite on the given canvas at the given position.
+      
+      @name draw
+      @methodOf Sprite#
+      @param {PowerCanvas} canvas Reference to the canvas to draw the sprite on
+      @param {Number} x Position on the x axis to draw the sprite
+      @param {Number} y Position on the y axis to draw the sprite
+      */
+
+      draw: function(canvas, x, y) {
+        return canvas.drawImage(image, sourceX, sourceY, width, height, x, y, width, height);
+      },
+      /**
+      Draw this sprite on the given canvas tiled to the x, y,
+      width, and height dimensions specified.
+      
+      @name fill
+      @methodOf Sprite#
+      @param {PowerCanvas} canvas Reference to the canvas to draw the sprite on
+      @param {Number} x Position on the x axis to draw the sprite
+      @param {Number} y Position on the y axis to draw the sprite
+      @param {Number} width How far to tile the sprite on the x-axis
+      @param {Number} height How far to tile the sprite on the y-axis
+      @param {String} repeat Repeat options. Can be `repeat-x`, `repeat-y`, `no-repeat`, or `repeat`. Defaults to `repeat`
+      */
+
+      fill: function(canvas, x, y, width, height, repeat) {
+        var pattern;
+        if (repeat == null) {
+          repeat = "repeat";
+        }
+        pattern = canvas.createPattern(image, repeat);
+        return canvas.drawRect({
+          x: x,
+          y: y,
+          width: width,
+          height: height,
+          color: pattern
+        });
+      },
+      width: width,
+      height: height,
+      image: image
+    };
+  };
+  /**
+  Loads all sprites from a sprite sheet found in
+  your images directory, specified by the name passed in.
+  
+  @name loadSheet
+  @methodOf Sprite
+  @param {String} name Name of the spriteSheet image in your images directory
+  @param {Number} tileWidth Width of each sprite in the sheet
+  @param {Number} tileHeight Height of each sprite in the sheet
+  @returns {Array} An array of sprite objects
+  */
+
+  Sprite.loadSheet = function(name, tileWidth, tileHeight) {
+    var image, sprites, url;
+    url = ResourceLoader.urlFor("images", name);
+    sprites = [];
+    image = new Image();
+    image.onload = function() {
+      var imgElement;
+      imgElement = this;
+      return (image.height / tileHeight).times(function(row) {
+        return (image.width / tileWidth).times(function(col) {
+          return sprites.push(Sprite(imgElement, col * tileWidth, row * tileHeight, tileWidth, tileHeight));
+        });
+      });
+    };
+    image.src = url;
+    return sprites;
+  };
+  /**
+  Loads a sprite from a given url.
+  
+  @name load
+  @methodOf Sprite
+  @param {String} url
+  @param {Function} [loadedCallback]
+  @returns {Sprite} A sprite object
+  */
+
+  Sprite.load = function(url, loadedCallback) {
+    var img, proxy, sprite;
+    if (sprite = spriteCache[url]) {
+      if (loadedCallback != null) {
+        loadedCallback.defer(sprite);
+      }
+      return sprite;
+    }
+    img = new Image();
+    proxy = LoaderProxy();
+    img.onload = function() {
+      spriteCache[url] = Object.extend(proxy, Sprite(this));
+      return typeof loadedCallback === "function" ? loadedCallback(proxy) : void 0;
+    };
+    img.src = url;
+    return proxy;
+  };
+  /**
+  Loads a sprite with the given pixie id.
+  
+  @name fromPixieId
+  @methodOf Sprite
+  @param {Number} id Pixie Id of the sprite to load
+  @param {Function} [callback] Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.
+  @returns {Sprite}
+  */
+
+  Sprite.fromPixieId = function(id, callback) {
+    return Sprite.load("http://pixieengine.com/s3/sprites/" + id + "/original.png", callback);
+  };
+  /**
+  A sprite that draws nothing.
+  
+  @name EMPTY
+  @fieldOf Sprite
+  @constant
+  @returns {Sprite}
+  */
+
+  /**
+  A sprite that draws nothing.
+  
+  @name NONE
+  @fieldOf Sprite
+  @constant
+  @returns {Sprite}
+  */
+
+  Sprite.EMPTY = Sprite.NONE = LoaderProxy();
+  /**
+  Loads a sprite from a given url.
+  
+  @name fromURL
+  @methodOf Sprite
+  @param {String} url The url where the image to load is located
+  @param {Function} [callback] Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.
+  @returns {Sprite}
+  */
+
+  Sprite.fromURL = Sprite.load;
+  /**
+  Loads a sprite with the given name.
+  
+  @name loadByName
+  @methodOf Sprite
+  @param {String} name The name of the image in your images directory
+  @param {Function} [callback] Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.
+  @returns {Sprite}
+  */
+
+  Sprite.loadByName = function(name, callback) {
+    return Sprite.load(ResourceLoader.urlFor("images", name), callback);
+  };
+  return (typeof exports !== "undefined" && exports !== null ? exports : this)["Sprite"] = Sprite;
+})();
 
 Player = function(I) {
   var PLAYER_COLORS, self;
@@ -14128,199 +14359,6 @@ Player.Weapons = function(I, self) {
   });
   return {};
 };
-
-/**
-The Sprite class provides a way to load images for use in games.
-
-By default, images are loaded asynchronously. A proxy object is
-returned immediately. Even though it has a draw method it will not
-draw anything to the screen until the image has been loaded.
-
-@name Sprite
-@constructor
-*/
-
-
-(function() {
-  var LoaderProxy, Sprite, spriteCache;
-  LoaderProxy = function() {
-    return {
-      draw: function() {},
-      fill: function() {},
-      frame: function() {},
-      update: function() {},
-      width: null,
-      height: null,
-      image: null
-    };
-  };
-  spriteCache = {};
-  Sprite = function(image, sourceX, sourceY, width, height) {
-    sourceX || (sourceX = 0);
-    sourceY || (sourceY = 0);
-    width || (width = image.width);
-    height || (height = image.height);
-    return {
-      /**
-      Draw this sprite on the given canvas at the given position.
-      
-      @name draw
-      @methodOf Sprite#
-      @param {PowerCanvas} canvas Reference to the canvas to draw the sprite on
-      @param {Number} x Position on the x axis to draw the sprite
-      @param {Number} y Position on the y axis to draw the sprite
-      */
-
-      draw: function(canvas, x, y) {
-        return canvas.drawImage(image, sourceX, sourceY, width, height, x, y, width, height);
-      },
-      /**
-      Draw this sprite on the given canvas tiled to the x, y,
-      width, and height dimensions specified.
-      
-      @name fill
-      @methodOf Sprite#
-      @param {PowerCanvas} canvas Reference to the canvas to draw the sprite on
-      @param {Number} x Position on the x axis to draw the sprite
-      @param {Number} y Position on the y axis to draw the sprite
-      @param {Number} width How far to tile the sprite on the x-axis
-      @param {Number} height How far to tile the sprite on the y-axis
-      @param {String} repeat Repeat options. Can be `repeat-x`, `repeat-y`, `no-repeat`, or `repeat`. Defaults to `repeat`
-      */
-
-      fill: function(canvas, x, y, width, height, repeat) {
-        var pattern;
-        if (repeat == null) {
-          repeat = "repeat";
-        }
-        pattern = canvas.createPattern(image, repeat);
-        return canvas.drawRect({
-          x: x,
-          y: y,
-          width: width,
-          height: height,
-          color: pattern
-        });
-      },
-      width: width,
-      height: height,
-      image: image
-    };
-  };
-  /**
-  Loads all sprites from a sprite sheet found in
-  your images directory, specified by the name passed in.
-  
-  @name loadSheet
-  @methodOf Sprite
-  @param {String} name Name of the spriteSheet image in your images directory
-  @param {Number} tileWidth Width of each sprite in the sheet
-  @param {Number} tileHeight Height of each sprite in the sheet
-  @returns {Array} An array of sprite objects
-  */
-
-  Sprite.loadSheet = function(name, tileWidth, tileHeight) {
-    var image, sprites, url;
-    url = ResourceLoader.urlFor("images", name);
-    sprites = [];
-    image = new Image();
-    image.onload = function() {
-      var imgElement;
-      imgElement = this;
-      return (image.height / tileHeight).times(function(row) {
-        return (image.width / tileWidth).times(function(col) {
-          return sprites.push(Sprite(imgElement, col * tileWidth, row * tileHeight, tileWidth, tileHeight));
-        });
-      });
-    };
-    image.src = url;
-    return sprites;
-  };
-  /**
-  Loads a sprite from a given url.
-  
-  @name load
-  @methodOf Sprite
-  @param {String} url
-  @param {Function} [loadedCallback]
-  @returns {Sprite} A sprite object
-  */
-
-  Sprite.load = function(url, loadedCallback) {
-    var img, proxy, sprite;
-    if (sprite = spriteCache[url]) {
-      if (loadedCallback != null) {
-        loadedCallback.defer(sprite);
-      }
-      return sprite;
-    }
-    img = new Image();
-    proxy = LoaderProxy();
-    img.onload = function() {
-      spriteCache[url] = Object.extend(proxy, Sprite(this));
-      return typeof loadedCallback === "function" ? loadedCallback(proxy) : void 0;
-    };
-    img.src = url;
-    return proxy;
-  };
-  /**
-  Loads a sprite with the given pixie id.
-  
-  @name fromPixieId
-  @methodOf Sprite
-  @param {Number} id Pixie Id of the sprite to load
-  @param {Function} [callback] Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.
-  @returns {Sprite}
-  */
-
-  Sprite.fromPixieId = function(id, callback) {
-    return Sprite.load("http://pixieengine.com/s3/sprites/" + id + "/original.png", callback);
-  };
-  /**
-  A sprite that draws nothing.
-  
-  @name EMPTY
-  @fieldOf Sprite
-  @constant
-  @returns {Sprite}
-  */
-
-  /**
-  A sprite that draws nothing.
-  
-  @name NONE
-  @fieldOf Sprite
-  @constant
-  @returns {Sprite}
-  */
-
-  Sprite.EMPTY = Sprite.NONE = LoaderProxy();
-  /**
-  Loads a sprite from a given url.
-  
-  @name fromURL
-  @methodOf Sprite
-  @param {String} url The url where the image to load is located
-  @param {Function} [callback] Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.
-  @returns {Sprite}
-  */
-
-  Sprite.fromURL = Sprite.load;
-  /**
-  Loads a sprite with the given name.
-  
-  @name loadByName
-  @methodOf Sprite
-  @param {String} name The name of the image in your images directory
-  @param {Function} [callback] Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.
-  @returns {Sprite}
-  */
-
-  Sprite.loadByName = function(name, callback) {
-    return Sprite.load(ResourceLoader.urlFor("images", name), callback);
-  };
-  return (typeof exports !== "undefined" && exports !== null ? exports : this)["Sprite"] = Sprite;
-})();
 
 Weapon = function(I) {
   var self;
