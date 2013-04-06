@@ -11,7 +11,13 @@ Beam = (I={}) ->
   self = Base(I)
 
   fireBeam = (sourcePoint, direction, sourceObject) ->
-    if nearestHit = engine.rayCollides(sourcePoint, direction, sourceObject)
+    nearestHit = engine.rayCollides
+      source: sourcePoint
+      direction: direction
+      sourceObject: sourceObject
+      selector: ".solid"
+
+    if nearestHit
       endPoint = nearestHit
       hitObject = nearestHit.object
 
@@ -23,17 +29,15 @@ Beam = (I={}) ->
 
     I.segments.push [sourcePoint, endPoint]
 
-    if hitObject?.I
-      if hitObject.I.shielding || hitObject.I.invulnerable
+    hitObject?.trigger "beamHit",
+      ricochet: ->
         fireBeam(endPoint, Point.fromAngle(Random.angle()), hitObject)
-        hitObject.I.shieldStrength -= 5
-      else if hitObject.I.destructable
-        hitObject.destroy()
 
   self.on "create", ->
     fireBeam(I.origin, I.direction, I.owner)
 
-  self.on "overlay", (canvas) ->
+  self.unbind "draw"
+  self.on "afterTransform", (canvas) ->
     I.segments.each ([start, end]) ->
       canvas.drawLine
         color: I.color

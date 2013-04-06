@@ -1,12 +1,15 @@
 Editor = (I, self) ->
   Object.reverseMerge I,
     editMode: false
+    tool: "create"
 
   clickStart = undefined
   snap = 8
 
   rect = ->
-    p = mousePosition.snap(snap)
+    camera = engine.camera()
+
+    p = camera.screenToWorld(mousePosition).snap(snap)
     {x, y} = Point.centroid(clickStart, p)
     extent = p.subtract(clickStart).abs()
 
@@ -20,11 +23,13 @@ Editor = (I, self) ->
       I.editMode = !I.editMode
 
     if I.editMode
-      engine.I.backgroundColor = "#847"
+      engine.I.backgroundColor = "#EEA"
 
       if mouseDown.left
         unless clickStart
-          clickStart = mousePosition.snap(snap)
+          camera = engine.camera()
+
+          clickStart = camera.screenToWorld(mousePosition).snap(snap)
 
       else
         if clickStart
@@ -39,15 +44,16 @@ Editor = (I, self) ->
       engine.I.backgroundColor = "#FFF"
 
   self.on "draw", (canvas) ->
-    if clickStart
-      r = rect()
+    canvas.withTransform engine.camera().transform2(), (canvas) ->
+      if clickStart
+        r = rect()
 
-      # TODO: Draw the same as game objects, from center
-      canvas.drawRect
-        x: r.x - r.width/2
-        y: r.y - r.height/2
-        width: r.width
-        height: r.height
-        color: "rgba(255, 0, 255, 0.5)"
+        # TODO: Draw the same as game objects, from center
+        canvas.drawRect
+          x: r.x - r.width/2
+          y: r.y - r.height/2
+          width: r.width
+          height: r.height
+          color: "rgba(255, 0, 255, 0.5)"
 
   return {}

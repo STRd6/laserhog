@@ -14,6 +14,8 @@ p1 = engine.add "Player",
 
 p1.include "Debuggable"
 
+engine.add "CameraTarget"
+
 engine.add "Player",
   controller: 1
   x: App.width/4
@@ -28,20 +30,26 @@ engine.add "Base",
   height: 20
   color: "green"
 
-# TODO Update existing module
-engine.collides = (bounds, sourceObject) ->
-  engine.objects().inject false, (collided, object) ->
-    collided || (object.solid?() && (object != sourceObject) && object.collides(bounds))
-
-engine.on "overlay", (canvas) ->
-  controller = engine.controller()
-  controller.drawDebug(canvas)
+# engine.on "overlay", (canvas) ->
+#   controller = engine.controller()
+#   controller.drawDebug(canvas)
 
 engine.include Editor
+
+ARENA_WIDTH = App.width * 2
 
 engine.on "update", ->
   if justPressed.enter
     engine.pause()
+
+  camera = engine.camera()
+
+  camera.I.maxSpeed = 500
+  camera.I.cameraBounds.width = ARENA_WIDTH
+  # camera.I.cameraBounds.height = ARENA_HEIGHT + 40
+
+  if target = engine.first("CameraTarget")
+    camera.follow(target)
 
 Music.volume 0#.5
 Music.play("TheApogee")
