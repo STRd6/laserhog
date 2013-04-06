@@ -44,7 +44,7 @@ Editor = (I, self) ->
       engine.I.backgroundColor = "#FFF"
 
   self.on "draw", (canvas) ->
-    canvas.withTransform engine.camera().transform2(), (canvas) ->
+    canvas.withTransform engine.camera().transform(), (canvas) ->
       if clickStart
         r = rect()
 

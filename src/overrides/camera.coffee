@@ -81,11 +81,7 @@ Camera = (I={}) ->
       transformFilters.push fn
 
     screenToWorld: (point) ->
-      self.transform2().inverse().transformPoint(point)
-
-    # TODO: Better name, or figure this out
-    transform2: ->
-      Matrix.translation(I.screen.width/2, I.screen.height/2).concat(self.transform())
+      self.transform().inverse().transformPoint(point)
 
   self.attrAccessor "transform"
 
@@ -97,7 +93,7 @@ Camera = (I={}) ->
     I.x = I.x.clamp(I.cameraBounds.left + I.screen.width/2, I.cameraBounds.right - I.screen.width/2)
     I.y = I.y.clamp(I.cameraBounds.top + I.screen.height/2, I.cameraBounds.bottom - I.screen.height/2)
 
-    I.transform = Matrix.translate(-I.x, -I.y)
+    I.transform = Matrix.translate(I.screen.width/2 - I.x, I.screen.height/2 - I.y)
 
   self.bind "draw", (canvas, objects) ->
     # Move to correct screen coordinates
@@ -107,10 +103,9 @@ Camera = (I={}) ->
       objects = objectFilters.pipeline(objects)
       transform = transformFilters.pipeline(self.transform().copy())
 
-      canvas.withTransform Matrix.translation(I.screen.width/2, I.screen.height/2), (canvas) ->
-        canvas.withTransform transform, (canvas) ->
-          self.trigger "beforeDraw", canvas
-          objects.invoke "draw", canvas
+      canvas.withTransform transform, (canvas) ->
+        self.trigger "beforeDraw", canvas
+        objects.invoke "draw", canvas
 
       self.trigger 'flash', canvas
 

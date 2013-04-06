@@ -13188,7 +13188,7 @@ Editor = function(I, self) {
     }
   });
   self.on("draw", function(canvas) {
-    return canvas.withTransform(engine.camera().transform2(), function(canvas) {
+    return canvas.withTransform(engine.camera().transform(), function(canvas) {
       var r;
       if (clickStart) {
         r = rect();
@@ -13675,10 +13675,7 @@ Camera = function(I) {
       return transformFilters.push(fn);
     },
     screenToWorld: function(point) {
-      return self.transform2().inverse().transformPoint(point);
-    },
-    transform2: function() {
-      return Matrix.translation(I.screen.width / 2, I.screen.height / 2).concat(self.transform());
+      return self.transform().inverse().transformPoint(point);
     }
   });
   self.attrAccessor("transform");
@@ -13688,7 +13685,7 @@ Camera = function(I) {
     }
     I.x = I.x.clamp(I.cameraBounds.left + I.screen.width / 2, I.cameraBounds.right - I.screen.width / 2);
     I.y = I.y.clamp(I.cameraBounds.top + I.screen.height / 2, I.cameraBounds.bottom - I.screen.height / 2);
-    return I.transform = Matrix.translate(-I.x, -I.y);
+    return I.transform = Matrix.translate(I.screen.width / 2 - I.x, I.screen.height / 2 - I.y);
   });
   self.bind("draw", function(canvas, objects) {
     return canvas.withTransform(Matrix.translate(I.screen.x, I.screen.y), function(canvas) {
@@ -13696,11 +13693,9 @@ Camera = function(I) {
       canvas.clip(0, 0, I.screen.width, I.screen.height);
       objects = objectFilters.pipeline(objects);
       transform = transformFilters.pipeline(self.transform().copy());
-      canvas.withTransform(Matrix.translation(I.screen.width / 2, I.screen.height / 2), function(canvas) {
-        return canvas.withTransform(transform, function(canvas) {
-          self.trigger("beforeDraw", canvas);
-          return objects.invoke("draw", canvas);
-        });
+      canvas.withTransform(transform, function(canvas) {
+        self.trigger("beforeDraw", canvas);
+        return objects.invoke("draw", canvas);
       });
       return self.trigger('flash', canvas);
     });
