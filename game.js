@@ -12932,12 +12932,17 @@ CameraTarget = function(I) {
 };
 
 Editor = function(I, self) {
-  var currentTool;
+  var changeTool, currentTool, selectedToolIndex, tools;
   Object.reverseMerge(I, {
-    editMode: false,
-    selectedObject: null
+    editMode: false
   });
-  currentTool = Editor.Tool.Create();
+  tools = [Editor.Tool.Create(), Editor.Tool.Pointer()];
+  selectedToolIndex = 0;
+  currentTool = tools[selectedToolIndex];
+  changeTool = function(delta) {
+    selectedToolIndex += delta;
+    return currentTool = tools.wrap(selectedToolIndex);
+  };
   self.on("update", function() {
     var camera, worldPosition;
     if (justPressed.esc) {
@@ -12945,6 +12950,12 @@ Editor = function(I, self) {
     }
     if (I.editMode) {
       engine.I.backgroundColor = "#EEA";
+      if (justPressed.right) {
+        changeTool(+1);
+      }
+      if (justPressed.left) {
+        changeTool(-1);
+      }
       camera = engine.camera();
       worldPosition = camera.screenToWorld(mousePosition);
       currentTool.updatePosition(worldPosition);
@@ -12959,65 +12970,129 @@ Editor = function(I, self) {
     }
   });
   self.on("draw", function(canvas) {
+    canvas.drawText({
+      x: 20,
+      y: 20,
+      text: currentTool.I.name,
+      color: "#000"
+    });
     return currentTool.draw(canvas);
   });
   return {};
 };
 
 Editor.Tool = function(I) {
+  var self;
   if (I == null) {
     I = {};
   }
-  return GameObject(I).extend({
+  Object.reverseMerge(I, {
+    snap: 8,
+    name: "Tool"
+  });
+  self = GameObject(I).extend({
     pressed: function(worldPoint) {},
     released: function(worldPoint) {},
     updatePosition: function(worldPoint) {
-      return I.currentPosition = worldPoint;
+      I.currentPosition = worldPoint;
+      return self.trigger("updatePosition", worldPoint);
     },
-    draw: function(canvas) {}
+    draw: function(canvas) {
+      return canvas.withTransform(engine.camera().transform(), function(canvas) {
+        return self.trigger("draw", canvas);
+      });
+    }
   });
+  return self;
 };
 
 Editor.Tool.Create = function(I) {
-  var clickStart, rect, self, snap;
+  var clickStart, rect, self;
   if (I == null) {
     I = {};
   }
   clickStart = void 0;
-  snap = 8;
+  I.name = "Create";
   rect = function(start, end) {
     var extent, x, y, _ref;
     _ref = Point.centroid(start, end), x = _ref.x, y = _ref.y;
     extent = end.subtract(start).abs();
     return {
-      x: x.snap(snap),
-      y: y.snap(snap),
-      width: extent.x.snap(2 * snap),
-      height: extent.y.snap(2 * snap)
+      x: x.snap(I.snap),
+      y: y.snap(I.snap),
+      width: extent.x.snap(2 * I.snap),
+      height: extent.y.snap(2 * I.snap)
     };
   };
   self = Editor.Tool(I).extend({
     pressed: function(worldPoint) {
-      return clickStart = worldPoint.snap(snap);
+      return clickStart = worldPoint.snap(I.snap);
     },
     released: function(worldPoint) {
-      engine.add("Block", rect(clickStart, worldPoint.snap(snap)));
+      engine.add("Block", rect(clickStart, worldPoint.snap(I.snap)));
       return clickStart = void 0;
-    },
-    draw: function(canvas) {
-      return canvas.withTransform(engine.camera().transform(), function(canvas) {
-        var r;
-        if (clickStart) {
-          r = rect(clickStart, I.currentPosition);
-          return canvas.drawRect({
-            x: r.x - r.width / 2,
-            y: r.y - r.height / 2,
-            width: r.width,
-            height: r.height,
-            color: "rgba(255, 0, 255, 0.5)"
-          });
-        }
+    }
+  });
+  self.on("draw", function(canvas) {
+    var r;
+    if (clickStart) {
+      r = rect(clickStart, I.currentPosition);
+      return canvas.drawRect({
+        x: r.x - r.width / 2,
+        y: r.y - r.height / 2,
+        width: r.width,
+        height: r.height,
+        color: "rgba(255, 0, 255, 0.5)"
       });
+    }
+  });
+  return self;
+};
+
+Editor.Tool.Pointer = function(I) {
+  var initialObjectPosition, selectedObject, self, startPoint;
+  if (I == null) {
+    I = {};
+  }
+  selectedObject = void 0;
+  initialObjectPosition = void 0;
+  startPoint = void 0;
+  I.name = "Pointer";
+  self = Editor.Tool(I).extend({
+    pressed: function(worldPoint) {
+      startPoint = worldPoint;
+      if (selectedObject = engine.objectsUnderPoint(startPoint).first()) {
+        return initialObjectPosition = selectedObject.position();
+      }
+    },
+    released: function(worldPoint) {
+      return startPoint = void 0;
+    }
+  });
+  self.on("draw", function(canvas) {
+    var r;
+    if (selectedObject) {
+      r = selectedObject.centeredBounds();
+      return canvas.drawRect({
+        x: r.x - r.xw,
+        y: r.y - r.yw,
+        width: r.xw * 2,
+        height: r.yw * 2,
+        stroke: {
+          width: 2,
+          color: "rgba(255, 0, 255, 0.75)"
+        },
+        color: "rgba(255, 0, 255, 0.25)"
+      });
+    }
+  });
+  self.on("updatePosition", function(worldPoint) {
+    var delta;
+    if (startPoint) {
+      delta = worldPoint.subtract(startPoint).snap(I.snap);
+      if (selectedObject) {
+        return selectedObject.position(initialObjectPosition.add(delta));
+      }
     }
   });
   return self;
@@ -13553,6 +13628,21 @@ Engine.Collision = function(I, self) {
         }
       });
       return nearestHit;
+    },
+    objectsUnderPoint: function(point, selector) {
+      var bounds;
+      if (selector == null) {
+        selector = "";
+      }
+      bounds = {
+        x: point.x,
+        y: point.y,
+        width: 0,
+        height: 0
+      };
+      return self.find(selector).select(function(object) {
+        return object.collides(bounds);
+      });
     }
   };
 };

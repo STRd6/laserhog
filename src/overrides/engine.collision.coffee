@@ -69,3 +69,14 @@ Engine.Collision = (I, self) ->
         nearestHit = hit
 
     nearestHit
+
+  objectsUnderPoint: (point, selector="") ->
+    bounds = {
+      x: point.x
+      y: point.y
+      width: 0
+      height: 0
+    }
+
+    self.find(selector).select (object) ->
+      object.collides(bounds)
