@@ -4,7 +4,7 @@ Block = (I={}) ->
     solid: true
     width: 32
     height: 32
-    sprite: "cloud"
+    sprite: "block"
 
   self = Base(I)
 

@@ -34,6 +34,16 @@ engine.add
   height: 20
   color: "green"
 
+positions = [
+  Point(ARENA.width / 8, ARENA.height - 100)
+  Point(ARENA.width * 7 / 8, ARENA.height - 100)
+]
+["red", "blue"].each (color, i) ->
+  engine.add "Flag"
+    sprite: "flag_#{color}"
+    x: positions[i].x
+    y: positions[i].y
+
 # engine.on "overlay", (canvas) ->
 #   controller = engine.controller()
 #   controller.drawDebug(canvas)

@@ -1,7 +1,9 @@
 Player.Weapons = (I, self) ->
   Object.reverseMerge I,
     aimDirection: Point(1, 0)
-    weapon: Weapon()
+    weapon: Weapon.Grenade()
+
+  I.weapon.pickup self
 
   self.on "update", (dt) ->
     I.weapon?.trigger "update", dt
