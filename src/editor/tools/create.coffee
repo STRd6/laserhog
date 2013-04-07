@@ -17,7 +17,7 @@ Editor.Tool.Create = (I={}) ->
       clickStart = worldPoint.snap(I.snap)
 
     released: (worldPoint) ->
-      engine.add "Block",
+      engine.add "Quicksand",
         rect(clickStart, worldPoint.snap(I.snap))
 
       clickStart = undefined

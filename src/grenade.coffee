@@ -9,11 +9,11 @@ Grenade = (I={}) ->
 
   self = GameObject(I)
 
-  computeNormal = (other) ->
+  computeNormal = (other, dt) ->
     {x, y, xw, yw} = other.centeredBounds()
 
-    # Not really correct for rectangles
-    delta = other.position().subtract(self.position())
+    previousPosition = self.position().subtract(I.velocity.scale(dt))
+    delta = other.position().subtract(previousPosition)
 
     # Correcting because these are non-circles
     delta.x = delta.x / xw
@@ -34,7 +34,7 @@ Grenade = (I={}) ->
     Collision.collide ".solid", self, (wall) ->
       return if wall is I.owner
 
-      normal = computeNormal(wall)
+      normal = computeNormal(wall, dt)
       projection = I.velocity.dot(normal)
 
       return if projection <= 0
