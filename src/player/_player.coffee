@@ -78,7 +78,7 @@ Player = (I={}) ->
         I.velocity.y = 0
         I.jumping = false
 
-    if I.y >= App.height + 100
+    if I.y >= ARENA.height + 500
       self.destroy()
 
   self.include "Player.Controller"

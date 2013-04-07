@@ -1,5 +1,9 @@
 canvas = $("canvas").pixieCanvas()
 
+window.ARENA =
+  width: App.width * 2
+  height: App.height * 1.5
+
 Engine.defaultModules.push "Gamepads"
 
 window.engine = Engine
@@ -22,11 +26,11 @@ engine.add "Player",
   y: App.height/2
 
 # temp ground
-engine.add "Base",
+engine.add
   solid: true
-  x: App.width/2
-  width: App.width
-  y: App.height - 10
+  x: ARENA.width/2
+  width: ARENA.width
+  y: ARENA.height - 10
   height: 20
   color: "green"
 
@@ -36,8 +40,6 @@ engine.add "Base",
 
 engine.include Editor
 
-ARENA_WIDTH = App.width * 2
-
 engine.on "update", ->
   if justPressed.enter
     engine.pause()
@@ -45,8 +47,8 @@ engine.on "update", ->
   camera = engine.camera()
 
   camera.I.maxSpeed = 500
-  camera.I.cameraBounds.width = ARENA_WIDTH
-  # camera.I.cameraBounds.height = ARENA_HEIGHT + 40
+  camera.I.cameraBounds.width = ARENA.width
+  camera.I.cameraBounds.height = ARENA.height
 
   if target = engine.first("CameraTarget")
     camera.follow(target)

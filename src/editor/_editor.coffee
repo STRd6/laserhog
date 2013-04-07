@@ -22,9 +22,9 @@ Editor = (I, self) ->
     if I.editMode
       engine.I.backgroundColor = "#EEA"
 
-      if justPressed.right
+      if justPressed.pageup
         changeTool(+1)
-      if justPressed.left
+      if justPressed.pagedown
         changeTool(-1)
 
       camera = engine.camera()
@@ -39,15 +39,16 @@ Editor = (I, self) ->
         currentTool.released(worldPosition)
 
     else
-      engine.I.backgroundColor = "#FFF"
+      engine.I.backgroundColor = "#58C4F5"
 
   self.on "draw", (canvas) ->
-    canvas.drawText
-      x: 20
-      y: 20
-      text: currentTool.I.name
-      color: "#000"
+    if I.editMode
+      canvas.drawText
+        x: 20
+        y: 120
+        text: currentTool.I.name
+        color: "#000"
 
-    currentTool.draw(canvas)
+      currentTool.draw(canvas)
 
   return {}

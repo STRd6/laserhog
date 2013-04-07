@@ -5,6 +5,14 @@ Editor.Tool.Pointer = (I={}) ->
 
   I.name = "Pointer"
 
+  spritePalette = """
+    block
+    cloud
+    sand
+    rock
+  """.split("\n").invoke("trim").map (name) ->
+    Sprite.loadByName(name)
+
   self = Editor.Tool(I).extend
     pressed: (worldPoint) ->
       startPoint = worldPoint
@@ -30,11 +38,28 @@ Editor.Tool.Pointer = (I={}) ->
           color: "rgba(255, 0, 255, 0.75)"
         color: "rgba(255, 0, 255, 0.25)"
 
+  # TODO: More generic update?
   self.on "updatePosition", (worldPoint) ->
-    if startPoint
-      delta = worldPoint.subtract(startPoint).snap(I.snap)
+    if selectedObject
+      4.times (i) ->
+        if justPressed[i+1]
+          if sprite = spritePalette[i]
+            selectedObject.sprite(sprite)
 
-      if selectedObject
+      if keydown.shift
+        attr = "height"
+      else
+        attr = "width"
+
+      if justPressed["+"]
+        selectedObject.I[attr] += 2 * I.snap
+      if justPressed["-"]
+        selectedObject.I[attr] -= 2 * I.snap
+
+      if startPoint
+        delta = worldPoint.subtract(startPoint).snap(I.snap)
+
         selectedObject.position(initialObjectPosition.add(delta))
+
 
   return self

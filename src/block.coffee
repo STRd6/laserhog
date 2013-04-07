@@ -4,10 +4,10 @@ Block = (I={}) ->
     solid: true
     width: 32
     height: 32
-    sprite: "rock"
+    sprite: "cloud"
 
   self = Base(I)
 
-  self.include NineSlice
+  self.include "NineSlice"
 
   return self

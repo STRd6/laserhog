@@ -1,6 +1,12 @@
 NineSlice = (I, self) ->
-  self.unbind "draw"
+  self.sprite = (newSprite) ->
+    if newSprite?
+      I.sprite = newSprite
+      I.patterns = undefined # Clear pattern cache
+    else
+      I.sprite
 
+  self.unbind "draw"
 
   self.on "draw", (canvas) ->
     canvas.withTransform Matrix.translation(-I.width/2, -I.height/2), ->
@@ -105,3 +111,5 @@ NineSlice = (I, self) ->
           width: I.width
           height: I.height
           color: I.color
+
+  return {}
