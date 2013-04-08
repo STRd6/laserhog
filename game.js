@@ -1,6 +1,7 @@
 App = {"directories":{"animations":"animations","data":"data","entities":"entities","images":"images","lib":"lib","sounds":"sounds","source":"src","test":"test","test_lib":"test_lib","tilemaps":"tilemaps"},"width":1280,"height":720,"library":false,"main":"main.coffee","wrapMain":true,"hotSwap":true,"name":"laserhog","author":"STRd6","libs":{"10_gamelib.js":"https://github.com/STRd6/gamelib/raw/pixie/gamelib.js","browserlib.js":"https://github.com/STRd6/browserlib/raw/pixie/browserlib.js"}};
 
 
+
 /**
 Checks whether an object is an array.
 
@@ -797,13 +798,13 @@ Bindable module.
     player = Core
       x: 5
       y: 10
-
+    
     player.bind "update", ->
       updatePlayer()
     # => Uncaught TypeError: Object has no method 'bind'
-
+    
     player.include(Bindable)
-
+    
     player.bind "update", ->
       updatePlayer()
     # => this will call updatePlayer each time through the main loop
@@ -832,15 +833,15 @@ Bindable = function(I, self) {
     },
     /**
     Adds a function as an event listener.
-
+    
         # this will call coolEventHandler after
         # yourObject.trigger "someCustomEvent" is called.
         yourObject.on "someCustomEvent", coolEventHandler
-
+      
         #or
         yourObject.on "anotherCustomEvent", ->
           doSomething()
-
+    
     @name on
     @methodOf Bindable#
     @param {String} event The event to listen to.
@@ -861,14 +862,14 @@ Bindable = function(I, self) {
     /**
     Removes a specific event listener, or all event listeners if
     no specific listener is given.
-
+    
         #  removes the handler coolEventHandler from the event
         # "someCustomEvent" while leaving the other events intact.
         yourObject.off "someCustomEvent", coolEventHandler
-
-        # removes all handlers attached to "anotherCustomEvent"
+      
+        # removes all handlers attached to "anotherCustomEvent" 
         yourObject.off "anotherCustomEvent"
-
+    
     @name off
     @methodOf Bindable#
     @param {String} event The event to remove the listener from.
@@ -904,10 +905,10 @@ Bindable = function(I, self) {
     },
     /**
     Calls all listeners attached to the specified event.
-
+    
         # calls each event handler bound to "someCustomEvent"
         yourObject.trigger "someCustomEvent"
-
+    
     @name trigger
     @methodOf Bindable#
     @param {String} event The event to trigger.
@@ -998,45 +999,45 @@ var __slice = Array.prototype.slice;
       /**
       External access to instance variables. Use of this property should be avoided
       in general, but can come in handy from time to time.
-
+        
           I =
             r: 255
             g: 0
             b: 100
-
+      
           myObject = Core(I)
-
-          # a bad idea most of the time, but it's
+      
+          # a bad idea most of the time, but it's 
           # pretty convenient to have available.
           myObject.I.r
           # => 255
-
+      
           myObject.I.g
           # => 0
-
+      
           myObject.I.b
           # => 100
-
+        
       @name I
       @fieldOf Core#
       */
       I: I,
       /**
-      Generates a public jQuery style getter / setter method for each
+      Generates a public jQuery style getter / setter method for each 
       String argument.
-
+        
           myObject = Core
             r: 255
             g: 0
             b: 100
-
+      
           myObject.attrAccessor "r", "g", "b"
-
+      
           myObject.r(254)
           myObject.r()
-
+      
           => 254
-
+        
       @name attrAccessor
       @methodOf Core#
       */
@@ -1056,23 +1057,23 @@ var __slice = Array.prototype.slice;
       },
       /**
       Generates a public jQuery style getter method for each String argument.
-
+        
           myObject = Core
             r: 255
             g: 0
             b: 100
-
+      
           myObject.attrReader "r", "g", "b"
-
+      
           myObject.r()
           => 255
-
+      
           myObject.g()
           => 0
-
+      
           myObject.b()
           => 100
-
+        
       @name attrReader
       @methodOf Core#
       */
@@ -1087,26 +1088,26 @@ var __slice = Array.prototype.slice;
       },
       /**
       Extends this object with methods from the passed in object. A shortcut for Object.extend(self, methods)
-
+        
           I =
             x: 30
             y: 40
             maxSpeed: 5
-
+      
           # we are using extend to give player
           # additional methods that Core doesn't have
           player = Core(I).extend
             increaseSpeed: ->
               I.maxSpeed += 1
-
+      
           player.I.maxSpeed
           => 5
-
+      
           player.increaseSpeed()
-
+      
           player.I.maxSpeed
           => 6
-
+        
       @name extend
       @methodOf Core#
       @see Object.extend
@@ -1118,14 +1119,14 @@ var __slice = Array.prototype.slice;
       },
       /**
       Includes a module in this object.
-
+        
           myObject = Core()
           myObject.include(Bindable)
-
+      
           # now you can bind handlers to functions
           myObject.bind "someEvent", ->
             alert("wow. that was easy.")
-
+        
       @name include
       @methodOf Core#
       @param {String} Module the module to include. A module is a constructor that takes two parameters, I and self, and returns an object containing the public methods to extend the including object with.
@@ -1188,11 +1189,11 @@ Function.prototype.once = function() {
 };
 
 /**
-Calling a debounced function will postpone its execution until after
-wait milliseconds have elapsed since the last time the function was
-invoked. Useful for implementing behavior that should only happen after
-the input has stopped arriving. For example: rendering a preview of a
-Markdown comment, recalculating a layout after the window has stopped
+Calling a debounced function will postpone its execution until after 
+wait milliseconds have elapsed since the last time the function was 
+invoked. Useful for implementing behavior that should only happen after 
+the input has stopped arriving. For example: rendering a preview of a 
+Markdown comment, recalculating a layout after the window has stopped 
 being resized...
 
     lazyLayout = calculateLayout.debounce(300)
@@ -1248,7 +1249,7 @@ Function.prototype.defer = function() {
 @name Logging
 @namespace
 
-Gives you some convenience methods for outputting data while developing.
+Gives you some convenience methods for outputting data while developing. 
 
       log "Testing123"
       info "Hey, this is happening"
@@ -1271,7 +1272,7 @@ var __slice = Array.prototype.slice;
 
 /**
 * Matrix.js v1.3.0pre
-*
+* 
 * Copyright (c) 2010 STRd6
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -1304,12 +1305,12 @@ var __slice = Array.prototype.slice;
     |_0  0  1 _|
   </pre>
   Creates a matrix for 2d affine transformations.
-
+  
   concat, inverse, rotate, scale and translate return new matrices with the
   transformations applied. The matrix is not modified in place.
-
+  
   Returns the identity matrix when called with no arguments.
-
+  
   @name Matrix
   @param {Number} [a]
   @param {Number} [b]
@@ -1362,7 +1363,7 @@ var __slice = Array.prototype.slice;
   Matrix.prototype = {
     /**
     Returns the result of this matrix multiplied by another matrix
-    combining the geometric effects of the two. In mathematical terms,
+    combining the geometric effects of the two. In mathematical terms, 
     concatenating two matrixes is the same as combining them using matrix multiplication.
     If this matrix is A and the matrix passed in is B, the resulting matrix is A x B
     http://mathworld.wolfram.com/MatrixMultiplication.html
@@ -1384,9 +1385,9 @@ var __slice = Array.prototype.slice;
       return Matrix(this.a, this.b, this.c, this.d, this.tx, this.ty);
     },
     /**
-    Given a point in the pretransform coordinate space, returns the coordinates of
-    that point after the transformation occurs. Unlike the standard transformation
-    applied using the transformPoint() method, the deltaTransformPoint() method
+    Given a point in the pretransform coordinate space, returns the coordinates of 
+    that point after the transformation occurs. Unlike the standard transformation 
+    applied using the transformPoint() method, the deltaTransformPoint() method 
     does not consider the translation parameters tx and ty.
     @name deltaTransformPoint
     @methodOf Matrix#
@@ -1438,7 +1439,7 @@ var __slice = Array.prototype.slice;
     /**
     Returns a new matrix that corresponds this matrix multiplied by a
     a skewing matrix.
-
+    
     @name skew
     @methodOf Matrix#
     @see Matrix.skew
@@ -1450,7 +1451,7 @@ var __slice = Array.prototype.slice;
     },
     /**
     Returns a string representation of this matrix.
-
+    
     @name toString
     @methodOf Matrix#
     @returns {String} A string reperesentation of this matrix.
@@ -1459,7 +1460,7 @@ var __slice = Array.prototype.slice;
       return "Matrix(" + this.a + ", " + this.b + ", " + this.c + ", " + this.d + ", " + this.tx + ", " + this.ty + ")";
     },
     /**
-    Returns the result of applying the geometric transformation represented by the
+    Returns the result of applying the geometric transformation represented by the 
     Matrix object to the specified point.
     @name transformPoint
     @methodOf Matrix#
@@ -1521,7 +1522,7 @@ var __slice = Array.prototype.slice;
   };
   /**
   Returns a matrix that corresponds to a skew of skewX, skewY.
-
+  
   @see Matrix#skew
   @param {Number} skewX The angle of skew in the x dimension.
   @param {Number} skewY The angle of skew in the y dimension.
@@ -1566,7 +1567,7 @@ var __slice = Array.prototype.slice;
   return (typeof exports !== "undefined" && exports !== null ? exports : this)["Matrix"] = Matrix;
 })();
 
-/**
+/** 
 Returns the absolute value of this number.
 
     (-4).abs()
@@ -1583,12 +1584,12 @@ Number.prototype.abs = function() {
 /**
 Returns the mathematical ceiling of this number.
 
-    4.9.ceil()
+    4.9.ceil() 
     # => 5
-
+    
     4.2.ceil()
     # => 5
-
+    
     (-1.2).ceil()
     # => -1
 
@@ -1606,10 +1607,10 @@ Returns the mathematical floor of this number.
 
     4.9.floor()
     # => 4
-
+    
     4.2.floor()
     # => 4
-
+    
     (-1.2).floor()
     # => -2
 
@@ -1627,7 +1628,7 @@ Returns this number rounded to the nearest integer.
 
     4.5.round()
     # => 5
-
+    
     4.4.round()
     # => 4
 
@@ -1644,7 +1645,7 @@ Number.prototype.round = function() {
 Get a bunch of points equally spaced around the unit circle.
 
     4.circularPoints (p) ->
-
+    
     # p gets Point(1, 0), Point(0, 1), Point(-1, 0), Point(0, -1)
 
 @name circularPoint
@@ -1710,10 +1711,10 @@ Get the sign of this number as an integer (1, -1, or 0).
 
     (-5).sign()
     # => -1
-
+    
     0.sign()
     # => 0
-
+    
     5.sign()
     # => 1
 
@@ -1737,12 +1738,12 @@ Returns true if this number is even (evenly divisible by 2).
 
     2.even()
     # => true
-
+    
     3.even()
     # => false
-
+    
     0.even()
-    # => true
+    # => true      
 
 @name even
 @methodOf Number#
@@ -1758,12 +1759,12 @@ Returns true if this number is odd (has remainder of 1 when divided by 2).
 
     2.odd()
     # => false
-
+    
     3.odd()
     # => true
-
+    
     0.odd()
-    # => false
+    # => false     
 
 @name odd
 @methodOf Number#
@@ -1779,14 +1780,14 @@ Number.prototype.odd = function() {
 };
 
 /**
-Calls iterator the specified number of times, passing in the number of the
-current iteration as a parameter: 0 on first call, 1 on the second call, etc.
+Calls iterator the specified number of times, passing in the number of the 
+current iteration as a parameter: 0 on first call, 1 on the second call, etc. 
 
     output = []
-
+    
     5.times (n) ->
       output.push(n)
-
+    
     output
     # => [0, 1, 2, 3, 4]
 
@@ -1807,15 +1808,15 @@ Number.prototype.times = function(iterator, context) {
 };
 
 /**
-Returns the the nearest grid resolution less than or equal to the number.
+Returns the the nearest grid resolution less than or equal to the number. 
 
-    7.snap(8)
+    7.snap(8) 
     # => 0
-
-    4.snap(8)
+    
+    4.snap(8) 
     # => 0
-
-    12.snap(8)
+    
+    12.snap(8) 
     # => 8
 
 @name snap
@@ -1840,7 +1841,7 @@ Floors the number for purposes of factorization.
 
     60.primeFactors()
     # => [2, 2, 3, 5]
-
+    
     37.primeFactors()
     # => [37]
 
@@ -1873,15 +1874,15 @@ Number.prototype.primeFactors = function() {
 };
 
 /**
-Returns the two character hexidecimal
+Returns the two character hexidecimal 
 representation of numbers 0 through 255.
 
     255.toColorPart()
     # => "ff"
-
+    
     0.toColorPart()
     # => "00"
-
+    
     200.toColorPart()
     # => "c8"
 
@@ -1902,7 +1903,7 @@ Returns a number that is maxDelta closer to target.
 
     255.approach(0, 5)
     # => 250
-
+    
     5.approach(0, 10)
     # => 0
 
@@ -1954,7 +1955,7 @@ Number.prototype.approachRotation = function(target, maxDelta) {
 /**
 Constrains a rotation to between -PI and PI.
 
-    (9/4 * Math.PI).constrainRotation()
+    (9/4 * Math.PI).constrainRotation() 
     # => 0.7853981633974483 # this is (1/4) * Math.PI
 
 @name constrainRotation
@@ -1996,7 +1997,7 @@ Utility method to convert a number to a duration of seconds.
 
     3.seconds
     # => 3000
-
+    
     setTimout doSometing, 3.seconds
 
 @name seconds
@@ -2025,7 +2026,7 @@ Utility method to convert a number to an amount of rotations.
 
     0.5.rotations
     # => 3.141592653589793
-
+    
     I.rotation = 0.25.rotations
 
 @name rotations
@@ -2054,9 +2055,9 @@ Utility method to convert a number to an amount of rotations.
 
     0.5.turns
     # => 3.141592653589793
-
+    
     I.rotation = 0.25.turns
-
+    
     1.turn # => Math.TAU (aka 2 * Math.PI)
 
 @name turns
@@ -2086,7 +2087,7 @@ Utility method to convert a number to an amount of degrees.
 
     180.degrees
     # => 3.141592653589793
-
+    
     I.rotation = 90.degrees
 
 @name degrees
@@ -2110,7 +2111,7 @@ if (!1..degree) {
   });
 }
 
-/**
+/** 
 The mathematical circle constant of 1 turn.
 
 @name TAU
@@ -2125,23 +2126,23 @@ var __slice = Array.prototype.slice;
   /**
   Create a new point with given x and y coordinates. If no arguments are given
   defaults to (0, 0).
-
+  
       point = Point()
-
+    
       p.x
       # => 0
-
+    
       p.y
       # => 0
-
+    
       point = Point(-2, 5)
-
+    
       p.x
       # => -2
-
+    
       p.y
       # => 5
-
+  
   @name Point
   @param {Number} [x]
   @param {Number} [y]
@@ -2170,7 +2171,7 @@ var __slice = Array.prototype.slice;
   Point.prototype = {
     /**
     Constrain the magnitude of a vector.
-
+    
     @name clamp
     @methodOf Point#
     @param {Number} n Maximum value for magnitude.
@@ -2188,17 +2189,17 @@ var __slice = Array.prototype.slice;
     },
     /**
     Creates a copy of this point.
-
+    
     @name copy
     @methodOf Point#
     @returns {Point} A new point with the same x and y value as this point.
-
+    
         point = Point(1, 1)
         pointCopy = point.copy()
-
+    
         point.equal(pointCopy)
         # => true
-
+    
         point == pointCopy
         # => false
     */
@@ -2209,23 +2210,23 @@ var __slice = Array.prototype.slice;
     Adds a point to this one and returns the new point. You may
     also use a two argument call like <code>point.add(x, y)</code>
     to add x and y values without a second point object.
-
+    
         point = Point(2, 3).add(Point(3, 4))
-
+    
         point.x
         # => 5
-
+    
         point.y
         # => 7
-
+    
         anotherPoint = Point(2, 3).add(3, 4)
-
+    
         anotherPoint.x
         # => 5
-
+    
         anotherPoint.y
         # => 7
-
+    
     @name add
     @methodOf Point#
     @param {Point} other The point to add this point to.
@@ -2238,32 +2239,32 @@ var __slice = Array.prototype.slice;
     Adds a point to this one, returning a modified point. You may
     also use a two argument call like <code>point.add(x, y)</code>
     to add x and y values without a second point object.
-
+    
         point = Point(2, 3)
-
+    
         point.x
         # => 2
-
+    
         point.y
         # => 3
-
+    
         point.add$(Point(3, 4))
-
+    
         point.x
         # => 5
-
+    
         point.y
         # => 7
-
+    
         anotherPoint = Point(2, 3)
         anotherPoint.add$(3, 4)
-
+    
         anotherPoint.x
         # => 5
-
+    
         anotherPoint.y
         # => 7
-
+    
     @name add$
     @methodOf Point#
     @param {Point} other The point to add this point to.
@@ -2281,23 +2282,23 @@ var __slice = Array.prototype.slice;
     },
     /**
     Subtracts a point to this one and returns the new point.
-
+    
         point = Point(1, 2).subtract(Point(2, 0))
-
+    
         point.x
         # => -1
-
+    
         point.y
         # => 2
-
+    
         anotherPoint = Point(1, 2).subtract(2, 0)
-
+    
         anotherPoint.x
         # => -1
-
+    
         anotherPoint.y
         # => 2
-
+    
     @name subtract
     @methodOf Point#
     @param {Point} other The point to subtract from this point.
@@ -2308,32 +2309,32 @@ var __slice = Array.prototype.slice;
     },
     /**
     Subtracts a point to this one and returns the new point.
-
+    
         point = Point(1, 2)
-
+    
         point.x
         # => 1
-
+    
         point.y
         # => 2
-
+    
         point.subtract$(Point(2, 0))
-
+    
         point.x
         # => -1
-
+    
         point.y
         # => 2
-
+    
         anotherPoint = Point(1, 2)
         anotherPoint.subtract$(2, 0)
-
+    
         anotherPoint.x
         # => -1
-
+    
         anotherPoint.y
         # => 2
-
+    
     @name subtract$
     @methodOf Point#
     @param {Point} other The point to subtract from this point.
@@ -2351,15 +2352,15 @@ var __slice = Array.prototype.slice;
     },
     /**
     Scale this Point (Vector) by a constant amount.
-
+    
         point = Point(5, 6).scale(2)
-
+    
         point.x
         # => 10
-
+    
         point.y
         # => 12
-
+    
     @name scale
     @methodOf Point#
     @param {Number} scalar The amount to scale this point by.
@@ -2370,23 +2371,23 @@ var __slice = Array.prototype.slice;
     },
     /**
     Scale this Point (Vector) by a constant amount. Modifies the point in place.
-
+    
         point = Point(5, 6)
-
+    
         point.x
         # => 5
-
+    
         point.y
         # => 6
-
+    
         point.scale$(2)
-
+    
         point.x
         # => 10
-
+    
         point.y
         # => 12
-
+    
     @name scale$
     @methodOf Point#
     @param {Number} scalar The amount to scale this point by.
@@ -2400,23 +2401,23 @@ var __slice = Array.prototype.slice;
     /**
     The norm of a vector is the unit vector pointing in the same direction. This method
     treats the point as though it is a vector from the origin to (x, y).
-
+    
         point = Point(2, 3).norm()
-
+    
         point.x
         # => 0.5547001962252291
-
-        point.y
+    
+        point.y  
         # => 0.8320502943378437
-
+    
         anotherPoint = Point(2, 3).norm(2)
-
+    
         anotherPoint.x
         # => 1.1094003924504583
-
-        anotherPoint.y
-        # => 1.6641005886756874
-
+    
+        anotherPoint.y   
+        # => 1.6641005886756874    
+    
     @name norm
     @methodOf Point#
     @returns {Point} The unit vector pointing in the same direction as this vector.
@@ -2428,23 +2429,23 @@ var __slice = Array.prototype.slice;
     /**
     The norm of a vector is the unit vector pointing in the same direction. This method
     treats the point as though it is a vector from the origin to (x, y). Modifies the point in place.
-
+    
         point = Point(2, 3).norm$()
-
+    
         point.x
         # => 0.5547001962252291
-
-        point.y
+    
+        point.y  
         # => 0.8320502943378437
-
+    
         anotherPoint = Point(2, 3).norm$(2)
-
+    
         anotherPoint.x
         # => 1.1094003924504583
-
-        anotherPoint.y
-        # => 1.6641005886756874
-
+    
+        anotherPoint.y   
+        # => 1.6641005886756874    
+    
     @name norm$
     @methodOf Point#
     @returns {Point} The unit vector pointing in the same direction as this vector.
@@ -2460,15 +2461,15 @@ var __slice = Array.prototype.slice;
     },
     /**
     Floor the x and y values, returning a new point.
-
+    
         point = Point(3.4, 5.8).floor()
-
+    
         point.x
         # => 3
-
+    
         point.y
         # => 5
-
+    
     @name floor
     @methodOf Point#
     @returns {Point} A new point, with x and y values each floored to the largest previous integer.
@@ -2478,16 +2479,16 @@ var __slice = Array.prototype.slice;
     },
     /**
     Floor the x and y values, returning a modified point.
-
+    
         point = Point(3.4, 5.8)
         point.floor$()
-
+    
         point.x
         # => 3
-
+    
         point.y
         # => 5
-
+    
     @name floor$
     @methodOf Point#
     @returns {Point} A modified point, with x and y values each floored to the largest previous integer.
@@ -2499,17 +2500,17 @@ var __slice = Array.prototype.slice;
     },
     /**
     Determine whether this point is equal to another point.
-
+    
         pointA = Point(2, 3)
         pointB = Point(2, 3)
         pointC = Point(4, 5)
-
+    
         pointA.equal(pointB)
         # => true
-
+    
         pointA.equal(pointC)
         # => false
-
+    
     @name equal
     @methodOf Point#
     @param {Point} other The point to check for equality.
@@ -2520,12 +2521,12 @@ var __slice = Array.prototype.slice;
     },
     /**
     Computed the length of this point as though it were a vector from (0,0) to (x,y).
-
+    
         point = Point(5, 7)
-
+    
         point.length()
         # => 8.602325267042627
-
+    
     @name length
     @methodOf Point#
     @returns {Number} The length of the vector from the origin to this point.
@@ -2535,12 +2536,12 @@ var __slice = Array.prototype.slice;
     },
     /**
     Calculate the magnitude of this Point (Vector).
-
+    
         point = Point(5, 7)
-
+    
         point.magnitude()
         # => 8.602325267042627
-
+    
     @name magnitude
     @methodOf Point#
     @returns {Number} The magnitude of this point as if it were a vector from (0, 0) -> (x, y).
@@ -2550,12 +2551,12 @@ var __slice = Array.prototype.slice;
     },
     /**
     Returns the direction in radians of this point from the origin.
-
+    
         point = Point(0, 1)
-
+    
         point.direction()
         # => 1.5707963267948966 # Math.PI / 2
-
+    
     @name direction
     @methodOf Point#
     @returns {Number} The direction in radians of this point from the origin
@@ -2574,12 +2575,12 @@ var __slice = Array.prototype.slice;
       return this.x * other.x + this.y * other.y;
     },
     /**
-    Calculate the cross product of this point and another point (Vector).
+    Calculate the cross product of this point and another point (Vector). 
     Usually cross products are thought of as only applying to three dimensional vectors,
-    but z can be treated as zero. The result of this method is interpreted as the magnitude
+    but z can be treated as zero. The result of this method is interpreted as the magnitude 
     of the vector result of the cross product between [x1, y1, 0] x [x2, y2, 0]
     perpendicular to the xy plane.
-
+    
     @name cross
     @methodOf Point#
     @param {Point} other The point to cross with this point.
@@ -2590,13 +2591,13 @@ var __slice = Array.prototype.slice;
     },
     /**
     Compute the Euclidean distance between this point and another point.
-
+    
         pointA = Point(2, 3)
         pointB = Point(9, 2)
-
+    
         pointA.distance(pointB)
         # => 7.0710678118654755 # Math.sqrt(50)
-
+    
     @name distance
     @methodOf Point#
     @param {Point} other The point to compute the distance to.
@@ -2616,13 +2617,13 @@ var __slice = Array.prototype.slice;
   };
   /**
   Compute the Euclidean distance between two points.
-
+  
       pointA = Point(2, 3)
       pointB = Point(9, 2)
-
+    
       Point.distance(pointA, pointB)
       # => 7.0710678118654755 # Math.sqrt(50)
-
+  
   @name distance
   @fieldOf Point
   @param {Point} p1
@@ -2635,10 +2636,10 @@ var __slice = Array.prototype.slice;
   /**
       pointA = Point(2, 3)
       pointB = Point(9, 2)
-
+    
       Point.distanceSquared(pointA, pointB)
       # => 50
-
+  
   @name distanceSquared
   @fieldOf Point
   @param {Point} p1
@@ -2651,7 +2652,7 @@ var __slice = Array.prototype.slice;
   /**
   @name interpolate
   @fieldOf Point
-
+  
   @param {Point} p1
   @param {Point} p2
   @param {Number} t
@@ -2662,15 +2663,15 @@ var __slice = Array.prototype.slice;
   };
   /**
   Construct a point on the unit circle for the given angle.
-
+  
       point = Point.fromAngle(Math.PI / 2)
-
+    
       point.x
       # => 0
-
+    
       point.y
       # => 1
-
+  
   @name fromAngle
   @fieldOf Point
   @param {Number} angle The angle in radians
@@ -2683,13 +2684,13 @@ var __slice = Array.prototype.slice;
   If you have two dudes, one standing at point p1, and the other
   standing at point p2, then this method will return the direction
   that the dude standing at p1 will need to face to look at p2.
-
+  
       p1 = Point(0, 0)
       p2 = Point(7, 3)
-
+    
       Point.direction(p1, p2)
       # => 0.40489178628508343
-
+  
   @name direction
   @fieldOf Point
   @param {Point} p1 The starting point.
@@ -2701,7 +2702,7 @@ var __slice = Array.prototype.slice;
   };
   /**
   The centroid of a set of points is their arithmetic mean.
-
+  
   @name centroid
   @methodOf Point
   @param points... The points to find the centroid of.
@@ -2715,7 +2716,7 @@ var __slice = Array.prototype.slice;
   };
   /**
   Generate a random point on the unit circle.
-
+  
   @returns {Point} A random point on the unit circle.
   */
   Point.random = function() {
@@ -2769,7 +2770,7 @@ var __slice = Array.prototype.slice;
   */  (typeof exports !== "undefined" && exports !== null ? exports : this)["Random"] = {
     /**
     Returns a random angle, uniformly distributed, between 0 and 2pi.
-
+    
     @name angle
     @methodOf Random
     @returns {Number} A random angle between 0 and 2pi
@@ -2779,7 +2780,7 @@ var __slice = Array.prototype.slice;
     },
     /**
     Returns a random angle between the given angles.
-
+    
     @name angleBetween
     @methodOf Random
     @returns {Number} A random angle between the angles given.
@@ -2789,7 +2790,7 @@ var __slice = Array.prototype.slice;
     },
     /**
     Returns a random color.
-
+    
     @name color
     @methodOf Random
     @returns {Color} A random color
@@ -2799,7 +2800,7 @@ var __slice = Array.prototype.slice;
     },
     /**
     Happens often.
-
+    
     @name often
     @methodOf Random
     */
@@ -2808,7 +2809,7 @@ var __slice = Array.prototype.slice;
     },
     /**
     Happens sometimes.
-
+    
     @name sometimes
     @methodOf Random
     */
@@ -2819,7 +2820,7 @@ var __slice = Array.prototype.slice;
   /**
   Returns random integers from [0, n) if n is given.
   Otherwise returns random float between 0 and 1.
-
+  
   @name rand
   @methodOf window
   @param {Number} n
@@ -2835,7 +2836,7 @@ var __slice = Array.prototype.slice;
   /**
   Returns random float from [-n / 2, n / 2] if n is given.
   Otherwise returns random float between -0.5 and 0.5.
-
+  
   @name signedRand
   @methodOf window
   @param {Number} n
@@ -2892,10 +2893,10 @@ Returns true if this string only contains whitespace characters.
 
     "".blank()
     # => true
-
+    
     "hello".blank()
     # => false
-
+    
     "   ".blank()
     # => true
 
@@ -2913,7 +2914,7 @@ Returns a new string that is a camelCase version.
     "camel_case".camelize()
     "camel-case".camelize()
     "camel case".camelize()
-
+    
     # => "camelCase"
 
 @name camelize
@@ -2938,7 +2939,7 @@ Returns a new string with the first letter capitalized and the rest lower cased.
     "cAPITAL".capitalize()
     "cApItAl".capitalize()
     "CAPITAL".capitalize()
-
+    
     # => "Capital"
 
 @name capitalize
@@ -2953,7 +2954,7 @@ String.prototype.capitalize = function() {
 /**
 Return the class or constant named in this string.
 
-
+    
     "Constant".constantize()
     # => Constant
     # notice this isn't a string. Useful for calling methods on class with the same name as `this`.
@@ -2999,7 +3000,7 @@ Returns a new string that is a more human readable version.
 
     "player_id".humanize()
     # => "Player"
-
+    
     "player_ammo".humanize()
     # => "Player ammo"
 
@@ -3031,11 +3032,11 @@ is not valid JSON returns the string itself.
     # this is valid json, so an object is returned
     '{"a": 3}'.parse()
     # => {a: 3}
-
+    
     # double quoting instead isn't valid JSON so a string is returned
     "{'a': 3}".parse()
     # => "{'a': 3}"
-
+    
 
 @name parse
 @methodOf String#
@@ -3069,7 +3070,7 @@ Returns a new string in Title Case.
 
     "title-case".titleize()
     # => "Title Case"
-
+    
     "title case".titleize()
     # => "Title Case"
 
@@ -3089,10 +3090,10 @@ Underscore a word, changing camelCased with under_scored.
 
     "UNDERScore".underscore()
     # => "under_score"
-
+    
     "UNDER-SCORE".underscore()
     # => "under_score"
-
+    
     "UnDEr-SCorE".underscore()
     # => "un_d_er_s_cor_e"
 
@@ -3106,10 +3107,10 @@ String.prototype.underscore = function() {
 };
 
 /**
-Assumes the string is something like a file name and returns the
+Assumes the string is something like a file name and returns the 
 contents of the string without the extension.
 
-    "neat.png".witouthExtension()
+    "neat.png".witouthExtension() 
     # => "neat"
 
 @name withoutExtension
@@ -3211,7 +3212,7 @@ number.toLocaleString();
 @methodOf Number#
 */
 /**
-Returns a string representing the Number object to the specified precision.
+Returns a string representing the Number object to the specified precision. 
 
 <code><em>number</em>.toPrecision( [ <em>precision</em> ] )</code>
 @param precision An integer specifying the number of significant digits.
@@ -3321,12 +3322,12 @@ a string as a parameter" section below.
 place of the substring received from parameter #1). The arguments supplied to
 this function are described in the "Specifying a function as a parameter"
 section below.
-@param flags gimy
+@param flags gimy 
 
 Non-standardThe use of the flags parameter in the String.replace method is
 non-standard. For cross-browser compatibility, use a RegExp object with
 corresponding flags.A string containing any combination of the RegExp flags: g
-global match i ignore case m match over multiple lines y Non-standard
+global match i ignore case m match over multiple lines y Non-standard     
 sticky global matchignore casematch over multiple linesNon-standard     sticky
 @name replace
 @methodOf String#
@@ -3967,8 +3968,8 @@ Sets the hours for a specified date according to local time.
 <code>
 setHours(<i>hoursValue</i>[, <i>minutesValue</i>[, <i>secondsValue</i>[, <em>msValue</em>]]])
 </code>
-@param  hoursValue   An integer between 0 and 23, representing the hour.
-@param  minutesValue   An integer between 0 and 59, representing the minutes.
+@param  hoursValue   An integer between 0 and 23, representing the hour. 
+@param  minutesValue   An integer between 0 and 59, representing the minutes. 
 @param  secondsValue   An integer between 0 and 59, representing the seconds. If
 you specify the secondsValue parameter, you must also specify the minutesValue.
 @param  msValue   A number between 0 and 999, representing the milliseconds. If
@@ -3994,7 +3995,7 @@ Sets the minutes for a specified date according to local time.
 <code>
 setMinutes(<i>minutesValue</i>[, <i>secondsValue</i>[, <em>msValue</em>]])
 </code>
-@param  minutesValue   An integer between 0 and 59, representing the minutes.
+@param  minutesValue   An integer between 0 and 59, representing the minutes. 
 @param  secondsValue   An integer between 0 and 59, representing the seconds. If
 you specify the secondsValue parameter, you must also specify the minutesValue.
 @param  msValue   A number between 0 and 999, representing the milliseconds. If
@@ -4021,7 +4022,7 @@ Sets the seconds for a specified date according to local time.
 <code>
 setSeconds(<i>secondsValue</i>[, <em>msValue</em>])
 </code>
-@param  secondsValue   An integer between 0 and 59.
+@param  secondsValue   An integer between 0 and 59. 
 @param  msValue   A number between 0 and 999, representing the milliseconds.
 @name setSeconds
 @methodOf Date#
@@ -4070,8 +4071,8 @@ Sets the hour for a specified date according to universal time.
 <code>
 setUTCHours(<i>hoursValue</i>[, <i>minutesValue</i>[, <i>secondsValue</i>[, <em>msValue</em>]]])
 </code>
-@param  hoursValue   An integer between 0 and 23, representing the hour.
-@param  minutesValue   An integer between 0 and 59, representing the minutes.
+@param  hoursValue   An integer between 0 and 23, representing the hour. 
+@param  minutesValue   An integer between 0 and 59, representing the minutes. 
 @param  secondsValue   An integer between 0 and 59, representing the seconds. If
 you specify the secondsValue parameter, you must also specify the minutesValue.
 @param  msValue   A number between 0 and 999, representing the milliseconds. If
@@ -4097,7 +4098,7 @@ Sets the minutes for a specified date according to universal time.
 <code>
 setUTCMinutes(<i>minutesValue</i>[, <i>secondsValue</i>[, <em>msValue</em>]])
 </code>
-@param  minutesValue   An integer between 0 and 59, representing the minutes.
+@param  minutesValue   An integer between 0 and 59, representing the minutes. 
 @param  secondsValue   An integer between 0 and 59, representing the seconds. If
 you specify the secondsValue parameter, you must also specify the minutesValue.
 @param  msValue   A number between 0 and 999, representing the milliseconds. If
@@ -4124,7 +4125,7 @@ Sets the seconds for a specified date according to universal time.
 <code>
 setUTCSeconds(<i>secondsValue</i>[, <em>msValue</em>])
 </code>
-@param  secondsValue   An integer between 0 and 59.
+@param  secondsValue   An integer between 0 and 59. 
 @param  msValue   A number between 0 and 999, representing the milliseconds.
 @name setUTCSeconds
 @methodOf Date#
@@ -4242,7 +4243,7 @@ Generate a random uuid.
  */
 (function() {
   // Private array of chars to use
-  var CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+  var CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split(''); 
 
   Math.uuid = function (len, radix) {
     var chars = CHARS, uuid = [];
@@ -4317,7 +4318,7 @@ the dimensions of your game. Useful for bullet type objects.
 
     # => bullet will be removed when it
          goes outside of the game bounds.
-
+    
     bullet2 = GameObject
       x: 50
       y: 50
@@ -4365,10 +4366,10 @@ ActiveBounds = function(I, self) {
 The Ageable module handles keeping track of an object's age.
 
     player = GameObject()
-
+    
     player.update(1)
-
-    #=> player.I.age == 1
+    
+    #=> player.I.age == 1   
 
 @name Ageable
 @module
@@ -4401,12 +4402,12 @@ by default in `GameObject`.
       height: 20
       other: "stuff"
       more: "properties"
-
+    
     player.position()
     # => Uncaught TypeError: Object has no method 'position'
-
+    
     player.include(Bounded)
-
+    
     # now player has all the methods provided by this module
     player.position()
     # => {x: 10, y: 50}
@@ -4434,7 +4435,7 @@ Bounded = function(I, self) {
   return {
     /**
     Get the object closest to this one.
-
+    
     @name closest
     @methodOf Bounded#
     @param {Object|Array|String} selector An object or set of objects to find the closest from.
@@ -4453,26 +4454,26 @@ Bounded = function(I, self) {
     },
     /**
     Distance between two objects. Proxies to Point.distance.
-    In order for this to work, `otherObj` must have a
+    In order for this to work, `otherObj` must have a 
     position method.
-
+    
         player = GameObject
           x: 50
           y: 50
           width: 10
           height: 10
-
+        
         player.include Bounded
-
+        
         enemy = GameObject
           x: 110
           y: 120
           width: 7
           height: 20
-
+          
         player.distance(enemy)
         # => 92.19544457292888
-
+    
     @name distance
     @methodOf Bounded#
     @see Point.distance
@@ -4484,16 +4485,16 @@ Bounded = function(I, self) {
     /**
     The position of this game object. By default it is the top left point.
     Redefining the center method will change the relative position.
-
+    
         player = Core
           x: 50
           y: 40
-
-        player.include(Bounded)
-
+      
+        player.include(Bounded)      
+      
         player.position()
         # => {x: 50, y: 40}
-
+    
     @name position
     @methodOf Bounded#
     @returns {Point} The position of this object
@@ -4514,18 +4515,18 @@ Bounded = function(I, self) {
     /**
     Does a check to see if this object is overlapping
     with the bounds passed in.
-
+    
         player = Core
           x: 4
           y: 6
           width: 20
           height: 20
-
-        player.include(Bounded)
-
+      
+        player.include(Bounded)  
+      
         player.collides({x: 5, y: 7, width: 20, height: 20})
         # => true
-
+    
     @name collides
     @methodOf Bounded#
     @returns {Point} The position of this object
@@ -4537,27 +4538,27 @@ Bounded = function(I, self) {
     This returns a modified bounds based on the collision margin.
     The area of the bounds is reduced if collision margin is positive
     and increased if collision margin is negative.
-
+    
         player = Core
-          collisionMargin:
+          collisionMargin: 
             x: -2
             y: -4
           x: 50
           y: 50
           width: 20
           height: 20
-
+      
         player.include(Bounded)
-
+      
         player.collisionBounds()
         # => {x: 38, y: 36, height: 28, width: 24}
-
+      
         player.collisionBounds(10, 10)
         # => {x: 48, y: 46, height: 28, width: 24}
-
+    
     @name collisionBounds
     @methodOf Bounded#
-    @param {Number} xOffset the amount to shift the x position
+    @param {Number} xOffset the amount to shift the x position 
     @param {Number} yOffset the amount to shift the y position
     @returns {Object} The collision bounds
     */
@@ -4572,24 +4573,24 @@ Bounded = function(I, self) {
     },
     /**
     Returns infomation about the location of the object and its dimensions with optional offsets.
-
+    
         player = Core
           x: 3
           y: 6
           width: 2
           height: 2
-
+      
         player.include(Bounded)
-
+      
         player.bounds()
         # => {x: 3, y: 6, width: 2, height: 2}
-
+      
         player.bounds(7, 4)
-        # => {x: 10, y: 10, width: 2, height: 2}
-
+        # => {x: 10, y: 10, width: 2, height: 2}   
+    
     @name bounds
     @methodOf Bounded#
-    @param {Number} xOffset the amount to shift the x position
+    @param {Number} xOffset the amount to shift the x position 
     @param {Number} yOffset the amount to shift the y position
     */
     bounds: function(xOffset, yOffset) {
@@ -4605,18 +4606,18 @@ Bounded = function(I, self) {
     /**
     The centeredBounds method returns infomation about the center
     of the object along with the midpoint of the width and height.
-
+    
         player = Core
           x: 3
           y: 6
           width: 2
           height: 2
-
+      
         player.include(Bounded)
-
+      
         player.centeredBounds()
         # => {x: 4, y: 7, xw: 1, yw: 1}
-
+    
     @name centeredBounds
     @methodOf Bounded#
     */
@@ -4633,18 +4634,18 @@ Bounded = function(I, self) {
     /**
     The center method returns the {@link Point} that is
     the center of the object.
-
+    
         player = Core
           x: 50
           y: 40
           width: 10
           height: 30
-
-        player.include(Bounded)
-
+      
+        player.include(Bounded)  
+      
         player.center()
         # => {x: 30, y: 35}
-
+    
     @name center
     @methodOf Bounded#
     @returns {Point} The middle of the calling object
@@ -4655,18 +4656,18 @@ Bounded = function(I, self) {
     /**
     Return the circular bounds of the object. The circle is
     centered at the midpoint of the object.
-
+    
         player = Core
           radius: 5
           x: 50
           y: 50
           other: "stuff"
-
+      
         player.include(Bounded)
-
+      
         player.circle()
         # => {radius: 5, x: 50, y: 50}
-
+    
     @name circle
     @methodOf Bounded#
     @returns {Object} An object with a position and a radius
@@ -4833,15 +4834,15 @@ Camera.Fade = function(I, self) {
   };
   return {
     /**
-    A convenient way to set the flash effect instance variables. This provides a shorthand for fading the screen in
+    A convenient way to set the flash effect instance variables. This provides a shorthand for fading the screen in 
     from a given color over a specified duration.
-
+    
         engine.fadeIn()
         # => Sets the effect variables to their default state. This will the screen to go from black to transparent over the next 30 frames.
-
+      
         engine.fadeIn('blue', 50)
         # => This effect will start off blue and fade to transparent over 50 frames.
-
+    
     @name fadeIn
     @methodOf Camera#
     @param {Number} [duration=30] How long the effect lasts
@@ -4854,17 +4855,17 @@ Camera.Fade = function(I, self) {
       return configureFade(duration, color, alpha);
     },
     /**
-    A convenient way to set the flash effect instance variables. This provides a shorthand for fading
+    A convenient way to set the flash effect instance variables. This provides a shorthand for fading 
     the screen to a given color over a specified duration.
-
+    
         camera.fadeOut()
         # => Sets the effect variables to their default state. This will the screen to fade from ransparent to black over the next 30 frames.
-
+        
         camera.fadeOut
           color: blue
           duration: 30
         # => This effect will start off transparent and change to blue over 50 frames.
-
+    
     @name fadeOut
     @methodOf Camera#
     @param {Number} [duration=30] How long the effect lasts
@@ -4880,7 +4881,7 @@ Camera.Fade = function(I, self) {
 };
 
 /**
-The <code>Flash</code> module allows you to flash a color onscreen and then fade to transparent over a time period.
+The <code>Flash</code> module allows you to flash a color onscreen and then fade to transparent over a time period. 
 This is nice for lightning type effects or to accentuate major game events.
 
 @name Flash
@@ -4917,21 +4918,21 @@ Camera.Flash = function(I, self) {
     /**
     A convenient way to set the flash effect instance variables. Alternatively, you can modify them by hand, but
     using Camera#flash is the suggested approach.
-
+    
         camera.flash()
         # => Sets the flash effect variables to their default state. This will cause a white flash that will turn transparent in the next 12 frames.
-
+      
         camera.flash
           color: 'green'
           duration: 30
         # => This flash effect will start off green and fade to transparent over 30 frames.
-
+      
         camera.flash
           color: Color(255, 0, 0, 0)
           duration: 20
           targetAlpha: 1
-        # => This flash effect will start off transparent and move toward red over 20 frames
-
+        # => This flash effect will start off transparent and move toward red over 20 frames 
+    
     @name flash
     @methodOf Camera#
     @param {Color} [color="white"] The flash color
@@ -5084,18 +5085,18 @@ Clampable = function(I, self) {
   return {
     /**
     Keep an objects attributes within a given range.
-
+    
         # Player's health will be within [0, 100] at the end of every update
         player.clamp
           health:
             min: 0
             max: 100
-
+      
         # Score can only be positive
         player.clamp
           score:
             min: 0
-
+    
     @name clamp
     @methodOf Clampable#
     @param {Object} data
@@ -5105,7 +5106,7 @@ Clampable = function(I, self) {
     },
     /**
     Helper to clamp the `x` and `y` properties of the object to be within a given bounds.
-
+    
     @name clampToBounds
     @methodOf Clampable#
     @param {Rectangle} [bounds] The bounds to clamp the object's position within. Defaults to the app size if none given.
@@ -5255,51 +5256,51 @@ Clampable = function(I, self) {
   };
   /**
   Collision holds many useful class methods for checking geometric overlap of various objects.
-
+  
   @name Collision
   @namespace
   */
   Collision = {
     /**
     Collision holds many useful class methods for checking geometric overlap of various objects.
-
+    
         player = engine.add
           class: "Player"
           x: 0
           y: 0
           width: 10
           height: 10
-
+    
         enemy = engine.add
           class: "Enemy"
           x: 5
           y: 5
           width: 10
           height: 10
-
+    
         enemy2 = engine.add
           class: "Enemy"
           x: -5
           y: -5
           width: 10
           height: 10
-
+    
         Collision.collide(player, enemy, (p, e) -> ...)
         # => callback is called once
-
+    
         Collision.collide(player, [enemy, enemy2], (p, e) -> ...)
         # => callback is called twice
-
+    
         Collision.collide("Player", "Enemy", (p, e) -> ...)
         # => callback is also called twice
-
+    
     @name collide
     @methodOf Collision
     @param {Object|Array|String} groupA An object or set of objects to check collisions with
     @param {Object|Array|String} groupB An object or set of objects to check collisions with
     @param {Function} callback The callback to call when an object of groupA collides
     with an object of groupB: (a, b) ->
-    @param {Function} [detectionMethod] An optional detection method to determine when two
+    @param {Function} [detectionMethod] An optional detection method to determine when two 
     objects are colliding.
     */
     collide: function(groupA, groupB, callback, detectionMethod) {
@@ -5323,25 +5324,25 @@ Clampable = function(I, self) {
     /**
     Takes two bounds objects and returns true if they collide (overlap), false otherwise.
     Bounds objects have x, y, width and height properties.
-
+    
         player = GameObject
           x: 0
           y: 0
           width: 10
           height: 10
-
+    
         enemy = GameObject
           x: 5
           y: 5
           width: 10
           height: 10
-
+    
         Collision.rectangular(player, enemy)
         # => true
-
+    
         Collision.rectangular(player, {x: 50, y: 40, width: 30, height: 30})
         # => false
-
+    
     @name rectangular
     @methodOf Collision
     @param {Object} a The first rectangle
@@ -5354,28 +5355,28 @@ Clampable = function(I, self) {
     /**
     Takes two circle objects and returns true if they collide (overlap), false otherwise.
     Circle objects have x, y, and radius.
-
+    
         player = GameObject
           x: 5
           y: 5
           radius: 10
-
+    
         enemy = GameObject
           x: 10
           y: 10
           radius: 10
-
+    
         farEnemy = GameObject
           x: 500
           y: 500
           radius: 30
-
+    
         Collision.circular(player, enemy)
         # => true
-
+    
         Collision.circular(player, farEnemy)
         # => false
-
+    
     @name circular
     @methodOf Collision
     @param {Object} a The first circle
@@ -5391,21 +5392,21 @@ Clampable = function(I, self) {
     },
     /**
     Detects whether a line intersects a circle.
-
+    
         circle = engine.add
           class: "circle"
           x: 50
           y: 50
           radius: 10
-
+    
         Collision.rayCircle(Point(0, 0), Point(1, 0), circle)
         # => true
-
+    
     @name rayCircle
     @methodOf Collision
     @param {Point} source The starting position
     @param {Point} direction A vector from the point
-    @param {Object} target The circle
+    @param {Object} target The circle 
     @returns {Boolean} true if the line intersects the circle, false otherwise
     */
     rayCircle: function(source, direction, target) {
@@ -5427,17 +5428,17 @@ Clampable = function(I, self) {
     },
     /**
     Detects whether a line intersects a rectangle.
-
+    
         rect = engine.add
           class: "circle"
           x: 50
           y: 50
           width: 20
           height: 20
-
+    
         Collision.rayRectangle(Point(0, 0), Point(1, 0), rect)
         # => true
-
+    
     @name rayRectangle
     @methodOf Collision
     @param {Point} source The starting position
@@ -5685,51 +5686,51 @@ var __slice = Array.prototype.slice;
   };
   /**
   Create a new color. The constructor is very flexible. It accepts individual r, g, b, a values,
-  arrays of r, g, b values, hex strings, rgb strings, hsl strings, other Color objects,
-  and even the named colors from the xkcd survey: http://blog.xkcd.com/2010/05/03/color-survey-results/.
+  arrays of r, g, b values, hex strings, rgb strings, hsl strings, other Color objects, 
+  and even the named colors from the xkcd survey: http://blog.xkcd.com/2010/05/03/color-survey-results/. 
   If no arguments are given, defaults to transparent.
-
+  
       individualRgb = Color(23, 56, 49, 0.4)
-
+    
       arrayRgb = Color([59, 100, 230])
-
+    
       hex = Color('#ff0000')
-
+    
       rgb = Color('rgb(0, 255, 0)')
-
+    
       hsl = Color('hsl(180, 1, 0.5)')
-
+    
       anotherColor = Color('blue')
-
+    
       Color(anotherColor)
       # => a new color with the same r, g, b, and alpha values as `anotherColor`
-
+    
       # You have access to all sorts of weird colors.
       # We give you all the named colors the browser recognizes
-      # and the ones from this survey
+      # and the ones from this survey 
       # http://blog.xkcd.com/2010/05/03/color-survey-results/
       namedBrown = Color('Fuzzy Wuzzy Brown')
-
-      # Uutput color in Hex format
+    
+      # Uutput color in Hex format 
       namedBrown.toHex()
       # => '#c45655'
-
+    
       # Default behavior
       transparent = Color()
-
+    
       transparent.toString()
-      # => 'rgba(0, 0, 0, 0)'
-
+      # => 'rgba(0, 0, 0, 0)' 
+    
       # let's print out the colors on a canvas to see what they look like
       canvas.font('14px Helvetica')
       for color, index in ['individualRgb', 'arrayRgb', 'hex', 'rgb', 'hsl', 'anotherColor', 'namedBrown']
         canvas.centerText
           color: eval(color)
           text: color
-          y: 20 * (index + 1)
-
+          y: 20 * (index + 1)  
+  
   @name Color
-  @param {Array|Number|String|Color} args... An Array, r, g, b values,
+  @param {Array|Number|String|Color} args... An Array, r, g, b values, 
   a sequence of numbers defining r, g, b values, a hex or hsl string, another Color object, or a named color
   @constructor
   */
@@ -5760,25 +5761,25 @@ var __slice = Array.prototype.slice;
   Color.prototype = {
     /**
     Returns the rgba color channels in an array.
-
+    
         transparent =  Color()
-
+    
         transparent.channels()
         # => [0, 0, 0, 0]
-
+    
         red = Color("#FF0000")
-
+    
         red.channels()
         # => [255, 0, 0, 1]
-
+    
         rgb = Color(200, 34, 2)
-
+    
         rgb.channels()
         # => [200, 34, 2, 1]
-
+    
     @name channels
     @methodOf Color#
-
+    
     @returns {Array} Array of r, g, b, and alpha values of the color
     */
     channels: function() {
@@ -5786,11 +5787,11 @@ var __slice = Array.prototype.slice;
     },
     /**
     A copy of the calling color that is its complementary color on the color wheel.
-
+    
         red = Color(255, 0, 0)
-
+    
         cyan = red.complement()
-
+    
         # to see what they look like
         for color, index in [red, cyan]
           canvas.drawRect
@@ -5798,11 +5799,11 @@ var __slice = Array.prototype.slice;
             x: 20 + (60 * index)
             y: 20 + (60 * index)
             width: 60
-            height: 60
-
+            height: 60         
+    
     @name complement
     @methodOf Color#
-
+    
     @returns {Color} new color that is a copy of the calling color with its hue shifted by 180 degrees on the color wheel
     */
     complement: function() {
@@ -5810,18 +5811,18 @@ var __slice = Array.prototype.slice;
     },
     /**
     Modifies the calling color to make it the complement of its previous value.
-
+    
         red = Color(255, 0, 0)
-
+    
         # modifies red in place to make it into cyan
         red.complement$()
-
+    
         red.toString()
         # => 'rgba(0, 255, 255, 1)'
-
+    
     @name complement$
     @methodOf Color#
-
+    
     @returns {Color} the color hue shifted by 180 degrees on the color wheel. Modifies the existing color.
     */
     complement$: function() {
@@ -5829,20 +5830,20 @@ var __slice = Array.prototype.slice;
     },
     /**
     A copy of the calling color.
-
+    
         color = Color(0, 100, 200)
-
+    
         copy = color.copy()
-
+    
         color == copy
         # => false
-
+    
         color.equal(copy)
         # => true
-
+    
     @name copy
     @methodOf Color#
-
+    
     @returns {Color} A new color. A copy of the calling color
     */
     copy: function() {
@@ -5850,11 +5851,11 @@ var __slice = Array.prototype.slice;
     },
     /**
     Returns a copy of the calling color darkened by `amount` (Lightness of the color ranges from 0 to 1).
-
+    
         green = Color(0, 255, 0)
-
+    
         darkGreen = green.darken(0.3)
-
+    
         # to see what they look like
         for color, index in [green, darkGreen]
           canvas.drawRect
@@ -5862,12 +5863,12 @@ var __slice = Array.prototype.slice;
             x: 20 + (60 * index)
             y: 20 + (60 * index)
             width: 60
-            height: 60
-
+            height: 60         
+    
     @name darken
     @methodOf Color#
     @param {Number} amount Amount to darken color by (between 0 - 1)
-
+    
     @returns {Color} A new color. The lightness value is reduced by `amount` from the original.
     */
     darken: function(amount) {
@@ -5875,19 +5876,19 @@ var __slice = Array.prototype.slice;
     },
     /**
     Modifies the color so that it is darkened by `amount` (Lightness of the color ranges from 0 to 1).
-
+    
         green = Color(0, 255, 0)
-
+    
         # Modifies green to be darkGreen
         green.darken$(0.3)
-
+    
         green.toString()
         # => 'rgba(0, 102, 0, 1)'
-
+    
     @name darken$
     @methodOf Color#
     @param {Number} amount Amount to darken color by (between 0 - 1)
-
+    
     @returns {Color} the color with the lightness value reduced by `amount`
     */
     darken$: function(amount) {
@@ -5899,11 +5900,11 @@ var __slice = Array.prototype.slice;
     },
     /**
     A copy of the calling color with its saturation reduced by `amount`.
-
+    
         blue = Color(0, 0, 255)
-
+    
         desaturatedBlue = blue.desaturate(0.4)
-
+    
         # to see what they look like
         for color, index in [blue, desaturatedBlue]
           canvas.drawRect
@@ -5911,12 +5912,12 @@ var __slice = Array.prototype.slice;
             x: 20 + (60 * index)
             y: 20 + (60 * index)
             width: 60
-            height: 60
-
+            height: 60  
+    
     @name desaturate
     @methodOf Color#
     @param {Number} amount Amount to reduce color saturation by (between 0 and 1)
-
+    
     @returns {Color} A copy of the color with the saturation value reduced by `amount`
     */
     desaturate: function(amount) {
@@ -5924,19 +5925,19 @@ var __slice = Array.prototype.slice;
     },
     /**
     The modified color with its saturation reduced by `amount`.
-
+    
         blue = Color(0, 0, 255)
-
+    
         # modifies blue to be desaturatedBlue
         blue.desaturate$(0.4)
-
+    
         blue.toString()
         # => 'rgba(38, 38, 217, 1)'
-
+    
     @name desaturate$
     @methodOf Color#
     @param {Number} amount Amount to reduce color saturation by (between 0 and 1)
-
+    
     @returns {Color} the color with the saturation value reduced by `amount`
     */
     desaturate$: function(amount) {
@@ -5948,20 +5949,20 @@ var __slice = Array.prototype.slice;
     },
     /**
     Determine whether two colors are equal. Compares their r, g, b, and alpha values.
-
+    
         hex = Color('#ffff00')
         rgb = Color(255, 255, 0)
-
+    
         hex == rgb
         # => false
-
+    
         hex.equal(rgb)
         # => true
-
+    
     @name equal
     @methodOf Color#
     @param {Color} other the color to compare to the calling color
-
+    
     @returns {Boolean} true if the r, g, b, a values of the colors agree, false otherwise
     */
     equal: function(other) {
@@ -5969,11 +5970,11 @@ var __slice = Array.prototype.slice;
     },
     /**
     A copy of the calling color converted to grayscale.
-
+    
         yellow = Color(255, 255, 0)
-
+    
         gray = yellow.grayscale()
-
+    
         # to see what they look like
         for color, index in [yellow, gray]
           canvas.drawRect
@@ -5981,11 +5982,11 @@ var __slice = Array.prototype.slice;
             x: 20 + (60 * index)
             y: 20 + (60 * index)
             width: 60
-            height: 60
-
+            height: 60 
+    
     @name grayscale
     @methodOf Color#
-
+    
     @returns {Color} A copy of the calling color converted to grayscale.
     */
     grayscale: function() {
@@ -5993,18 +5994,18 @@ var __slice = Array.prototype.slice;
     },
     /**
     The calling color converted to grayscale.
-
+    
         color = Color(255, 255, 0)
-
+    
         # modifies color into gray
         color.grayscale$()
-
+    
         color.toString()
         # => 'rgba(128, 128, 128, 1)'
-
+    
     @name grayscale$
     @methodOf Color#
-
+    
     @returns {Color} The calling color converted to grayscale.
     */
     grayscale$: function() {
@@ -6015,29 +6016,29 @@ var __slice = Array.prototype.slice;
       return this;
     },
     /**
-    A getter / setter for the hue value of the color. Passing no argument returns the
+    A getter / setter for the hue value of the color. Passing no argument returns the 
     current hue value. Passing a value will set the hue to that value and return the color.
-
+    
         magenta = Color(255, 0, 255)
-
+    
         magenta.hue()
         # => 300
-
+    
         # modifies the color to be yellow
         magenta.hue(60)
-
+    
         # to see what it looks like
         canvas.drawRect
           color: magenta
-          x: 50
-          y: 30
+          x: 50 
+          y: 30 
           width: 80
-          height: 80
-
+          height: 80 
+    
     @name hue
     @methodOf Color#
     @param {Number} [newVal] the new hue value
-
+    
     @returns {Color|Number} returns the color object if you pass a new hue value and returns the hue otherwise
     */
     hue: function(newVal) {
@@ -6052,29 +6053,29 @@ var __slice = Array.prototype.slice;
       }
     },
     /**
-    A getter / setter for the lightness value of the color. Passing no argument returns the
+    A getter / setter for the lightness value of the color. Passing no argument returns the 
     current lightness value. Passing a value will set the lightness to that value and return the color.
-
+    
         magenta = Color(255, 0, 255)
-
+    
         magenta.lightness()
         # => 0.9
-
+    
         # modifies magenta in place to be lighter
         magenta.lightness(0.75)
-
+    
         # to see what it looks like
         canvas.drawRect
           color: magenta
-          x: 50
-          y: 30
+          x: 50 
+          y: 30 
           width: 80
-          height: 80
-
+          height: 80 
+    
     @name lightness
     @methodOf Color#
     @param {Number} [newVal] the new lightness value
-
+    
     @returns {Color|Number} returns the color object if you pass a new lightness value and returns the lightness otherwise
     */
     lightness: function(newVal) {
@@ -6101,19 +6102,19 @@ var __slice = Array.prototype.slice;
     },
     /**
     A copy of the calling color with its hue shifted by `degrees`. This differs from the hue setter in that it adds to the existing hue value and will wrap around 0 and 360.
-
+    
         magenta = Color(255, 0, 255)
-
+    
         magenta.hue()
         # => 300
-
+    
         yellow = magenta.shiftHue(120)
-
+    
         # since magenta's hue is 300 we have wrapped
         # around 360 to end up at 60
         yellow.hue()
         # => 60
-
+    
         # to see what they look like
         for color, index in [magenta, yellow]
           canvas.drawRect
@@ -6121,12 +6122,12 @@ var __slice = Array.prototype.slice;
             x: 20 + (60 * index)
             y: 20 + (60 * index)
             width: 60
-            height: 60
-
+            height: 60 
+    
     @name shiftHue
     @methodOf Color#
     @param {Number} degrees number of degrees to shift the hue on the color wheel.
-
+    
     @returns {Color} A copy of the color with its hue shifted by `degrees`
     */
     shiftHue: function(degrees) {
@@ -6134,27 +6135,27 @@ var __slice = Array.prototype.slice;
     },
     /**
     The calling color with its hue shifted by `degrees`. This differs from the hue setter in that it adds to the existing hue value and will wrap around 0 and 360.
-
+    
         magenta = Color(255, 0, 255)
-
+    
         magenta.hue()
         # => 300
-
+    
         magenta.shiftHue$(120)
-
+    
         # since magenta's hue is 300 we have wrapped
-        # around 360 to end up at 60. Also we have
+        # around 360 to end up at 60. Also we have 
         # modified magenta in place to become yellow
         magenta.hue()
         # => 60
-
+    
         magenta.toString()
         # => 'rgba(255, 255, 0, 1)'
-
+    
     @name shiftHue$
     @methodOf Color#
     @param {Number} degrees number of degrees to shift the hue on the color wheel.
-
+    
     @returns {Color} The color with its hue shifted by `degrees`
     */
     shiftHue$: function(degrees) {
@@ -6166,11 +6167,11 @@ var __slice = Array.prototype.slice;
     },
     /**
     Returns a copy of the calling color lightened by `amount` (Lightness of the color ranges from 0 to 1).
-
+    
         green = Color(0, 255, 0)
-
+    
         lightGreen = green.lighten(0.3)
-
+    
         # to see what they look like
         for color, index in [green, lightGreen]
           canvas.drawRect
@@ -6178,12 +6179,12 @@ var __slice = Array.prototype.slice;
             x: 20 + (60 * index)
             y: 20 + (60 * index)
             width: 60
-            height: 60
-
+            height: 60 
+    
     @name lighten
     @methodOf Color#
     @param {Number} amount Amount to lighten color by (between 0 to 1)
-
+    
     @returns {Color} A new color. The lightness value is increased by `amount` from the original.
     */
     lighten: function(amount) {
@@ -6191,20 +6192,20 @@ var __slice = Array.prototype.slice;
     },
     /**
     The calling color lightened by `amount` (Lightness of the color ranges from 0 to 1).
-
+    
         green = Color(0, 255, 0)
-
+    
         green.lighten$(0.2)
-
+    
         # we have modified green in place
         # to become lightGreen
         green.toString()
         # => 'rgba(102, 255, 102, 1)'
-
+    
     @name lighten$
     @methodOf Color#
     @param {Number} amount Amount to lighten color by (between 0 - 1)
-
+    
     @returns {Color} The calling color with its lightness value increased by `amount`.
     */
     lighten$: function(amount) {
@@ -6215,18 +6216,18 @@ var __slice = Array.prototype.slice;
       return this;
     },
     /**
-    A copy of the calling color mixed with `other` using `amount` as the
+    A copy of the calling color mixed with `other` using `amount` as the 
     mixing ratio. If amount is not passed, then the colors are mixed evenly.
-
+    
         red = Color(255, 0, 0)
         yellow = Color(255, 255, 0)
-
+    
         # With no amount argument the colors are mixed evenly
         orange = red.mixWith(yellow)
-
+    
         # With an amount of 0.3 we are mixing the color 30% red and 70% yellow
         somethingCloseToOrange = red.mixWith(yellow, 0.3)
-
+    
         # to see what they look like
         for color, index in [red, yellow, orange, somethingCloseToOrange]
           canvas.drawRect
@@ -6234,45 +6235,45 @@ var __slice = Array.prototype.slice;
             x: 20 + (60 * (index % 2))
             y: 20 + (60 * (if index > 1 then 1 else 0))
             width: 60
-            height: 60
-
+            height: 60 
+    
     @name mixWith
     @methodOf Color#
     @param {Color} other the other color to mix
     @param {Number} [amount] the mixing ratio of the calling color to `other`
-
+    
     @returns {Color} A new color that is a mix of the calling color and `other`
     */
     mixWith: function(other, amount) {
       return this.copy().mixWith$(other, amount);
     },
     /**
-    A copy of the calling color mixed with `other` using `amount` as the
+    A copy of the calling color mixed with `other` using `amount` as the 
     mixing ratio. If amount is not passed, then the colors are mixed evenly.
-
+    
         red = Color(255, 0, 0)
         yellow = Color(255, 255, 0)
         anotherRed = Color(255, 0, 0)
-
+    
         # With no amount argument the colors are mixed evenly
         red.mixWith$(yellow)
-
-        # We have modified red in place to be orange
+    
+        # We have modified red in place to be orange 
         red.toString()
-        # => 'rgba(255, 128, 0, 1)'
-
+        # => 'rgba(255, 128, 0, 1)'    
+    
         # With an amount of 0.3 we are mixing the color 30% red and 70% yellow
         anotherRed.mixWith$(yellow, 0.3)
-
-        # We have modified `anotherRed` in place to be somethingCloseToOrange
+    
+        # We have modified `anotherRed` in place to be somethingCloseToOrange 
         anotherRed.toString()
         # => rgba(255, 179, 0, 1)
-
+    
     @name mixWith$
     @methodOf Color#
     @param {Color} other the other color to mix
     @param {Number} [amount] the mixing ratio of the calling color to `other`
-
+    
     @returns {Color} The modified calling color after mixing it with `other`
     */
     mixWith$: function(other, amount) {
@@ -6288,17 +6289,17 @@ var __slice = Array.prototype.slice;
     },
     /**
     A copy of the calling color with its saturation increased by `amount`.
-
+    
         color = Color(50, 50, 200)
-
+    
         color.saturation()
         # => 0.6
-
+    
         saturatedColor = color.saturate(0.2)
-
+    
         saturatedColor.saturation()
         # => 0.8
-
+    
         # to see what they look like
         for color, index in [color, saturatedColor]
           canvas.drawRect
@@ -6306,12 +6307,12 @@ var __slice = Array.prototype.slice;
             x: 20 + (60 * index)
             y: 20 + (60 * index)
             width: 60
-            height: 60
-
+            height: 60 
+    
     @name saturate
     @methodOf Color#
     @param {Number} amount the amount to increase saturation by
-
+    
     @returns {Color} A copy of the calling color with its saturation increased by `amount`
     */
     saturate: function(amount) {
@@ -6319,25 +6320,25 @@ var __slice = Array.prototype.slice;
     },
     /**
     The calling color with its saturation increased by `amount`.
-
+    
         color = Color(50, 50, 200)
-
+    
         color.saturation()
         # => 0.6
-
+    
         color.saturate$(0.2)
-
+    
         # We have modified color in place and increased its saturation to 0.8
         color.saturation()
         # => 0.8
-
+    
         color.toString()
         # => rgba(25, 25, 225, 1)
-
+    
     @name saturate$
     @methodOf Color#
     @param {Number} amount the amount to increase saturation by
-
+    
     @returns {Color} The calling color with its saturation increased by `amount`
     */
     saturate$: function(amount) {
@@ -6348,28 +6349,28 @@ var __slice = Array.prototype.slice;
       return this;
     },
     /**
-    A getter / setter for the saturation value of the color. Passing no argument returns the
+    A getter / setter for the saturation value of the color. Passing no argument returns the 
     current saturation value. Passing a value will set the saturation to that value and return the color.
-
+    
         yellow = Color('hsl(60, 0.5, 0.5)')
-
+    
         yellow.saturation()
         # => 0.5
-
+    
         yellow.saturation(0.8)
-
+    
         # to see what it looks like
         canvas.drawRect
           color: yellow
-          x: 50
-          y: 30
+          x: 50 
+          y: 30 
           width: 80
-          height: 80
-
+          height: 80     
+    
     @name saturation
     @methodOf Color#
     @param {Number} [newVal] the new saturation value
-
+    
     @returns {Color|Number} returns the color object if you pass a new saturation value and returns the saturation otherwise
     */
     saturation: function(newVal, mode) {
@@ -6395,22 +6396,22 @@ var __slice = Array.prototype.slice;
       }
     },
     /**
-    returns the Hex representation of the color. Exclude the leading `#` by passing false.
-
+    returns the Hex representation of the color. Exclude the leading `#` by passing false. 
+    
         color = Color('hsl(60, 1, 0.5)')
-
+    
         # passing nothing will leave the `#` intact
         color.toHex()
         # => '#ffff00'
-
+    
         # passing false will remove the `#`
         color.toHex(false)
         # => 'ffff00'
-
+    
     @name toHex
     @methodOf Color#
     @param {Boolean} [leadingHash] if passed as false excludes the leading `#` from the string
-
+    
     @returns {String} returns the Hex representation of the color
     */
     toHex: function(leadingHash) {
@@ -6434,16 +6435,16 @@ var __slice = Array.prototype.slice;
       }
     },
     /**
-    returns an array of the hue, saturation, lightness, and alpha values of the color.
-
+    returns an array of the hue, saturation, lightness, and alpha values of the color. 
+    
         magenta = Color(255, 0, 255)
-
+    
         magenta.toHsl()
         # => [300, 1, 0.5, 1]
-
+    
     @name toHsl
     @methodOf Color#
-
+    
     @returns {Array} An array of the hue, saturation, lightness, and alpha values of the color.
     */
     toHsl: function() {
@@ -6507,16 +6508,16 @@ var __slice = Array.prototype.slice;
       return [h, s, v];
     },
     /**
-    returns string rgba representation of the color.
-
+    returns string rgba representation of the color. 
+    
         red = Color('#ff0000')
-
+    
         red.toString()
         # => 'rgba(255, 0, 0, 1)'
-
+    
     @name toString
     @methodOf Color#
-
+    
     @returns {String} The rgba string representation of the color
     */
     toString: function() {
@@ -6524,17 +6525,17 @@ var __slice = Array.prototype.slice;
     },
     /**
     A copy of the calling color with its alpha reduced by `amount`.
-
+    
         color = Color(0, 0, 0, 1)
-
+    
         color.a
         # => 1
-
+    
         transparentColor = color.transparentize(0.5)
-
+    
         transparentColor.a
         # => 0.5
-
+    
         # to see what they look like
         for color, index in [color, transparentColor]
           canvas.drawRect
@@ -6542,11 +6543,11 @@ var __slice = Array.prototype.slice;
             x: 20 + (60 * index)
             y: 20 + (60 * index)
             width: 60
-            height: 60
-
+            height: 60     
+    
     @name transparentize
     @methodOf Color#
-
+    
     @returns {Color} A copy of the calling color with its alpha reduced by `amount`
     */
     transparentize: function(amount) {
@@ -6554,21 +6555,21 @@ var __slice = Array.prototype.slice;
     },
     /**
     The calling color with its alpha reduced by `amount`.
-
+    
         color = Color(0, 0, 0, 1)
-
+    
         color.a
         # => 1
-
+    
         # We modify color in place
         color.transparentize$(0.5)
-
+    
         color.a
         # => 0.5
-
+    
     @name transparentize$
     @methodOf Color#
-
+    
     @returns {Color} The calling color with its alpha reduced by `amount`
     */
     transparentize$: function(amount) {
@@ -6577,17 +6578,17 @@ var __slice = Array.prototype.slice;
     },
     /**
     A copy of the calling color with its alpha increased by `amount`.
-
+    
         color = Color(0, 0, 0, 0.25)
-
+    
         color.a
         # => 0.25
-
+    
         opaqueColor = color.opacify(0.5)
-
+    
         opaqueColor.a
         # => 0.75
-
+    
         # to see what they look like
         for color, index in [color, opaqueColor]
           canvas.drawRect
@@ -6595,11 +6596,11 @@ var __slice = Array.prototype.slice;
             x: 20 + (60 * index)
             y: 20 + (60 * index)
             width: 60
-            height: 60
-
+            height: 60     
+    
     @name opacify
     @methodOf Color#
-
+    
     @returns {Color} A copy of the calling color with its alpha increased by `amount`
     */
     opacify: function(amount) {
@@ -6607,21 +6608,21 @@ var __slice = Array.prototype.slice;
     },
     /**
     The calling color with its alpha increased by `amount`.
-
+    
         color = Color(0, 0, 0, 0)
-
+    
         color.a
         # => 0
-
+    
         # We modify color in place
         color.opacify$(0.25)
-
+    
         color.a
         # => 0.25
-
+    
     @name opacify$
     @methodOf Color#
-
+    
     @returns {Color} The calling color with its alpha increased by `amount`
     */
     opacify$: function(amount) {
@@ -6631,16 +6632,16 @@ var __slice = Array.prototype.slice;
   };
   /**
   returns a random color.
-
+  
       Color.random().toString()
       # => 'rgba(213, 144, 202, 1)'
-
+    
       Color.random().toString()
       # => 'rgba(1, 211, 24, 1)'
-
+  
   @name random
   @methodOf Color
-
+  
   @returns {Color} A random color.
   */
   Color.random = function() {
@@ -6648,29 +6649,29 @@ var __slice = Array.prototype.slice;
   };
   /**
   Mix two colors. Behaves just like `#mixWith` except that you are passing two colors.
-
+  
       red = Color(255, 0, 0)
       yellow = Color(255, 255, 0)
-
+    
       # With no amount argument the colors are mixed evenly
       orange = Color.mix(red, yellow)
-
+    
       orange.toString()
-      # => 'rgba(255, 128, 0, 1)'
-
+      # => 'rgba(255, 128, 0, 1)'    
+    
       # With an amount of 0.3 we are mixing the color 30% red and 70% yellow
       somethingCloseToOrange = Color.mix(red, yellow, 0.3)
-
+    
       somethingCloseToOrange.toString()
       # => rgba(255, 179, 0, 1)
-
+  
   @name mix
   @methodOf Color
   @see Color#mixWith
   @param {Color} color1 the first color to mix
   @param {Color} color2 the second color to mix
-  @param {Number} amount the ratio to mix the colors
-
+  @param {Number} amount the ratio to mix the colors 
+  
   @returns {Color} A new color that is the two colors mixed at the ratio defined by `amount`
   */
   Color.mix = function(color1, color2, amount) {
@@ -6711,21 +6712,21 @@ when up, down, left, or right are held.
         x: 15
         y: 30
         speed:  2
-
+    
       player.include Controllable
-
+    
       # hold the left arrow key, then
       # update the player
       player.update()
-
+    
       # the player is moved left according to his speed
       player.I.x
       # => 13
-
+    
       # We keep track of the direction the object is
       # facing in case you need that (eg. for attack direction)
       player.I.facing
-      # => player.I.facing
+      # => player.I.facing 
       # => Point(-1, 0)
 
 @name Controllable
@@ -6768,44 +6769,45 @@ GameObject's properties.
     # Health regeneration
     player = GameObject
       health: 50
-
-    # health will approach
-    # 100 by 1 each update
+    
+    # health will approach 
+    # 100 by 1 every second
     player.cooldown "health",
       target: 100
-
-    player.update(1)
-
+    
+    elapsedTime = 1
+    player.update(elapsedTime)
+    
     player.I.health
     # => 51
 
     # Shoot Timeout
     player = GameObject()
-
-    # by default the cooldown
-    # approaches 0 by 1 each update
+    
+    # by default the cooldown 
+    # approaches 0 by 1 each second
     player.cooldown "shootTimer"
-
+    
     player.I.shootTimer = 10 # => Pew! Pew!
-
-    player.update(1)
-
+    
+    player.update(elapsedTime)
+    
     player.I.shootTimer # => 9
-
+    
     # Turbo Cooldown
     player = GameObject()
-
-    # turboTimer starts at 1000
-    # and approaches 12 by 5 each update
+    
+    # turboTimer starts at 1000 
+    # and approaches 12 by 5 each second
     player.cooldown "turboTimer",
       approachBy: 5
       value: 1000
       target: 12
-
+    
     player.I.turboTimer = 1000
-
-    player.update(1)
-
+    
+    player.update(elapsedTime)
+    
     player.I.turboTimer # => 995
 
 @name Cooldown
@@ -6861,9 +6863,9 @@ attribute filters so that you can exclude irrelevant data.
       y: 14
       spriteName: null
       numericErrorProperty: NaN
-
+    
     player.include Debuggable
-
+    
     # sets up debug output for all player's properties
     # at the starting position (0, 0)
     player.debug
@@ -7037,34 +7039,34 @@ Debuggable = function(I, self) {
   return {
     /**
     Enable debugging display for the calling GameObject.
-
+    
         player = GameObject
           x: 40
           y: 14
           spriteName: null
           numericErrorProperty: NaN
-
+        
         player.include Debuggable
-
+      
         # sets up debug output for all player's properties
         # at the starting position (0, 0)
         player.debug
           filter: 'all'
-
+        
         player.I.y = 45
-
+        
         # sets up debug output for only properties that have
         # changed since initialization. In this case only y
         # would be displayed.
         player.debug
           filter: 'changed'
-
-        # sets up debug output for properties that are <code>undefined</code>,
+        
+        # sets up debug output for properties that are <code>undefined</code>, 
         # <code>null</code>, or <code>NaN</code>. In this case spriteName and
         # numericErrorProperty would be displayed.
         player.debug
           filter: 'undefined'
-
+        
         # sets up debug output using all possible configuration options
         player.debug
           bounds: true # set this to false to disable visual debugging of the object's bounding box
@@ -7073,7 +7075,7 @@ Debuggable = function(I, self) {
           x: 30 # x position to start printing debug information
           y: 50 # y position to start printing debug information
           velocity: true # set this to false to disable visual debugging of the object's velocity
-
+    
     @name debug
     @methodOf Debuggable#
     @param {Object} Options to configure debug output
@@ -7095,23 +7097,23 @@ Debuggable = function(I, self) {
     },
     /**
     Toggle display of debug information.
-
+    
         player = GameObject()
-
+      
         player.include Debuggable
-
+      
         # enables debug display
         player.debug()
-
+        
         # disables debug display
         player.toggleDisable()
-
-        # if false is passed to toggleDisplay, then debugging is disabled.
+        
+        # if false is passed to toggleDisplay, then debugging is disabled.  
         player.toggleDisplay(false)
-
+      
         # if true is passed to toggleDisplay, then debugging is enabled.
         player.toggleDisplay(true)
-
+    
     @name toggleDebug
     @methodOf Debuggable#
     @param {Boolean} newVal If true is passed then debugging is enabled, if false is passed then debugging is disabled, if nothing is passed, then debug state is toggled.
@@ -7205,7 +7207,7 @@ the first argument. This applies the current transform.
 var Drawable;
 
 Drawable = function(I, self) {
-  var setSizeCallback, _ref;
+  var _ref;
   if (I == null) I = {};
   Object.reverseMerge(I, {
     alpha: 1,
@@ -7215,15 +7217,11 @@ Drawable = function(I, self) {
     scaleY: 1,
     zIndex: 0
   });
-  setSizeCallback = function(sprite) {
-    I.width = sprite.width;
-    return I.height = sprite.height;
-  };
   if ((_ref = I.sprite) != null ? typeof _ref.isString === "function" ? _ref.isString() : void 0 : void 0) {
     if (I.sprite.indexOf("data:") === 0) {
-      I.sprite = Sprite.fromURL(I.sprite, setSizeCallback);
+      I.sprite = Sprite.fromURL(I.sprite);
     } else {
-      I.sprite = Sprite.loadByName(I.sprite, setSizeCallback);
+      I.sprite = Sprite.loadByName(I.sprite);
     }
   }
   self.bind('draw.Drawable', function(canvas) {
@@ -7264,7 +7262,7 @@ Drawable = function(I, self) {
     /**
     Draw does not actually do any drawing itself, instead it triggers all of the draw events.
     Listeners on the events do the actual drawing.
-
+    
     @name draw
     @methodOf Drawable#
     @returns self
@@ -7281,7 +7279,7 @@ Drawable = function(I, self) {
     },
     /**
     Returns the current transform, with translation, rotation, and flipping applied.
-
+    
     @name transform
     @methodOf Drawable#
     @returns {Matrix} The current transform
@@ -7299,8 +7297,6 @@ Drawable = function(I, self) {
     }
   };
 };
-
-Drawable.setSizeCallback = function(sprite) {};
 
 var DustEmitter, DustParticle;
 
@@ -7480,26 +7476,18 @@ Emitterable = function(I, self) {
 
 
 (function() {
-  var Engine, defaults;
-  defaults = {
-    FPS: 30,
-    age: 0,
-    paused: false,
-    showFPS: false,
-    zSort: false
-  };
   /**
   The Engine controls the game world and manages game state. Once you
   set it up and let it run it pretty much takes care of itself.
-
+  
   You can use the engine to add or remove objects from the game world.
-
+  
   There are several modules that can include to add additional capabilities
   to the engine.
-
+  
   The engine fires events that you  may bind listeners to. Event listeners
   may be bound with <code>engine.bind(eventName, callback)</code>
-
+  
   @name Engine
   @constructor
   @param {Object} I Instance variables of the engine
@@ -7523,7 +7511,7 @@ Emitterable = function(I, self) {
   */
   /**
   Called when the engine updates all the game objects.
-
+  
   @name update
   @methodOf Engine#
   @event
@@ -7532,14 +7520,14 @@ Emitterable = function(I, self) {
   /**
   Called after the engine completes an update. Here it is
   safe to modify the game objects array.
-
+  
   @name afterUpdate
   @methodOf Engine#
   @event
   */
   /**
   Called before the engine draws the game objects on the canvas. The current camera transform is applied.
-
+  
   @name beforeDraw
   @methodOf Engine#
   @event
@@ -7547,14 +7535,14 @@ Emitterable = function(I, self) {
   */
   /**
   Called after the engine draws on the canvas. The current camera transform is applied.
-
+  
       engine.bind "draw", (canvas) ->
         # print some directions for the player
         canvas.drawText
           text: "Go this way =>"
           x: 200
           y: 200
-
+  
   @name draw
   @methodOf Engine#
   @event
@@ -7562,30 +7550,34 @@ Emitterable = function(I, self) {
   */
   /**
   Called after the engine draws.
-
+  
   The current camera transform is not applied. This is great for
   adding overlays.
-
+  
       engine.bind "overlay", (canvas) ->
         # print the player's health. This will be
         # positioned absolutely according to the viewport.
         canvas.drawText
           text: "HEALTH:"
           position: Point(20, 20)
-
+  
         canvas.drawText
           text: player.health()
           position: Point(50, 20)
-
+  
   @name overlay
   @methodOf Engine#
   @event
   @params {PixieCanvas} canvas A reference to the canvas to draw on.
   */
+  var Engine;
   Engine = function(I) {
     var animLoop, draw, frameAdvance, lastStepTime, running, self, startTime, step, update;
     if (I == null) I = {};
-    Object.reverseMerge(I, defaults);
+    Object.reverseMerge(I, {
+      FPS: 60,
+      paused: false
+    });
     frameAdvance = false;
     running = false;
     startTime = +new Date();
@@ -7615,20 +7607,19 @@ Emitterable = function(I, self) {
       return self.trigger("overlay", canvas);
     };
     step = function() {
-      var secondsPerFrame;
+      var elapsedTime;
       if (!I.paused || frameAdvance) {
-        secondsPerFrame = 1 / I.FPS;
-        update(secondsPerFrame);
-        I.age += 1;
+        elapsedTime = 1 / I.FPS;
+        update(elapsedTime);
       }
       return draw();
     };
     self = Core(I).extend({
       /**
       Start the game simulation.
-
+      
           engine.start()
-
+      
       @methodOf Engine#
       @name start
       */
@@ -7640,9 +7631,9 @@ Emitterable = function(I, self) {
       },
       /**
       Stop the simulation.
-
+      
           engine.stop()
-
+      
       @methodOf Engine#
       @name stop
       */
@@ -7651,9 +7642,9 @@ Emitterable = function(I, self) {
       },
       /**
       Pause the game and step through 1 update of the engine.
-
+      
           engine.frameAdvance()
-
+      
       @methodOf Engine#
       @name frameAdvance
       */
@@ -7665,9 +7656,9 @@ Emitterable = function(I, self) {
       },
       /**
       Resume the game.
-
+      
           engine.play()
-
+      
       @methodOf Engine#
       @name play
       */
@@ -7676,9 +7667,9 @@ Emitterable = function(I, self) {
       },
       /**
       Toggle the paused state of the simulation.
-
+      
           engine.pause()
-
+      
       @methodOf Engine#
       @name pause
       @param {Boolean} [setTo] Force to pause by passing true or unpause by passing false.
@@ -7692,17 +7683,17 @@ Emitterable = function(I, self) {
       },
       /**
       Query the engine to see if it is paused.
-
+      
           engine.pause()
-
+      
           engine.paused()
           # true
-
+      
           engine.play()
-
+      
           engine.paused()
           # false
-
+      
       @methodOf Engine#
       @name paused
       */
@@ -7711,9 +7702,9 @@ Emitterable = function(I, self) {
       },
       /**
       Change the framerate of the game. The default framerate is 30 fps.
-
+      
           engine.setFramerate(60)
-
+      
       @methodOf Engine#
       @name setFramerate
       */
@@ -7725,6 +7716,7 @@ Emitterable = function(I, self) {
       update: update,
       draw: draw
     });
+    self.include(Ageable);
     Engine.defaultModules.each(function(moduleName) {
       var fullModuleName;
       fullModuleName = "Engine." + moduleName;
@@ -7753,7 +7745,7 @@ Engine.Collision = function(I, self) {
   return {
     /**
     Detects collisions between a bounds and the game objects.
-
+    
     @name collides
     @methodOf Engine#
     @param bounds The bounds to check collisions with.
@@ -7766,9 +7758,9 @@ Engine.Collision = function(I, self) {
       });
     },
     /**
-    Detects collisions between a bounds and the game objects.
+    Detects collisions between a bounds and the game objects. 
     Returns an array of objects colliding with the bounds provided.
-
+    
     @name collidesWith
     @methodOf Engine#
     @param bounds The bounds to check collisions with.
@@ -7788,7 +7780,7 @@ Engine.Collision = function(I, self) {
     },
     /**
     Detects collisions between a ray and the game objects.
-
+    
     @name rayCollides
     @methodOf Engine#
     @param source The origin point
@@ -7822,7 +7814,7 @@ The <code>Data</code> module provides methods to store global and persistent dat
 
     engine.data.score = 0
     engine.data.score += 10
-
+    
     engine.data.score # => 10
 
 @name Data
@@ -7868,16 +7860,16 @@ Engine.Delay = function(I, self) {
   return {
     /**
     Execute a callback after a number of seconds have passed.
-
+    
         engine.delay 5, ->
           engine.add
             class: "Ghost"
-
+    
     @name delay
     @methodOf Engine#
     @param {Number} seconds The number of steps to wait before executing the callback
     @param {Function} callback The callback to be executed.
-
+    
     @returns {Engine} self
     */
     delay: function(seconds, callback) {
@@ -8024,10 +8016,10 @@ The <code>Joysticks</code> module gives the engine access to joysticks.
     # Then you need to get a controller reference
     # id = 0 for player 1, etc.
     controller = engine.controller(id)
-
+    
     # Point indicating direction primary axis is held
     direction = controller.position()
-
+    
     # Check if buttons are held
     controller.actionDown("A")
     controller.actionDown("B")
@@ -8050,10 +8042,10 @@ Engine.Joysticks = function(I, self) {
   return {
     /**
     Get a controller for a given joystick id.
-
+    
     @name controller
     @methodOf Engine.Joysticks#
-
+    
     @param {Number} i The joystick id to get the controller of.
     */
     controller: function(i) {
@@ -8109,9 +8101,9 @@ Engine.Levels = function(I, self) {
   return {
     /**
     Load map for the next level.
-
+    
         engine.nextLevel()
-
+    
     @name nextLevel
     @methodOf Engine#
     */
@@ -8128,9 +8120,9 @@ Engine.Levels = function(I, self) {
     },
     /**
     Load map named <code>level</code>
-
+    
         engine.goToLevel 'bossFight'
-
+    
     @name goToLevel
     @methodOf Engine#
     */
@@ -8139,9 +8131,9 @@ Engine.Levels = function(I, self) {
     },
     /**
     Reload the current level. Useful for retrying after a player dies.
-
+    
         engine.reloadLevel()
-
+    
     @name reloadLevel
     @methodOf Engine#
     */
@@ -8191,28 +8183,28 @@ Engine.Selector = function(I, self) {
   return {
     /**
     Get the game object matching the given selector that is closest to the given position.
-
+    
         player = engine.add
           x: 0
           y: 0
-
+      
         enemy1 = engine.add
           enemy: true
           x: 10
           y: 0
-
+      
         enemy2 = engine.add
           enemy: true
           x: 0
           y: 15
-
+      
         player2 = engine.add
           x: 0
           y: 10
-
+      
         equals engine.closest(".enemy", player.position()), enemy1
         equals engine.closest(".enemy", player2.position()), enemy2
-
+    
     @name closest
     @methodOf Engine.selector
     @param {String} selector
@@ -8227,40 +8219,40 @@ Engine.Selector = function(I, self) {
     Get a selection of GameObjects that match the specified selector criteria. The selector language
     can select objects by id, class, or attributes. Note that this method always returns an Array,
     so if you are trying to find only one object you will need something like <code>engine.find("Enemy").first()</code>.
-
+    
         player = engine.add
           class: "Player"
-
+      
         enemy = engine.add
           class: "Enemy"
           speed: 5
           x: 0
-
+      
         distantEnemy = engine.add
           class "Enemy"
           x: 500
-
+      
         boss = engine.add
           class: "Enemy"
           id: "Boss"
           x: 0
-
+      
         # to select an object by id use "#anId"
         engine.find "#Boss"
         # => [boss]
-
+      
         # to select an object by class use "MyClass"
         engine.find "Enemy"
         # => [enemy, distantEnemy, boss]
-
+      
         # to select an object by properties use ".someProperty" or ".someProperty=someValue"
         engine.find ".speed=5"
         # => [enemy]
-
+      
         # You may mix and match selectors.
         engine.find "Enemy.x=0"
         # => [enemy, boss] # doesn't return distantEnemy
-
+    
     @name find
     @methodOf Engine#
     @param {String} selector
@@ -8273,10 +8265,10 @@ Engine.Selector = function(I, self) {
     },
     /**
     Find all game objects that match the given selector.
-
+    
     @name find
     @methodOf Engine.selector
-
+    
     @param {String} selector
     */
     find: function(selector) {
@@ -8290,10 +8282,10 @@ Engine.Selector = function(I, self) {
     },
     /**
     Find the first game object that matches the given selector.
-
+    
     @name find
     @methodOf Engine.selector
-
+    
     @param {String} selector
     */
     first: function(selector) {
@@ -8399,7 +8391,7 @@ Engine.Tilemap = function(I, self) {
   return {
     /**
     Loads a new may and unloads any existing map or entities.
-
+    
     @name loadMap
     @methodOf Engine#
     */
@@ -8459,15 +8451,15 @@ This module is included by default in <code>GameObjects</code>
       x: 50
       y: 30
       duration: 5
-
+    
     enemy.include Expirable
-
+    
     enemy.I.active
     # => true
-
+    
     5.times ->
       enemy.update(1)
-
+    
     enemy.I.active
     # => false
 
@@ -8497,15 +8489,15 @@ Expirable = function(I, self) {
 };
 
 /**
-The `Flickerable` module provides a method to flicker a sprite between its current opacity (alpha) and a given opacity.
+The `Flickerable` module provides a method to flicker a sprite between its current opacity (alpha) and a given opacity. 
 
     player = GameObject
       alpha: 0.9
 
     player.include 'Flickerable'
 
-    # called with no arguments, flicker will toggle the player's alpha
-    # value between 0.9 (value provided above) and 0.5 (flickerable default)
+    # called with no arguments, flicker will toggle the player's alpha 
+    # value between 0.9 (value provided above) and 0.5 (flickerable default) 
     # every 0.1 second, for a total of 2 seconds
     player.flicker()
 
@@ -8547,19 +8539,19 @@ Flickerable = function(I, self) {
     /**
     A convenient way to set the flicker instance variables on a sprite. You can modify the
     instance variables by hand but the suggested way to do it is through this method.
-
+    
         player = GameObject()
-
+      
         player.include(Flickerable)
-
+          
         player.flicker
           duration: 5
           frequency: 0.2
           alpha: 0.3
-
+    
         # => This causes the sprite to flicker between full opacity
         # => and 30% opacity every 0.2 seconds for 5 seconds
-
+    
     @name flicker
     @methodOf Flickerable#
     @param {Number} [duration=2] How long the effect lasts in seconds
@@ -8586,10 +8578,10 @@ Flickerable = function(I, self) {
 The Follow module provides a simple method to set an object's
 direction so that it is pointed at another object.
 
-The calculated direction is based on the center point of
+The calculated direction is based on the center point of 
 each object.
 
-This method relies on both objects having <code>position</code> methods.
+This method relies on both objects having <code>position</code> methods. 
 
 Include this module by calling <code>self.include Follow</code>
 
@@ -8598,7 +8590,7 @@ Include this module by calling <code>self.include Follow</code>
       y: 50
       width: 10
       height: 10
-
+    
     enemy = GameObject
       x: 100
       y: 50
@@ -8606,19 +8598,19 @@ Include this module by calling <code>self.include Follow</code>
       height: 10
       velocity: Point(0, 0)
       speed: 2
-
+    
     enemy.include Follow
-
+    
     # Make an enemy follow the player
     enemy.follow(player)
-
+    
     # now the enemy's direction will point toward the player
     enemy.I.direction
     # => Point(-1, 0)
-
+    
     # you can use this direction to set a velocity for your object.
     enemy.I.velocity = enemy.I.direction.scale(I.speed)
-
+    
 
 @name Follow
 @module
@@ -8637,13 +8629,13 @@ Follow = function(I, self) {
   return {
     /**
     Set your velocity to follow another object.
-
+    
         enemy.follow(player)
-
+      
         # => The enemy now has it's velocity attribute set in
         # the direction of the player, with magnitude equal to
         # the enemy's speed
-
+    
     @name follow
     @methodOf Follow#
     @param {GameObject} obj The object you want to follow
@@ -8680,7 +8672,7 @@ Framerate = function(options) {
   setInterval(updateFramerate, framerateUpdateInterval);
   /**
   Call this method everytime you render.
-
+  
   @name rendered
   @methodOf Framerate#
   */
@@ -8706,7 +8698,7 @@ Framerate = function(options) {
 /**
 The default base class for all objects you can add to the engine.
 
-GameObjects fire events that you may bind listeners to. Event listeners
+GameObjects fire events that you may bind listeners to. Event listeners 
 may be bound with <code>object.bind(eventName, callback)</code>
 
 @name GameObject
@@ -8718,10 +8710,10 @@ may be bound with <code>object.bind(eventName, callback)</code>
 Triggered when the object is created.
 
     enemyCount = 0
-
+    
     enemy = engine.add
       class: "Enemy"
-
+    
     enemy.bind 'create', ->
       enemyCount++
 
@@ -8730,11 +8722,11 @@ Triggered when the object is created.
 @event
 */
 /**
-Triggered when object is destroyed. Use
+Triggered when object is destroyed. Use 
 the destroy event to add particle effects, play sounds, etc.
 
     bomb = GameObject()
-
+    
     bomb.bind 'destroy', ->
       bomb.explode()
       Sound.play "Kaboom"
@@ -8747,9 +8739,9 @@ the destroy event to add particle effects, play sounds, etc.
 Triggered during every update step.
 
     player = GameObject()
-
+    
     player.bind 'step', ->
-      # check to see if keys are being pressed and
+      # check to see if keys are being pressed and 
       # change the player's velocity
       if keydown.left
         player.velocity(Point(-1, 0))
@@ -8766,11 +8758,11 @@ Triggered during every update step.
 Triggered every update after the <code>step</code> event is triggered.
 
     player = GameObject()
-
-    # we can really use the update and
+    
+    # we can really use the update and 
     # step events almost interchangebly
     player.bind 'update', ->
-      # check to see if keys are being pressed and
+      # check to see if keys are being pressed and 
       # change the player's velocity
       if keydown.left
         player.velocity(Point(-1, 0))
@@ -8788,7 +8780,7 @@ Triggered when the object is removed from
 the engine. Use the remove event to handle any clean up.
 
     boss = GameObject()
-
+    
     boss.bind 'remove', ->
       unlockDoorToLevel2()
 
@@ -8802,7 +8794,7 @@ GameObject = function(I) {
   var self;
   I || (I = {});
   /**
-  @name {Object} I Instance variables
+  @name {Object} I Instance variables 
   @memberOf GameObject#
   */
   Object.reverseMerge(I, {
@@ -8813,7 +8805,7 @@ GameObject = function(I) {
   self = Core(I).extend({
     /**
     Update the game object. This is generally called by the engine.
-
+    
     @name update
     @methodOf GameObject#
     */
@@ -8823,7 +8815,7 @@ GameObject = function(I) {
     },
     /**
     Triggers the create event if the object has not already been created.
-
+    
     @name create
     @methodOf GameObject#
     */
@@ -8833,7 +8825,7 @@ GameObject = function(I) {
     },
     /**
     Destroys the object and triggers the destroyed event.
-
+    
     @name destroy
     @methodOf GameObject#
     */
@@ -8881,16 +8873,16 @@ GameObject.Effect = function(I, self) {
   return {
     /**
     A convenient way to fade out this object over time.
-
+    
         player = GameObject()
-
-        # Fade the player object out over the next 2 seconds.
+    
+        # Fade the player object out over the next 2 seconds. 
         player.fadeOut 2
-
+    
         # Fade out and then destroy
         player.fadeOut, 0.25, ->
           self.destroy()
-
+    
     @name fadeOut
     @methodOf GameObject#
     @param {Number} [duration=1] Time to fade out in seconds
@@ -8913,21 +8905,21 @@ meter ui to track arbitrary numeric attributes.
     player = GameObject
       health: 100
       heathMax: 100
-
+    
     enemy = GameObject
       health: 500
-
+    
     someOtherObject = GameObject
-
+    
     player.meter 'health'
     # => Sets up a health meter that will be drawn during the player overlay event
-
+    
     enemy.meter 'health'
-    # => Sets up a health meter that will be drawn during the enemy overlay event.
+    # => Sets up a health meter that will be drawn during the enemy overlay event. 
     # Since healthMax wasn't provided, it is set to the value of I.health (500)
-
+    
     someOtherObject.meter 'turbo'
-    # => Sets up a turbo meter that will be drawn during the someOtherObject overlay event.
+    # => Sets up a turbo meter that will be drawn during the someOtherObject overlay event. 
     # Since neither turbo or turboMax were provided, they are both set to 100.
 
 Metered module
@@ -8985,9 +8977,9 @@ GameObject.Meter = function(I, self) {
   return {
     /**
     Configures a meter to be drawn each overlay event.
-
+    
         player = GameObject
-
+      
         player.meter 'health',
           border
             color: 'brown'
@@ -8998,9 +8990,9 @@ GameObject.Meter = function(I, self) {
           y: 5
           show: true
           width: 150
-
+      
         # => Sets up a health meter, using all the configuration options
-
+    
     @name meter
     @methodOf Metered#
     @param {String} name The name of the property to meter
@@ -9044,16 +9036,16 @@ GameObject.Meter = function(I, self) {
     },
     /**
     Shows the named meter
-
+    
         player = GameObject
-
+      
         # creates a health meter but disables visibility
         player.meter 'health'
           show: false
-
+      
         # enables visibility for the meter named 'health'
         player.showMeter 'health'
-
+    
     @name showMeter
     @methodOf Metered#
     @param {String} name The name of the meter to show
@@ -9063,15 +9055,15 @@ GameObject.Meter = function(I, self) {
     },
     /**
     Hides the named meter
-
+    
         player = GameObject
-
+      
         # creates a health meter
         player.meter 'health'
-
+      
         # disables visibility for the meter named 'health'
         player.hideMeter 'health'
-
+    
     @name hideMeter
     @methodOf Metered#
     @param {String} name The name of the meter to hide
@@ -9081,15 +9073,15 @@ GameObject.Meter = function(I, self) {
     },
     /**
     Toggles visibility of the named meter
-
+    
         player = GameObject
-
+      
         # creates a health meter
         player.meter 'health'
-
+      
         # toggles visibility for the meter named 'health'
         player.toggleMeter 'health'
-
+    
     @name toggleMeter
     @methodOf Metered#
     @param {String} name The name of the meter to toggle
@@ -9158,17 +9150,17 @@ GameState = function(I) {
     /**
     The add method creates and adds an object to the game world. Two
     other events are triggered around this one: beforeAdd and afterAdd.
-
+    
         # you can add arbitrary entityData and
         # the engine will make it into a GameObject
-        engine.add
+        engine.add 
           x: 50
           y: 30
           color: "red"
-
+    
         player = engine.add
           class: "Player"
-
+    
     @name add
     @methodOf Engine#
     @param {Object} entityData The data used to create the game object.
@@ -9224,11 +9216,11 @@ GameState.SaveState = function(I, self) {
   return {
     /**
     Save the current game state and returns a JSON object representing that state.
-
+    
         engine.bind 'update', ->
           if justPressed.s
             engine.saveState()
-
+    
     @name saveState
     @methodOf GameState#
     @returns {Array} An array of the instance data of all objects in the game state
@@ -9240,17 +9232,17 @@ GameState.SaveState = function(I, self) {
     },
     /**
     Loads the game state passed in, or the last saved state, if any.
-
+    
         engine.bind 'update', ->
           if justPressed.l
             # loads the last saved state
             engine.loadState()
-
+      
           if justPressed.o
-            # removes all game objects, then reinstantiates
+            # removes all game objects, then reinstantiates 
             # them with the entityData passed in
             engine.loadState([{x: 40, y: 50, class: "Player"}, {x: 0, y: 0, class: "Enemy"}, {x: 500, y: 400, class: "Boss"}])
-
+    
     @name loadState
     @methodOf GameState#
     @param [newState] An arraf of object instance data to load.
@@ -9266,16 +9258,16 @@ GameState.SaveState = function(I, self) {
     },
     /**
     Reloads the current game state, useful for hotswapping code.
-
+    
         engine.I.objects.each (object) ->
           # bring all objects to (0, 0) for some reason
           object.I.x = 0
           object.I.y = 0
-
+      
         # reload all objects to make sure
-        # they are at (0, 0)
+        # they are at (0, 0)  
         engine.reload()
-
+    
     @name reload
     @methodOf GameState#
     */
@@ -9344,7 +9336,7 @@ GameState.Cameras = function(I, self) {
     },
     /**
     Returns the array of camera objects.
-
+    
     @name cameras
     @methodOf Engine#
     @returns {Array}
@@ -9439,6 +9431,7 @@ Movable = function(I, self) {
   });
   I.acceleration = Point(I.acceleration.x, I.acceleration.y);
   I.velocity = Point(I.velocity.x, I.velocity.y);
+  self.attrReader("velocity", "acceleration");
   self.unbind(".Movable");
   return self.bind('update.Movable', function(dt) {
     var currentSpeed;
@@ -9493,10 +9486,10 @@ Helps access the assets in your game.
   ResourceLoader = {
     /**
     Return the url for a particular asset.
-
+    
         ResourceLoader.urlFor("images", "player")
         # => This returns the url for the file "player.png" in your images directory.
-
+    
     @name urlFor
     @methodOf ResourceLoader#
     @param {String} directory The directory your file is in.
@@ -9521,17 +9514,17 @@ based on its rotational velocity.
       x: 0
       y: 0
       rotationalVelocity: Math.PI / 64
-
+    
     player.I.rotation
     # => 0
-
+    
     player.update(1)
-
+    
     player.I.rotation
     # => 0.04908738521234052 # Math.PI / 64
-
+    
     player.update(1)
-
+    
     player.I.rotation
     # => 0.09817477042468103 # 2 * (Math.PI / 64)
 
@@ -9574,7 +9567,8 @@ draw anything to the screen until the image has been loaded.
       frame: function() {},
       update: function() {},
       width: null,
-      height: null
+      height: null,
+      image: null
     };
   };
   spriteCache = {};
@@ -9586,7 +9580,7 @@ draw anything to the screen until the image has been loaded.
     return {
       /**
       Draw this sprite on the given canvas at the given position.
-
+      
       @name draw
       @methodOf Sprite#
       @param {PowerCanvas} canvas Reference to the canvas to draw the sprite on
@@ -9599,7 +9593,7 @@ draw anything to the screen until the image has been loaded.
       /**
       Draw this sprite on the given canvas tiled to the x, y,
       width, and height dimensions specified.
-
+      
       @name fill
       @methodOf Sprite#
       @param {PowerCanvas} canvas Reference to the canvas to draw the sprite on
@@ -9622,13 +9616,14 @@ draw anything to the screen until the image has been loaded.
         });
       },
       width: width,
-      height: height
+      height: height,
+      image: image
     };
   };
   /**
   Loads all sprites from a sprite sheet found in
   your images directory, specified by the name passed in.
-
+  
   @name loadSheet
   @methodOf Sprite
   @param {String} name Name of the spriteSheet image in your images directory
@@ -9655,7 +9650,7 @@ draw anything to the screen until the image has been loaded.
   };
   /**
   Loads a sprite from a given url.
-
+  
   @name load
   @methodOf Sprite
   @param {String} url
@@ -9679,7 +9674,7 @@ draw anything to the screen until the image has been loaded.
   };
   /**
   Loads a sprite with the given pixie id.
-
+  
   @name fromPixieId
   @methodOf Sprite
   @param {Number} id Pixie Id of the sprite to load
@@ -9691,7 +9686,7 @@ draw anything to the screen until the image has been loaded.
   };
   /**
   A sprite that draws nothing.
-
+  
   @name EMPTY
   @fieldOf Sprite
   @constant
@@ -9699,7 +9694,7 @@ draw anything to the screen until the image has been loaded.
   */
   /**
   A sprite that draws nothing.
-
+  
   @name NONE
   @fieldOf Sprite
   @constant
@@ -9708,7 +9703,7 @@ draw anything to the screen until the image has been loaded.
   Sprite.EMPTY = Sprite.NONE = LoaderProxy();
   /**
   Loads a sprite from a given url.
-
+  
   @name fromURL
   @methodOf Sprite
   @param {String} url The url where the image to load is located
@@ -9718,7 +9713,7 @@ draw anything to the screen until the image has been loaded.
   Sprite.fromURL = Sprite.load;
   /**
   Loads a sprite with the given name.
-
+  
   @name loadByName
   @methodOf Sprite
   @param {String} name The name of the image in your images directory
@@ -9743,7 +9738,7 @@ The Text Effect class provides a method to display moving text onscreen, fading 
 @constructor
 */
 /**
-Updates the position of the text based on the effect velocity. Updates the
+Updates the position of the text based on the effect velocity. Updates the 
 alpha based on the elapsed time since the effect creation.
 
 @name update
@@ -9828,7 +9823,7 @@ TextEffect.Floating = function(I) {
 };
 
 /**
-The Text Screen class is a GameState that provides convenience methods for drawing text to screen.
+The Text Screen class is a GameState that provides convenience methods for drawing text to screen. 
 
 @name TextScreen
 @constructor
@@ -9847,13 +9842,13 @@ TextScreen = function(I) {
   return self = GameState(I).extend({
     /**
     Draw center aligned text at the given y position.
-
+      
         screen = TextScreen()
         screen.centerText canvas, 'Centering text is easy'
-
+      
     @name centerText
     @methodOf TextScreen#
-    @param {PixieCanvas} canvas The canvas to draw on
+    @param {PixieCanvas} canvas The canvas to draw on    
     @param {String} text The text to draw
     @param {Object} options These include font, size, color, and yPosition
     */
@@ -9973,15 +9968,15 @@ TimedEvents = function(I, self) {
   return {
     /**
     Execute <code>fn</code> every <code>n</code> frames.
-
+    
         player = GameObject()
-
+        
         player.include TimedEvents
-
+        
         # doSomething is called every 4 seconds
         player.every 4, ->
           doSomething()
-
+    
     @name every
     @methodOf TimedEvents#
     @param {Number} n Number of frames to wait before executing the callback
@@ -9996,16 +9991,16 @@ TimedEvents = function(I, self) {
       });
       /**
         Execute a callback after a number of seconds have passed.
-
+      
         self.delay 5, ->
           engine.add
             class: "Ghost"
-
+      
         @name delay
         @methodOf TimedEvents#
         @param {Number} steps The number of steps to wait before executing the callback
         @param {Function} callback The callback to be executed.
-
+      
         @returns {Engine} self
       */
     },
@@ -10043,7 +10038,7 @@ Goes to the next level on any user input.
 @event
 */
 /**
-Overlays the title text in the middle of the screen. Uses <code>App.name</code>
+Overlays the title text in the middle of the screen. Uses <code>App.name</code> 
 
 @name overlay
 @methodOf TitleScreen#
@@ -10070,7 +10065,7 @@ TitleScreen = function(I) {
 };
 
 /**
-The <code>Tween</code> module provides a method to tween object properties.
+The <code>Tween</code> module provides a method to tween object properties. 
 
 @name Tween
 @module
@@ -10112,22 +10107,22 @@ Tween = function(I, self) {
   return {
     /**
     Modify the object's properties over time.
-
+    
         player = GameObject()
-
+      
         player.tween 30,
           x: 50
           y: 50
           easing: "quadratic"
-
+    
         player = GameObject()
-
+      
         player.tween 30,
           x: 150
           y: 150
           complete: ->
             player.dance()
-
+    
     @name tween
     @methodOf Tween#
     @param {Number} duration How long (in frames) until the object's properties reach their final values.
@@ -12813,7 +12808,7 @@ window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitReq
 
 
 // Generated by CoffeeScript 1.4.0
-var Base, Beam, Block, Camera, CameraTarget, Drawable, Editor, Explosion, Flag, FlowTile, Grenade, Movable, NineSlice, Player, Quicksand, Weapon, canvas, oldCamera, p1, positions,
+var Base, Beam, Block, Camera, CameraTarget, Editor, Explosion, Flag, FlowTile, Grenade, NineSlice, Player, Quicksand, Weapon, canvas, oldCamera, p1, positions,
   __slice = [].slice;
 
 Base = function(I) {
@@ -13160,11 +13155,14 @@ Flag = function(I) {
 };
 
 FlowTile = function(I, self) {
+  Object.reverseMerge(I, {
+    flowVelocity: Point(0, 2)
+  });
   self.unbind("draw");
   self.on("draw", function(canvas) {
     var offsetX, offsetY;
-    offsetX = 0;
-    offsetY = (2 * I.age).floor().mod(I.sprite.height);
+    offsetX = (I.flowVelocity.x * I.age).floor().mod(I.sprite.height);
+    offsetY = (I.flowVelocity.y * I.age).floor().mod(I.sprite.height);
     return canvas.withTransform(Matrix.translation(-I.width / 2 + offsetX, -I.height / 2 + offsetY), function() {
       return I.sprite.fill(canvas, -offsetX, -offsetY, I.width, I.height);
     });
@@ -13490,190 +13488,6 @@ Camera = function(I) {
 Camera.defaultModules = ["ZSort", "Zoom", "Rotate", "Shake", "Flash", "Fade"];
 
 Object.extend(Camera, oldCamera);
-
-/**
-The Drawable module is used to provide a simple draw method to the including
-object.
-
-Binds a default draw listener to draw a rectangle or a sprite, if one exists.
-
-Binds a step listener to update the transform of the object.
-
-Autoloads the sprite specified in I.spriteName, if any.
-
-    player = Core
-      x: 15
-      y: 30
-      width: 5
-      height: 5
-      sprite: "my_cool_sprite"
-
-    engine.bind 'draw', (canvas) ->
-      player.draw(canvas)
-    # => Uncaught TypeError: Object has no method 'draw'
-
-    player.include(Drawable)
-
-    engine.bind 'draw', (canvas) ->
-      player.draw(canvas)
-    # => if you have a sprite named "my_cool_sprite" in your images folder
-    # then it will be drawn. Otherwise, a rectangle positioned at x: 15 and
-    # y: 30 with width and height 5 will be drawn.
-
-@name Drawable
-@module
-@constructor
-@param {Object} I Instance variables
-@param {Core} self Reference to including object
-*/
-
-
-/**
-Triggered every time the object should be drawn. A canvas is passed as
-the first argument.
-
-    player = Core
-      x: 0
-      y: 10
-      width: 5
-      height: 5
-
-    player.bind "draw", (canvas) ->
-      # Text will be drawn positioned relatively to the object.
-      canvas.drawText
-        text: "Hey, drawing stuff is pretty easy."
-        color: "white"
-        x: 5
-        y: 5
-
-@name draw
-@methodOf Drawable#
-@event
-@param {PowerCanvas} canvas A reference to the canvas to draw on.
-*/
-
-
-/**
-Triggered before the object should be drawn. A canvas is passed as
-the first argument. This does not apply the current transform.
-
-@name beforeTransform
-@methodOf Drawable#
-@event
-@param {PowerCanvas} canvas A reference to the canvas to draw on.
-*/
-
-
-/**
-Triggered after the object should be drawn. A canvas is passed as
-the first argument. This applies the current transform.
-
-@name afterTransform
-@methodOf Drawable#
-@event
-@param {PowerCanvas} canvas A reference to the canvas to draw on.
-*/
-
-
-Drawable = function(I, self) {
-  var _ref;
-  if (I == null) {
-    I = {};
-  }
-  Object.reverseMerge(I, {
-    alpha: 1,
-    color: "#196",
-    scale: 1,
-    scaleX: 1,
-    scaleY: 1,
-    zIndex: 0
-  });
-  if ((_ref = I.sprite) != null ? typeof _ref.isString === "function" ? _ref.isString() : void 0 : void 0) {
-    if (I.sprite.indexOf("data:") === 0) {
-      I.sprite = Sprite.fromURL(I.sprite);
-    } else {
-      I.sprite = Sprite.loadByName(I.sprite);
-    }
-  }
-  self.bind('draw.Drawable', function(canvas) {
-    var previousAlpha, sprite;
-    if ((I.alpha != null) && I.alpha !== 1) {
-      previousAlpha = canvas.context().globalAlpha;
-      canvas.context().globalAlpha = I.alpha;
-    }
-    if (sprite = I.sprite) {
-      if (sprite.draw != null) {
-        sprite.draw(canvas, -sprite.width / 2, -sprite.height / 2);
-      } else {
-        if (typeof warn === "function") {
-          warn("Sprite has no draw method!");
-        }
-      }
-    } else {
-      if (I.radius != null) {
-        canvas.drawCircle({
-          x: 0,
-          y: 0,
-          radius: I.radius,
-          color: I.color
-        });
-      } else {
-        canvas.drawRect({
-          x: -I.width / 2,
-          y: -I.height / 2,
-          width: I.width,
-          height: I.height,
-          color: I.color
-        });
-      }
-    }
-    if ((I.alpha != null) && I.alpha !== 1) {
-      return canvas.context().globalAlpha = previousAlpha;
-    }
-  });
-  return {
-    /**
-    Draw does not actually do any drawing itself, instead it triggers all of the draw events.
-    Listeners on the events do the actual drawing.
-    
-    @name draw
-    @methodOf Drawable#
-    @returns self
-    */
-
-    draw: function(canvas) {
-      self.trigger('beforeTransform', canvas);
-      canvas.withTransform(self.transform(), function(canvas) {
-        self.trigger('beforeDraw', canvas);
-        self.trigger('draw', canvas);
-        return self.trigger('afterDraw', canvas);
-      });
-      self.trigger('afterTransform', canvas);
-      return self;
-    },
-    /**
-    Returns the current transform, with translation, rotation, and flipping applied.
-    
-    @name transform
-    @methodOf Drawable#
-    @returns {Matrix} The current transform
-    */
-
-    transform: function() {
-      var center, transform;
-      center = self.center();
-      transform = Matrix.translation(center.x.floor(), center.y.floor());
-      transform = transform.concat(Matrix.scale(I.scale * I.scaleX, I.scale * I.scaleY));
-      if (I.rotation) {
-        transform = transform.concat(Matrix.rotation(I.rotation));
-      }
-      if (I.spriteOffset) {
-        transform = transform.concat(Matrix.translation(I.spriteOffset.x, I.spriteOffset.y));
-      }
-      return transform;
-    }
-  };
-};
 
 /**
 The <code>Collision</code> module provides some simple collision detection methods to engine.
@@ -14023,259 +13837,6 @@ $(function() {
   };
 });
 
-/**
-The Movable module automatically updates the position and velocity of
-GameObjects based on the velocity and acceleration. It does not check
-collisions so is probably best suited to particle effect like things.
-
-    player = GameObject
-      x: 0
-      y: 0
-      velocity: Point(0, 0)
-      acceleration: Point(1, 0)
-      maxSpeed: 2
-
-    player.include(Movable)
-
-    # => `velocity is {x: 0, y: 0} and position is {x: 0, y: 0}`
-
-    player.update(1)
-    # => `velocity is {x: 1, y: 0} and position is {x: 1, y: 0}`
-
-    player.update(1)
-    # => `velocity is {x: 2, y: 0} and position is {x: 3, y: 0}`
-
-    # we've hit our maxSpeed so our velocity won't increase
-    player.update(1)
-    # => `velocity is {x: 2, y: 0} and position is {x: 5, y: 0}`
-
-@name Movable
-@module
-@constructor
-@param {Object} I Instance variables
-@param {Core} self Reference to including object
-*/
-
-
-Movable = function(I, self) {
-  if (I == null) {
-    I = {};
-  }
-  Object.reverseMerge(I, {
-    acceleration: Point(0, 0),
-    velocity: Point(0, 0)
-  });
-  I.acceleration = Point(I.acceleration.x, I.acceleration.y);
-  I.velocity = Point(I.velocity.x, I.velocity.y);
-  self.attrReader("velocity", "acceleration");
-  self.unbind(".Movable");
-  return self.bind('update.Movable', function(dt) {
-    var currentSpeed;
-    I.velocity = I.velocity.add(I.acceleration.scale(dt));
-    if (I.maxSpeed != null) {
-      currentSpeed = I.velocity.magnitude();
-      if (currentSpeed > I.maxSpeed) {
-        I.velocity = I.velocity.scale(I.maxSpeed / currentSpeed);
-      }
-    }
-    I.x += I.velocity.x * dt;
-    return I.y += I.velocity.y * dt;
-  });
-};
-
-/**
-The Sprite class provides a way to load images for use in games.
-
-By default, images are loaded asynchronously. A proxy object is
-returned immediately. Even though it has a draw method it will not
-draw anything to the screen until the image has been loaded.
-
-@name Sprite
-@constructor
-*/
-
-
-(function() {
-  var LoaderProxy, Sprite, spriteCache;
-  LoaderProxy = function() {
-    return {
-      draw: function() {},
-      fill: function() {},
-      frame: function() {},
-      update: function() {},
-      width: null,
-      height: null,
-      image: null
-    };
-  };
-  spriteCache = {};
-  Sprite = function(image, sourceX, sourceY, width, height) {
-    sourceX || (sourceX = 0);
-    sourceY || (sourceY = 0);
-    width || (width = image.width);
-    height || (height = image.height);
-    return {
-      /**
-      Draw this sprite on the given canvas at the given position.
-      
-      @name draw
-      @methodOf Sprite#
-      @param {PowerCanvas} canvas Reference to the canvas to draw the sprite on
-      @param {Number} x Position on the x axis to draw the sprite
-      @param {Number} y Position on the y axis to draw the sprite
-      */
-
-      draw: function(canvas, x, y) {
-        return canvas.drawImage(image, sourceX, sourceY, width, height, x, y, width, height);
-      },
-      /**
-      Draw this sprite on the given canvas tiled to the x, y,
-      width, and height dimensions specified.
-      
-      @name fill
-      @methodOf Sprite#
-      @param {PowerCanvas} canvas Reference to the canvas to draw the sprite on
-      @param {Number} x Position on the x axis to draw the sprite
-      @param {Number} y Position on the y axis to draw the sprite
-      @param {Number} width How far to tile the sprite on the x-axis
-      @param {Number} height How far to tile the sprite on the y-axis
-      @param {String} repeat Repeat options. Can be `repeat-x`, `repeat-y`, `no-repeat`, or `repeat`. Defaults to `repeat`
-      */
-
-      fill: function(canvas, x, y, width, height, repeat) {
-        var pattern;
-        if (repeat == null) {
-          repeat = "repeat";
-        }
-        pattern = canvas.createPattern(image, repeat);
-        return canvas.drawRect({
-          x: x,
-          y: y,
-          width: width,
-          height: height,
-          color: pattern
-        });
-      },
-      width: width,
-      height: height,
-      image: image
-    };
-  };
-  /**
-  Loads all sprites from a sprite sheet found in
-  your images directory, specified by the name passed in.
-  
-  @name loadSheet
-  @methodOf Sprite
-  @param {String} name Name of the spriteSheet image in your images directory
-  @param {Number} tileWidth Width of each sprite in the sheet
-  @param {Number} tileHeight Height of each sprite in the sheet
-  @returns {Array} An array of sprite objects
-  */
-
-  Sprite.loadSheet = function(name, tileWidth, tileHeight) {
-    var image, sprites, url;
-    url = ResourceLoader.urlFor("images", name);
-    sprites = [];
-    image = new Image();
-    image.onload = function() {
-      var imgElement;
-      imgElement = this;
-      return (image.height / tileHeight).times(function(row) {
-        return (image.width / tileWidth).times(function(col) {
-          return sprites.push(Sprite(imgElement, col * tileWidth, row * tileHeight, tileWidth, tileHeight));
-        });
-      });
-    };
-    image.src = url;
-    return sprites;
-  };
-  /**
-  Loads a sprite from a given url.
-  
-  @name load
-  @methodOf Sprite
-  @param {String} url
-  @param {Function} [loadedCallback]
-  @returns {Sprite} A sprite object
-  */
-
-  Sprite.load = function(url, loadedCallback) {
-    var img, proxy, sprite;
-    if (sprite = spriteCache[url]) {
-      if (loadedCallback != null) {
-        loadedCallback.defer(sprite);
-      }
-      return sprite;
-    }
-    img = new Image();
-    proxy = LoaderProxy();
-    img.onload = function() {
-      spriteCache[url] = Object.extend(proxy, Sprite(this));
-      return typeof loadedCallback === "function" ? loadedCallback(proxy) : void 0;
-    };
-    img.src = url;
-    return proxy;
-  };
-  /**
-  Loads a sprite with the given pixie id.
-  
-  @name fromPixieId
-  @methodOf Sprite
-  @param {Number} id Pixie Id of the sprite to load
-  @param {Function} [callback] Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.
-  @returns {Sprite}
-  */
-
-  Sprite.fromPixieId = function(id, callback) {
-    return Sprite.load("http://pixieengine.com/s3/sprites/" + id + "/original.png", callback);
-  };
-  /**
-  A sprite that draws nothing.
-  
-  @name EMPTY
-  @fieldOf Sprite
-  @constant
-  @returns {Sprite}
-  */
-
-  /**
-  A sprite that draws nothing.
-  
-  @name NONE
-  @fieldOf Sprite
-  @constant
-  @returns {Sprite}
-  */
-
-  Sprite.EMPTY = Sprite.NONE = LoaderProxy();
-  /**
-  Loads a sprite from a given url.
-  
-  @name fromURL
-  @methodOf Sprite
-  @param {String} url The url where the image to load is located
-  @param {Function} [callback] Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.
-  @returns {Sprite}
-  */
-
-  Sprite.fromURL = Sprite.load;
-  /**
-  Loads a sprite with the given name.
-  
-  @name loadByName
-  @methodOf Sprite
-  @param {String} name The name of the image in your images directory
-  @param {Function} [callback] Function to execute once the image is loaded. The sprite proxy data is passed to this as a parameter.
-  @returns {Sprite}
-  */
-
-  Sprite.loadByName = function(name, callback) {
-    return Sprite.load(ResourceLoader.urlFor("images", name), callback);
-  };
-  return (typeof exports !== "undefined" && exports !== null ? exports : this)["Sprite"] = Sprite;
-})();
-
 Player = function(I) {
   var PLAYER_COLORS, self;
   if (I == null) {
@@ -14596,7 +14157,8 @@ Quicksand = function(I) {
     I = {};
   }
   Object.reverseMerge(I, {
-    sprite: "sand"
+    sprite: "sand",
+    solid: true
   });
   self = GameObject(I);
   self.include("FlowTile");

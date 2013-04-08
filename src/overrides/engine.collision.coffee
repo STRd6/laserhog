@@ -55,7 +55,7 @@ Engine.Collision = (I, self) ->
     selector ?= ""
 
     hits = self.find(selector).map (object) ->
-      hit = (object != sourceObject) && Collision.rayRectangle(source, direction, object.centeredBounds())
+      hit = (object != sourceObject) and Collision.rayRectangle(source, direction, object.centeredBounds())
       hit.object = object if hit
 
       hit
@@ -70,6 +70,7 @@ Engine.Collision = (I, self) ->
 
     nearestHit
 
+  # TODO Allow specification of collision type (i.e. circular)
   objectsUnderPoint: (point, selector="") ->
     bounds = {
       x: point.x
