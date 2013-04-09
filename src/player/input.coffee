@@ -4,6 +4,7 @@ Player.Input = (I, self) ->
     # TODO Cooldowns?
     I.shielding = false
     I.shooting = false
+    I.grappling = false
 
     acc = 750 #(pixels / s^2)
     dec = 3000 #(pixels / s^2)
@@ -44,6 +45,7 @@ Player.Input = (I, self) ->
         I.jumping = false
 
       I.shooting = self.actionDown "shoot"
+      I.grappling = self.actionDown "grapple"
 
     if I.shielding or !(p.x)
       # TODO get friction from ground

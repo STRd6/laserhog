@@ -4,6 +4,7 @@ Player.Controller = (I, self) ->
       jump: "A"
       shield: "RT"
       shoot: "X"
+      grapple: "B"
 
   actionDown: (name) ->
     if button = I.controls[name]

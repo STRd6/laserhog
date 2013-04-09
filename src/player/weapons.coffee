@@ -1,7 +1,7 @@
 Player.Weapons = (I, self) ->
   Object.reverseMerge I,
     aimDirection: Point(1, 0)
-    weapon: Weapon.Grenade()
+    weapon: Weapon.Railgun()
 
   I.weapon.pickup self
 
