@@ -17,8 +17,10 @@ Editor.Tool.Create = (I={}) ->
       clickStart = worldPoint.snap(I.snap)
 
     released: (worldPoint) ->
+      data = Object.extend {level: true}, rect(clickStart, worldPoint.snap(I.snap))
+
       engine.add "Quicksand",
-        rect(clickStart, worldPoint.snap(I.snap))
+        data
 
       clickStart = undefined
 

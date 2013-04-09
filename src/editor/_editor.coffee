@@ -51,4 +51,21 @@ Editor = (I, self) ->
 
       currentTool.draw(canvas)
 
-  return {}
+  saveLevel: ->
+    objects = engine.find(".level").map (object) ->
+      object = Object.extend({}, object.I)
+
+      # This hack is to prevent circular reference from sprite's image reference
+      # TODO: Use I.spriteName instead of sprite, have sprite be a computed method
+      delete object.sprite
+
+      return object
+
+    JSON.stringify(objects)
+
+  loadLevel: (name) ->
+    $.getJSON "levels/#{name}.json", (levelData) ->
+      engine.find(".level").each (l) -> l.active = false
+
+      levelData.each (datum) ->
+        engine.add datum

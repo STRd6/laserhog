@@ -12975,7 +12975,27 @@ Editor = function(I, self) {
       return currentTool.draw(canvas);
     }
   });
-  return {};
+  return {
+    saveLevel: function() {
+      var objects;
+      objects = engine.find(".level").map(function(object) {
+        object = Object.extend({}, object.I);
+        delete object.sprite;
+        return object;
+      });
+      return JSON.stringify(objects);
+    },
+    loadLevel: function(name) {
+      return $.getJSON("levels/" + name + ".json", function(levelData) {
+        engine.find(".level").each(function(l) {
+          return l.active = false;
+        });
+        return levelData.each(function(datum) {
+          return engine.add(datum);
+        });
+      });
+    }
+  };
 };
 
 Editor.Tool = function(I) {
@@ -13026,7 +13046,11 @@ Editor.Tool.Create = function(I) {
       return clickStart = worldPoint.snap(I.snap);
     },
     released: function(worldPoint) {
-      engine.add("Quicksand", rect(clickStart, worldPoint.snap(I.snap)));
+      var data;
+      data = Object.extend({
+        level: true
+      }, rect(clickStart, worldPoint.snap(I.snap)));
+      engine.add("Quicksand", data);
       return clickStart = void 0;
     }
   });
