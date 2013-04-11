@@ -1,36 +1,34 @@
 NineSlice = (I, self) ->
-  self.sprite = (newSprite) ->
-    if newSprite?
-      I.sprite = newSprite
-      I.patterns = undefined # Clear pattern cache
-    else
-      I.sprite
 
-  self.unbind "draw"
+  self.unbind ".Drawable"
 
   self.on "draw", (canvas) ->
     canvas.withTransform Matrix.translation(-I.width/2, -I.height/2), ->
-      if image = I.sprite.image
+      sprite = self.sprite()
+
+      if image = sprite.image
+        {width, height} = sprite
         size = 8
         n = 3
 
-        unless I.patterns
-          I.patterns = []
+        patterns = sprite.nineSlicePatterns
 
-          n.times (x) ->
-            n.times (y) ->
+        unless patterns
+          patterns = sprite.nineSlicePatterns = []
+
+          [[0, size], [size, width-2*size], [width-size, size]].each ([x, width], i) ->
+            [[0, size], [size, height-2*size], [height-size, size]].each ([y, height], j) ->
               patternCanvas = document.createElement('canvas')
-              patternCanvas.width = patternCanvas.height = size
+              patternCanvas.width = width
+              patternCanvas.height = height
               patternContext = patternCanvas.getContext("2d")
               patternContext.drawImage image,
-                size * x, size * y,
-                size, size,
+                x, y,
+                width, height,
                 0, 0,
-                size, size
+                width, height
 
-              I.patterns[x + 3 * y] = patternContext.createPattern(patternCanvas, "repeat")
-
-        {width, height} = I.sprite
+              patterns[i + 3 * j] = patternContext.createPattern(patternCanvas, "repeat")
 
         # top left
         canvas.drawRect
@@ -38,7 +36,7 @@ NineSlice = (I, self) ->
           y: 0
           width: size
           height: size
-          color: I.patterns[0]
+          color: patterns[0]
 
         # top center
         canvas.drawRect
@@ -46,7 +44,7 @@ NineSlice = (I, self) ->
           y: 0
           width: I.width - 2 * size
           height: size
-          color: I.patterns[1]
+          color: patterns[1]
 
         # top right
         canvas.drawRect
@@ -54,7 +52,7 @@ NineSlice = (I, self) ->
           y: 0
           width: size
           height: size
-          color: I.patterns[2]
+          color: patterns[2]
 
         # center left
         canvas.drawRect
@@ -62,7 +60,7 @@ NineSlice = (I, self) ->
           y: size
           width: size
           height: I.height - 2 * size
-          color: I.patterns[3]
+          color: patterns[3]
 
         # center center
         canvas.drawRect
@@ -70,7 +68,7 @@ NineSlice = (I, self) ->
           y: size
           width: I.width - 2 * size
           height: I.height - 2 * size
-          color: I.patterns[4]
+          color: patterns[4]
 
         # center right
         canvas.drawRect
@@ -78,7 +76,7 @@ NineSlice = (I, self) ->
           y: size
           width: size
           height: I.height - 2 * size
-          color: I.patterns[5]
+          color: patterns[5]
 
         # bottom left
         canvas.drawRect
@@ -86,7 +84,7 @@ NineSlice = (I, self) ->
           y: I.height - size
           width: size
           height: size
-          color: I.patterns[6]
+          color: patterns[6]
 
         # bottom center
         canvas.drawRect
@@ -94,7 +92,7 @@ NineSlice = (I, self) ->
           y: I.height - size
           width: I.width - 2 * size
           height: size
-          color: I.patterns[7]
+          color: patterns[7]
 
         # bottom right
         canvas.drawRect
@@ -102,7 +100,7 @@ NineSlice = (I, self) ->
           y: I.height - size
           width: size
           height: size
-          color: I.patterns[8]
+          color: patterns[8]
 
       else
         canvas.drawRect

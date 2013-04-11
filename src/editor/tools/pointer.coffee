@@ -8,10 +8,9 @@ Editor.Tool.Pointer = (I={}) ->
   spritePalette = """
     block
     cloud
-    sand
+    scaffold
     rock
-  """.split("\n").invoke("trim").map (name) ->
-    Sprite.loadByName(name)
+  """.split("\n").invoke("trim")
 
   self = Editor.Tool(I).extend
     pressed: (worldPoint) ->
@@ -44,7 +43,7 @@ Editor.Tool.Pointer = (I={}) ->
       4.times (i) ->
         if justPressed[i+1]
           if sprite = spritePalette[i]
-            selectedObject.sprite(sprite)
+            selectedObject.I.sprite = sprite
 
       if keydown.shift
         attr = "height"
