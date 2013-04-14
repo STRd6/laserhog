@@ -4,7 +4,7 @@ Grappler = (I, self) ->
     grappleDirection: null
     grappleAttached: null
     grappleLength: 0
-    grappleRate: 1200
+    grappleRate: 1800
 
   checkGrappleHits = ->
     nearestHit = engine.rayCollides
