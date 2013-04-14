@@ -1,21 +1,42 @@
 Player.Weapons = (I, self) ->
   Object.reverseMerge I,
     aimDirection: Point(1, 0)
-    weapon: Weapon.Railgun()
+    activeWeapon: "Railgun"
 
-  I.weapon.pickup self
+  weaponChoices = [
+    "Grenade"
+    "Railgun"
+  ]
+
+  weapons = weaponChoices.eachWithObject {}, (weaponName, choices) ->
+    weapon = choices[weaponName] = Weapon[weaponName]()
+    weapon.pickup self
+
+  changeWeapon = (delta) ->
+    index = weaponChoices.indexOf(I.activeWeapon) + delta
+
+    I.activeWeapon = weaponChoices.wrap(index)
 
   self.on "update", (dt) ->
-    I.weapon?.trigger "update", dt
+    # TODO: should all weapons cooldown even when not active?
+    self.activeWeapon()?.trigger "update", dt
 
   self.on "update", ->
+    # Weapon switching
+    if self.actionPressed("nextWeapon")
+      changeWeapon(+1)
+
+    if self.actionPressed("previousWeapon")
+      changeWeapon(-1)
+
+    # Aiming
     p = self.controllerPosition().norm()
 
     unless p.equal(Point.ZERO)
       I.aimDirection = p
 
     if I.shooting
-      I.weapon.shoot(I.aimDirection, self)
+      self.activeWeapon()?.shoot(I.aimDirection, self)
 
   self.on "draw", (canvas) ->
     angle = I.aimDirection.angle()
@@ -28,6 +49,7 @@ Player.Weapons = (I, self) ->
 
     canvas.withTransform scale, (canvas) ->
       canvas.withTransform Matrix.rotation(angle), (canvas) ->
-        I.weapon?.trigger "draw", canvas
+        self.activeWeapon()?.trigger "draw", canvas
 
-  return {}
+  activeWeapon: ->
+    weapons[I.activeWeapon]

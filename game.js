@@ -12395,7 +12395,7 @@ Grappler = function(I, self) {
     grappleDirection: null,
     grappleAttached: null,
     grappleLength: 0,
-    grappleRate: 1200
+    grappleRate: 1800
   });
   checkGrappleHits = function() {
     var nearestHit;
@@ -12698,7 +12698,9 @@ Player.Controller = function(I, self) {
       jump: "A",
       shield: "RT",
       shoot: "X",
-      grapple: "B"
+      grapple: "B",
+      nextWeapon: "RB",
+      previousWeapon: "LB"
     }
   });
   return {
@@ -12706,6 +12708,12 @@ Player.Controller = function(I, self) {
       var button;
       if (button = I.controls[name]) {
         return engine.controller(I.controller).buttonDown(button);
+      }
+    },
+    actionPressed: function(name) {
+      var button;
+      if (button = I.controls[name]) {
+        return engine.controller(I.controller).buttonPressed(button);
       }
     },
     controllerPosition: function() {
@@ -12890,23 +12898,40 @@ Player.Shield = function(I, self) {
 };
 
 Player.Weapons = function(I, self) {
+  var changeWeapon, weaponChoices, weapons;
   Object.reverseMerge(I, {
     aimDirection: Point(1, 0),
-    weapon: Weapon.Railgun()
+    activeWeapon: "Railgun"
   });
-  I.weapon.pickup(self);
+  weaponChoices = ["Grenade", "Railgun"];
+  weapons = weaponChoices.eachWithObject({}, function(weaponName, choices) {
+    var weapon;
+    weapon = choices[weaponName] = Weapon[weaponName]();
+    return weapon.pickup(self);
+  });
+  changeWeapon = function(delta) {
+    var index;
+    index = weaponChoices.indexOf(I.activeWeapon) + delta;
+    return I.activeWeapon = weaponChoices.wrap(index);
+  };
   self.on("update", function(dt) {
     var _ref;
-    return (_ref = I.weapon) != null ? _ref.trigger("update", dt) : void 0;
+    return (_ref = self.activeWeapon()) != null ? _ref.trigger("update", dt) : void 0;
   });
   self.on("update", function() {
-    var p;
+    var p, _ref;
+    if (self.actionPressed("nextWeapon")) {
+      changeWeapon(+1);
+    }
+    if (self.actionPressed("previousWeapon")) {
+      changeWeapon(-1);
+    }
     p = self.controllerPosition().norm();
     if (!p.equal(Point.ZERO)) {
       I.aimDirection = p;
     }
     if (I.shooting) {
-      return I.weapon.shoot(I.aimDirection, self);
+      return (_ref = self.activeWeapon()) != null ? _ref.shoot(I.aimDirection, self) : void 0;
     }
   });
   self.on("draw", function(canvas) {
@@ -12921,11 +12946,15 @@ Player.Weapons = function(I, self) {
     return canvas.withTransform(scale, function(canvas) {
       return canvas.withTransform(Matrix.rotation(angle), function(canvas) {
         var _ref;
-        return (_ref = I.weapon) != null ? _ref.trigger("draw", canvas) : void 0;
+        return (_ref = self.activeWeapon()) != null ? _ref.trigger("draw", canvas) : void 0;
       });
     });
   });
-  return {};
+  return {
+    activeWeapon: function() {
+      return weapons[I.activeWeapon];
+    }
+  };
 };
 
 Quicksand = function(I) {
