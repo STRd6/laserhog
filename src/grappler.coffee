@@ -35,11 +35,7 @@ Grappler = (I, self) ->
     if I.grappleAttached
       I.grappleAttached.subtract(self.position())
     else
-      I.grappleStart.add(
-        I.grappleDirection.scale(I.grappleLength)
-      ).subtract(
-        self.position()
-      ).norm()
+      I.grappleDirection
 
   self.bind 'afterTransform', (canvas) ->
     if I.grappleAttached
@@ -52,7 +48,7 @@ Grappler = (I, self) ->
       canvas.drawLine
         color: "white"
         start: self.position()
-        end: I.grappleStart.add(I.grappleDirection.norm(I.grappleLength))
+        end: self.position().add(I.grappleDirection.norm(I.grappleLength))
 
   grapplePhysics: (elapsedTime) ->
     if I.grappling

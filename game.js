@@ -12429,7 +12429,7 @@ Grappler = function(I, self) {
     if (I.grappleAttached) {
       return I.grappleAttached.subtract(self.position());
     } else {
-      return I.grappleStart.add(I.grappleDirection.scale(I.grappleLength)).subtract(self.position()).norm();
+      return I.grappleDirection;
     }
   };
   self.bind('afterTransform', function(canvas) {
@@ -12443,7 +12443,7 @@ Grappler = function(I, self) {
       return canvas.drawLine({
         color: "white",
         start: self.position(),
-        end: I.grappleStart.add(I.grappleDirection.norm(I.grappleLength))
+        end: self.position().add(I.grappleDirection.norm(I.grappleLength))
       });
     }
   });
