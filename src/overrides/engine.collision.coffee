@@ -31,15 +31,9 @@ Engine.Collision = (I, self) ->
   @param [sourceObject] An object to exclude from the results.
   @returns {Array} An array of objects that collide with the given bounds.
   ###
-  collidesWith: (bounds, sourceObject) ->
-    collided = []
-
-    self.objects().each (object) ->
-      return unless object.solid()
-      if object != sourceObject and object.collides(bounds)
-        collided.push(object)
-
-    return collided if collided.length
+  collidesWith: (bounds, sourceObject, selector=".solid") ->
+    self.find(selector).select (object) ->
+      object != sourceObject and object.collides(bounds)
 
   ###*
   Detects collisions between a ray and the game objects.
