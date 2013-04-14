@@ -8,7 +8,7 @@ Grappler = (I, self) ->
 
   checkGrappleHits = ->
     nearestHit = engine.rayCollides
-      source: I.grappleStart
+      source: self.position()
       direction: I.grappleDirection
       sourceObject: self
       selector: ".solid"

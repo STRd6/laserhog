@@ -12400,7 +12400,7 @@ Grappler = function(I, self) {
   checkGrappleHits = function() {
     var nearestHit;
     nearestHit = engine.rayCollides({
-      source: I.grappleStart,
+      source: self.position(),
       direction: I.grappleDirection,
       sourceObject: self,
       selector: ".solid"
