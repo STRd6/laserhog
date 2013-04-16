@@ -38,8 +38,9 @@ positions = [
   Point(ARENA.width / 8, ARENA.height - 100)
   Point(ARENA.width * 7 / 8, ARENA.height - 100)
 ]
-["red", "blue"].each (color, i) ->
+["blue", "red"].each (color, i) ->
   engine.add "Flag"
+    team: i
     sprite: "flag_#{color}"
     x: positions[i].x
     y: positions[i].y
@@ -62,6 +63,9 @@ engine.on "update", ->
 
   if target = engine.first("CameraTarget")
     camera.follow(target)
+
+  Collision.collide "Player", "Flag", (player, flag) ->
+    flag.pickup player
 
 Music.volume 0#.5
 Music.play("TheApogee")

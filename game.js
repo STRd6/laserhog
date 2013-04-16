@@ -12362,7 +12362,11 @@ Flag = function(I) {
   Object.reverseMerge(I, {
     sprite: "flag_red"
   });
-  self = GameObject(I);
+  self = GameObject(I).extend({
+    pickup: function(carrier) {
+      return I.heldBy = carrier;
+    }
+  });
   self.on("update", function() {
     if (I.heldBy) {
       return self.position(I.heldBy.position());
@@ -13124,8 +13128,9 @@ engine.add({
 
 positions = [Point(ARENA.width / 8, ARENA.height - 100), Point(ARENA.width * 7 / 8, ARENA.height - 100)];
 
-["red", "blue"].each(function(color, i) {
+["blue", "red"].each(function(color, i) {
   return engine.add("Flag", {
+    team: i,
     sprite: "flag_" + color,
     x: positions[i].x,
     y: positions[i].y
@@ -13144,8 +13149,11 @@ engine.on("update", function() {
   camera.I.cameraBounds.width = ARENA.width;
   camera.I.cameraBounds.height = ARENA.height;
   if (target = engine.first("CameraTarget")) {
-    return camera.follow(target);
+    camera.follow(target);
   }
+  return Collision.collide("Player", "Flag", function(player, flag) {
+    return flag.pickup(player);
+  });
 });
 
 Music.volume(0);
