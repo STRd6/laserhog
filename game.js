@@ -9982,17 +9982,17 @@ The <code>Gamepads</code> module gives the engine access to gamepads.
 
     # First you need to add the `Gamepads` module to the engine
     Engine.defaultModules.push "Gamepads"
-    
+
     window.engine = Engine
       ...
-    
+
     # Then you need to get a controller reference
     # id = 0 for player 1, etc.
     controller = engine.controller(id)
-    
+
     # Point indicating direction primary axis is held
     direction = controller.position()
-    
+
     # Check if buttons are held
     controller.actionDown("A")
     controller.actionDown("B")
@@ -10015,10 +10015,10 @@ Engine.Gamepads = function(I, self) {
   return {
     /**
     Get a controller for a given id.
-    
+
     @name controller
     @methodOf Engine.Gamepads#
-    
+
     @param {Number} index The index to get a controller for.
     */
     controller: function(index) {
@@ -10050,15 +10050,6 @@ window.onerror = function(message, url, lineNumber) {
   errorContext[4] = "<b style='font-weight: bold; text-decoration: underline;'>" + errorContext[4] + "</b>";
   return typeof displayRuntimeError === "function" ? displayRuntimeError("<code>" + message + "</code> <br /><br />(Sometimes this context may be wrong.)<br /><code><pre>" + (errorContext.join('\n')) + "</pre></code>") : void 0;
 };
-
-var root;
-
-(function() {}, root = typeof exports !== "undefined" && exports !== null ? exports : this, root.gameKeys = function(keyMap) {
-  return parent.postMessage({
-    type: 'controls',
-    data: keyMap
-  }, 'http://pixieengine.com');
-})();
 
 var Gamepads;
 
@@ -10773,42 +10764,42 @@ Binny V A, http://www.openjs.com/scripts/events/keyboard_shortcuts/
 $(function() {
   /**
   The global keydown property lets your query the status of keys.
-  
+
   <code><pre>
   if keydown.left
     moveLeft()
-  
+
   if keydown.a or keydown.space
     attack()
-  
+
   if keydown.return
     confirm()
-  
+
   if keydown.esc
     cancel()
   </pre></code>
-  
+
   @name keydown
   @namespace
   */
   /**
-  The global justPressed property lets your query the status of keys. However, 
+  The global justPressed property lets your query the status of keys. However,
   unlike keydown it will only trigger once for each time the key is pressed.
-  
+
   <code><pre>
   if justPressed.left
     moveLeft()
-  
+
   if justPressed.a or justPressed.space
     attack()
-  
+
   if justPressed.return
     confirm()
-  
+
   if justPressed.esc
     cancel()
   </pre></code>
-  
+
   @name justPressed
   @namespace
   */
@@ -10855,15 +10846,15 @@ $(function() {
 $(function() {
   /**
   The global mouseDown property lets your query the status of mouse buttons.
-  
+
   <code><pre>
   if mouseDown.left
     moveLeft()
-  
+
   if mouseDown.right
     attack()
   </pre></code>
-  
+
   @name mouseDown
   @namespace
   */
@@ -10871,15 +10862,15 @@ $(function() {
   The global mousePressed property lets your query the status of mouse buttons.
   However, unlike mouseDown it will only trigger the first time the button
   pressed.
-  
+
   <code><pre>
   if mousePressed.left
     moveLeft()
-  
+
   if mousePressed.right
     attack()
   </pre></code>
-  
+
   @name mousePressed
   @namespace
   */
@@ -10958,12 +10949,12 @@ Music = (function() {
   return {
     /**
     Set the global volume modifier for all music.
-    
+
     Any value set is clamped between 0 and 1. This is multiplied
     into each individual track that plays.
-    
+
     If no argument is given return the current global music volume.
-    
+
     @name globalVolume
     @methodOf Music
     @param {Number} [newVolume] The volume to set
@@ -10977,7 +10968,7 @@ Music = (function() {
     },
     /**
     Plays a music track.
-    
+
     @name play
     @methodOf Music
     @param {String} name The name of the track to play.
@@ -10992,7 +10983,7 @@ Music = (function() {
     clamped between 0 and 1. Use this to adjust the volume of
     individual tracks or to increase or decrease volume during
     gameplay.
-    
+
     @name volume
     @methodOf Music
     @param {Number} [newVolume] The volume to set to.
@@ -11019,11 +11010,11 @@ var __slice = Array.prototype.slice;
     context = void 0;
     /**
     PixieCanvas provides a convenient wrapper for working with Context2d.
-    
+
     Methods try to be as flexible as possible as to what arguments they take.
-    
+
     Non-getter methods return `this` for method chaining.
-    
+
     @name PixieCanvas
     @constructor
     */
@@ -11033,13 +11024,13 @@ var __slice = Array.prototype.slice;
       applied. All drawing methods called within the block will draw
       into the canvas with the transformation applied. The transformation
       is removed at the end of the block, even if the block throws an error.
-      
+
       @name withTransform
       @methodOf PixieCanvas#
-      
+
       @param {Matrix} matrix
       @param {Function} block
-      
+
       @returns {PixieCanvas} this
       */
       withTransform: function(matrix, block) {
@@ -11054,19 +11045,19 @@ var __slice = Array.prototype.slice;
       },
       /**
       Clear the canvas (or a portion of it).
-      
+
       Clear the entire canvas
-      
+
       <code><pre>
       canvas.clear()
       </pre></code>
-      
+
       Clear a portion of the canvas
-      
+
       <code class="run"><pre>
       # Set up: Fill canvas with blue
-      canvas.fill("blue")  
-      
+      canvas.fill("blue")
+
       # Clear a portion of the canvas
       canvas.clear
         x: 50
@@ -11074,22 +11065,22 @@ var __slice = Array.prototype.slice;
         width: 50
         height: 50
       </pre></code>
-      
+
       You can also clear the canvas by passing x, y, width height as
       unnamed parameters:
-      
+
       <code><pre>
       canvas.clear(25, 25, 50, 50)
       </pre></code>
-      
+
       @name clear
       @methodOf PixieCanvas#
-      
+
       @param {Number} [x] where to start clearing on the x axis
       @param {Number} [y] where to start clearing on the y axis
       @param {Number} [width] width of area to clear
       @param {Number} [height] height of area to clear
-      
+
       @returns {PixieCanvas} this
       */
       clear: function(x, y, width, height) {
@@ -11108,11 +11099,11 @@ var __slice = Array.prototype.slice;
       /**
       Fills the entire canvas (or a specified section of it) with
       the given color.
-      
+
       <code class="run"><pre>
       # Paint the town (entire canvas) red
       canvas.fill "red"
-      
+
       # Fill a section of the canvas white (#FFF)
       canvas.fill
         x: 50
@@ -11121,17 +11112,17 @@ var __slice = Array.prototype.slice;
         height: 50
         color: "#FFF"
       </pre></code>
-      
+
       @name fill
       @methodOf PixieCanvas#
-      
+
       @param {Number} [x=0] Optional x position to fill from
       @param {Number} [y=0] Optional y position to fill from
       @param {Number} [width=canvas.width] Optional width of area to fill
-      @param {Number} [height=canvas.height] Optional height of area to fill 
+      @param {Number} [height=canvas.height] Optional height of area to fill
       @param {Bounds} [bounds] bounds object to fill
       @param {String|Color} [color] color of area to fill
-      
+
       @returns {PixieCanvas} this
       */
       fill: function(color) {
@@ -11156,10 +11147,10 @@ var __slice = Array.prototype.slice;
       that implement drawable will have this wrapped up nicely,
       so there is a good chance that you will not have to deal with
       it directly.
-      
+
       @name drawImage
       @methodOf PixieCanvas#
-      
+
       @param image
       @param {Number} sx
       @param {Number} sy
@@ -11169,7 +11160,7 @@ var __slice = Array.prototype.slice;
       @param {Number} dy
       @param {Number} dWidth
       @param {Number} dHeight
-      
+
       @returns {PixieCanvas} this
       */
       drawImage: function(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
@@ -11179,14 +11170,14 @@ var __slice = Array.prototype.slice;
       /**
       Draws a circle at the specified position with the specified
       radius and color.
-      
+
       <code class="run"><pre>
       # Draw a large orange circle
       canvas.drawCircle
         radius: 30
         position: Point(100, 75)
         color: "orange"
-      
+
       # Draw a blue circle with radius 10 at (25, 50)
       # and a red stroke
       canvas.drawCircle
@@ -11197,24 +11188,24 @@ var __slice = Array.prototype.slice;
         stroke:
           color: "red"
           width: 1
-      
+
       # Create a circle object to set up the next examples
       circle =
         radius: 20
         x: 50
         y: 50
-      
+
       # Draw a given circle in yellow
       canvas.drawCircle
         circle: circle
         color: "yellow"
-      
+
       # Draw the circle in green at a different position
       canvas.drawCircle
         circle: circle
         position: Point(25, 75)
         color: "green"
-      
+
       # Draw an outline circle in purple.
       canvas.drawCircle
         x: 50
@@ -11224,10 +11215,10 @@ var __slice = Array.prototype.slice;
           color: "purple"
           width: 2
       </pre></code>
-      
+
       @name drawCircle
       @methodOf PixieCanvas#
-      
+
       @param {Number} [x] location on the x axis to start drawing
       @param {Number} [y] location on the y axis to start drawing
       @param {Point} [position] position object of location to start drawing. This will override x and y values passed
@@ -11235,7 +11226,7 @@ var __slice = Array.prototype.slice;
       @param {Color|String} [color] color of the circle
       @param {Circle} [circle] circle object that contains position and radius. Overrides x, y, and radius if passed
       @param {Stroke} [stroke] stroke object that specifies stroke color and stroke width
-      
+
       @returns {PixieCanvas} this
       */
       drawCircle: function(_arg) {
@@ -11258,10 +11249,10 @@ var __slice = Array.prototype.slice;
         return this;
       },
       /**
-      Draws a rectangle at the specified position with given 
+      Draws a rectangle at the specified position with given
       width and height. Optionally takes a position, bounds
       and color argument.
-      
+
       <code class="run"><pre>
       # Draw a red rectangle using x, y, width and height
       canvas.drawRect
@@ -11270,7 +11261,7 @@ var __slice = Array.prototype.slice;
         width: 50
         height: 50
         color: "#F00"
-      
+
       # Draw a blue rectangle using position, width and height
       # and throw in a stroke for good measure
       canvas.drawRect
@@ -11281,19 +11272,19 @@ var __slice = Array.prototype.slice;
         stroke:
           color: "orange"
           width: 3
-      
+
       # Set up a bounds object for the next examples
       bounds =
         x: 100
         y: 0
         width: 100
         height: 100
-      
+
       # Draw a purple rectangle using bounds
       canvas.drawRect
         bounds: bounds
         color: "green"
-      
+
       # Draw the outline of the same bounds, but at a different position
       canvas.drawRect
         bounds: bounds
@@ -11302,10 +11293,10 @@ var __slice = Array.prototype.slice;
           color: "purple"
           width: 2
       </pre></code>
-      
+
       @name drawRect
       @methodOf PixieCanvas#
-      
+
       @param {Number} [x] location on the x axis to start drawing
       @param {Number} [y] location on the y axis to start drawing
       @param {Number} [width] width of rectangle to draw
@@ -11314,7 +11305,7 @@ var __slice = Array.prototype.slice;
       @param {Color|String} [color] color of rectangle
       @param {Bounds} [bounds] bounds of rectangle. Overrides x, y, width, height if passed
       @param {Stroke} [stroke] stroke object that specifies stroke color and stroke width
-      
+
       @returns {PixieCanvas} this
       */
       drawRect: function(_arg) {
@@ -11337,38 +11328,38 @@ var __slice = Array.prototype.slice;
       },
       /**
       Draw a line from `start` to `end`.
-      
+
       <code class="run"><pre>
       # Draw a sweet diagonal
       canvas.drawLine
         start: Point(0, 0)
         end: Point(200, 200)
         color: "purple"
-      
+
       # Draw another sweet diagonal
       canvas.drawLine
         start: Point(200, 0)
         end: Point(0, 200)
         color: "red"
         width: 6
-      
+
       # Now draw a sweet horizontal with a direction and a length
       canvas.drawLine
         start: Point(0, 100)
         length: 200
         direction: Point(1, 0)
         color: "orange"
-      
+
       </pre></code>
-      
+
       @name drawLine
       @methodOf PixieCanvas#
-      
+
       @param {Point} start position to start drawing from
       @param {Point} [end] position to stop drawing
       @param {Number} [width] width of the line
       @param {String|Color} [color] color of the line
-      
+
       @returns {PixieCanvas} this
       */
       drawLine: function(_arg) {
@@ -11387,7 +11378,7 @@ var __slice = Array.prototype.slice;
       },
       /**
       Draw a polygon.
-      
+
       <code class="run"><pre>
       # Draw a sweet rhombus
       canvas.drawPoly
@@ -11402,14 +11393,14 @@ var __slice = Array.prototype.slice;
           color: "red"
           width: 2
       </pre></code>
-      
+
       @name drawPoly
       @methodOf PixieCanvas#
-      
+
       @param {Point[]} [points] collection of points that define the vertices of the polygon
       @param {String|Color} [color] color of the polygon
       @param {Stroke} [stroke] stroke object that specifies stroke color and stroke width
-      
+
       @returns {PixieCanvas} this
       */
       drawPoly: function(_arg) {
@@ -11437,9 +11428,9 @@ var __slice = Array.prototype.slice;
       },
       /**
       Draw a rounded rectangle.
-      
+
       Adapted from http://js-bits.blogspot.com/2010/07/canvas-rounded-corner-rectangles.html
-      
+
       <code class="run"><pre>
       # Draw a purple rounded rectangle with a red outline
       canvas.drawRoundRect
@@ -11452,10 +11443,10 @@ var __slice = Array.prototype.slice;
           color: "red"
           width: 2
       </pre></code>
-      
+
       @name drawRoundRect
       @methodOf PixieCanvas#
-      
+
       @param {Number} [x] location on the x axis to start drawing
       @param {Number} [y] location on the y axis to start drawing
       @param {Number} [width] width of the rounded rectangle
@@ -11465,7 +11456,7 @@ var __slice = Array.prototype.slice;
       @param {Color|String} [color] color of the rounded rectangle
       @param {Bounds} [bounds] bounds of the rounded rectangle. Overrides x, y, width, and height if passed
       @param {Stroke} [stroke] stroke object that specifies stroke color and stroke width
-      
+
       @returns {PixieCanvas} this
       */
       drawRoundRect: function(_arg) {
@@ -11501,37 +11492,37 @@ var __slice = Array.prototype.slice;
       /**
       Draws text on the canvas at the given position, in the given color.
       If no color is given then the previous fill color is used.
-      
+
       <code class="run"><pre>
       # Fill canvas to indicate bounds
       canvas.fill
         color: '#eee'
-      
+
       # A line to indicate the baseline
       canvas.drawLine
         start: Point(25, 50)
         end: Point(125, 50)
         color: "#333"
         width: 1
-      
+
       # Draw some text, note the position of the baseline
       canvas.drawText
         position: Point(25, 50)
         color: "red"
         text: "It's dangerous to go alone"
-      
+
       </pre></code>
-      
+
       @name drawText
       @methodOf PixieCanvas#
-      
+
       @param {Number} [x] location on x axis to start printing
       @param {Number} [y] location on y axis to start printing
       @param {String} text text to print
       @param {Point} [position] position to start printing. Overrides x and y if passed
       @param {String|Color} [color] color of text to start printing
       @param {String} [font] font of text to print
-      
+
       @returns {PixieCanvas} this
       */
       drawText: function(_arg) {
@@ -11547,43 +11538,43 @@ var __slice = Array.prototype.slice;
       Centers the given text on the canvas at the given y position. An x position
       or point position can also be given in which case the text is centered at the
       x, y or position value specified.
-      
+
       <code class="run"><pre>
       # Fill canvas to indicate bounds
       canvas.fill
         color: "#eee"
-      
+
       # A line to indicate the baseline
       canvas.drawLine
         start: Point(25, 25)
         end: Point(125, 25)
         color: "#333"
         width: 1
-      
+
       # Center text on the screen at y value 25
       canvas.centerText
         y: 25
         color: "red"
         text: "It's dangerous to go alone"
-      
+
       # Center text at point (75, 75)
       canvas.centerText
         position: Point(75, 75)
         color: "green"
         text: "take this"
-      
+
       </pre></code>
-      
+
       @name centerText
       @methodOf PixieCanvas#
-      
+
       @param {String} text Text to print
       @param {Number} [y] location on the y axis to start printing
       @param {Number} [x] location on the x axis to start printing. Overrides the default centering behavior if passed
       @param {Point} [position] position to start printing. Overrides x and y if passed
       @param {String|Color} [color] color of text to print
       @param {String} [font] font of text to print
-      
+
       @returns {PixieCanvas} this
       */
       centerText: function(_arg) {
@@ -11602,24 +11593,24 @@ var __slice = Array.prototype.slice;
       },
       /**
       A getter / setter method to set the canvas fillColor.
-      
+
       <code><pre>
       # Set the fill color
       canvas.fillColor('#FF0000')
-      
+
       # Passing no arguments returns the fillColor
       canvas.fillColor()
       # => '#FF0000'
-      
+
       # You can also pass a Color object
       canvas.fillColor(Color('sky blue'))
-      </pre></code>      
-      
+      </pre></code>
+
       @name fillColor
       @methodOf PixieCanvas#
-      
-      @param {String|Color} [color] color to make the canvas fillColor 
-      
+
+      @param {String|Color} [color] color to make the canvas fillColor
+
       @returns {PixieCanvas} this
       */
       fillColor: function(color) {
@@ -11636,24 +11627,24 @@ var __slice = Array.prototype.slice;
       },
       /**
       A getter / setter method to set the canvas strokeColor.
-      
+
       <code><pre>
       # Set the stroke color
       canvas.strokeColor('#FF0000')
-      
+
       # Passing no arguments returns the strokeColor
       canvas.strokeColor()
       # => '#FF0000'
-      
+
       # You can also pass a Color object
       canvas.strokeColor(Color('sky blue'))
-      </pre></code>      
-      
+      </pre></code>
+
       @name strokeColor
       @methodOf PixieCanvas#
-      
-      @param {String|Color} [color] color to make the canvas strokeColor 
-      
+
+      @param {String|Color} [color] color to make the canvas strokeColor
+
       @returns {PixieCanvas} this
       */
       strokeColor: function(color) {
@@ -11670,17 +11661,17 @@ var __slice = Array.prototype.slice;
       },
       /**
       Determine how wide some text is.
-      
+
       <code><pre>
       canvas.measureText('Hello World!')
       # => 55
-      </pre></code>      
-      
+      </pre></code>
+
       @name measureText
       @methodOf PixieCanvas#
-      
-      @param {String} [text] the text to measure 
-      
+
+      @param {String} [text] the text to measure
+
       @returns {PixieCanvas} this
       */
       measureText: function(text) {
@@ -11745,9 +11736,9 @@ var __slice = Array.prototype.slice;
 })(jQuery);
 
 /**
-A browser polyfill so you can consistently 
-call requestAnimationFrame. Using 
-requestAnimationFrame is preferred to 
+A browser polyfill so you can consistently
+call requestAnimationFrame. Using
+requestAnimationFrame is preferred to
 setInterval for main game loops.
 
 http://paulirish.com/2011/requestanimationframe-for-smart-animating/
@@ -11765,7 +11756,7 @@ window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitReq
 (function($) {
   /**
   A simple interface for playing sounds in games.
-  
+
   @name Sound
   @namespace
   */
@@ -11796,12 +11787,12 @@ window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitReq
   Object.extend(Sound, {
     /**
     Set the global volume modifier for all sound effects.
-    
+
     Any value set is clamped between 0 and 1. This is multiplied
     into each individual effect that plays.
-    
+
     If no argument is given return the current global sound effect volume.
-    
+
     @name volume
     @methodOf Sound
     @param {Number} [newVolume] The volume to set
@@ -11813,15 +11804,15 @@ window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitReq
     /**
     Play a sound from your sounds
     directory with the name of `id`.
-    
+
     <code><pre>
     # plays a sound called explode from your sounds directory
     Sound.play('explode')
     </pre></code>
-    
+
     @name play
     @methodOf Sound
-    
+
     @param {String} id id or name of the sound file to play
     @param {String} maxChannels max number of sounds able to be played simultaneously
     */
@@ -11851,17 +11842,17 @@ window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitReq
     /**
     Play a sound from the given
     url with the name of `id`.
-    
+
     <code><pre>
     # plays the sound at the specified url
     Sound.playFromUrl('http://YourSoundWebsite.com/explode.wav')
     </pre></code>
-    
+
     @name playFromUrl
     @methodOf Sound
-    
+
     @param {String} url location of sound file to play
-    
+
     @returns {Sound} this sound object
     */
     playFromUrl: function(url) {
@@ -11874,16 +11865,16 @@ window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitReq
     },
     /**
     Stop a sound while it is playing.
-    
+
     <code><pre>
     # stops the sound 'explode' from
     # playing if it is currently playing
     Sound.stop('explode')
     </pre></code>
-    
+
     @name stop
     @methodOf Sound
-    
+
     @param {String} id id or name of sound to stop playing.
     */
     stop: function(id) {
@@ -11893,12 +11884,12 @@ window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitReq
   });
   /**
   Set the global volume modifier for all sound effects.
-  
+
   Any value set is clamped between 0 and 1. This is multiplied
   into each individual effect that plays.
-  
+
   If no argument is given return the current global sound effect volume.
-  
+
   @name globalVolume
   @deprecated
   @methodOf Sound
@@ -11911,31 +11902,31 @@ window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitReq
 
 (function() {
   /**
-  A wrapper on the Local Storage API 
-  
+  A wrapper on the Local Storage API
+
   @name Local
   @namespace
   */
   /**
   Store an object in local storage.
-  
+
   <code><pre>
   # you can store strings
   Local.set('name', 'Matt')
-  
+
   # and numbers
   Local.set('age', 26)
-  
+
   # and even objects
   Local.set('person', {name: 'Matt', age: 26})
   </pre></code>
-  
+
   @name set
   @methodOf Local
-  
+
   @param {String} key string used to identify the object you are storing
   @param {Object} value value of the object you are storing
-  
+
   @returns {Object} value
   */
   var retrieve, store;
@@ -11945,23 +11936,23 @@ window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitReq
   };
   /**
   Retrieve an object from local storage.
-  
+
   <code><pre>
   Local.get('name')
   # => 'Matt'
-  
+
   Local.get('age')
   # => 26
-  
+
   Local.get('person')
   # => { age: 26, name: 'Matt' }
   </pre></code>
-  
+
   @name get
   @methodOf Local
-  
+
   @param {String} key string that identifies the stored object
-  
+
   @returns {Object} The object that was stored or undefined if no object was stored.
   */
   retrieve = function(key) {
@@ -11975,11 +11966,11 @@ window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitReq
     put: store,
     /**
     Access an instance of Local with a specified prefix.
-    
+
     @name new
     @methodOf Local
-    
-    @param {String} prefix 
+
+    @param {String} prefix
     @returns {Local} An interface to local storage with the given prefix applied.
     */
     "new": function(prefix) {
@@ -12001,7 +11992,7 @@ window.requestAnimationFrame || (window.requestAnimationFrame = window.webkitReq
 
 
 // Generated by CoffeeScript 1.4.0
-var Base, Beam, Block, CameraTarget, Editor, Explosion, Flag, FlowTile, Grappler, Grenade, NineSlice, Player, Quicksand, SweepMovable, Weapon, canvas, p1, positions;
+var Base, Beam, Block, Camera, CameraTarget, Editor, Explosion, Flag, FlowTile, Grappler, Grenade, NineSlice, Player, Quicksand, SweepMovable, Weapon, canvas, oldCamera, p1, positions;
 
 Base = function(I) {
   var self;
@@ -12088,33 +12079,6 @@ Block = function(I) {
   });
   self = Base(I);
   self.include("NineSlice");
-  return self;
-};
-
-CameraTarget = function(I) {
-  var self;
-  if (I == null) {
-    I = {};
-  }
-  Object.reverseMerge(I, {
-    target: "Player.controller=0"
-  });
-  self = GameObject(I).extend({
-    draw: function() {}
-  });
-  self.on("update", function(canvas) {
-    var position, target, targetPosition, targetVelocity;
-    if (target = engine.first(I.target)) {
-      targetPosition = target.position();
-      targetVelocity = target.velocity();
-      position = targetPosition.add(targetVelocity.scale(1.25));
-      I.x = position.x;
-      return I.y = position.y;
-    } else {
-      I.x = ARENA_CENTER.x;
-      return I.y = ARENA_CENTER.y;
-    }
-  });
   return self;
 };
 
@@ -12631,6 +12595,248 @@ NineSlice = function(I, self) {
     });
   });
   return {};
+};
+
+oldCamera = Camera;
+
+Camera = function(I) {
+  var currentObject, currentType, focusOn, followTypes, moduleName, objectFilters, self, transformFilters, _i, _len, _ref;
+  if (I == null) {
+    I = {};
+  }
+  Object.reverseMerge(I, {
+    cameraBounds: Rectangle({
+      x: 0,
+      y: 0,
+      width: App.width,
+      height: App.height
+    }),
+    screen: Rectangle({
+      x: 0,
+      y: 0,
+      width: App.width,
+      height: App.height
+    }),
+    deadzone: Point(0, 0),
+    zoom: 1,
+    transform: Matrix(),
+    x: App.width / 2,
+    y: App.height / 2,
+    velocity: Point.ZERO,
+    maxSpeed: 750,
+    t90: 2
+  });
+  currentType = "centered";
+  currentObject = null;
+  objectFilters = [];
+  transformFilters = [];
+  focusOn = function(object, elapsedTime) {
+    var c, dampingFactor, delta, force, objectCenter, target;
+    dampingFactor = 2;
+    c = elapsedTime * 3.75 / I.t90;
+    if (c >= 1) {
+      self.position(target);
+      return I.velocity = Point.ZERO;
+    } else {
+      objectCenter = object.center();
+      target = objectCenter;
+      delta = target.subtract(self.position());
+      force = delta.subtract(I.velocity.scale(dampingFactor));
+      self.changePosition(I.velocity.scale(c).clamp(I.maxSpeed));
+      return I.velocity = I.velocity.add(force.scale(c));
+    }
+  };
+  followTypes = {
+    centered: function(object, elapsedTime) {
+      I.deadzone = Point(0, 0);
+      return focusOn(object, elapsedTime);
+    },
+    topdown: function(object, elapsedTime) {
+      var helper;
+      helper = Math.max(I.screen.width, I.screen.height) / 4;
+      I.deadzone = Point(helper, helper);
+      return focusOn(object, elapsedTime);
+    },
+    platformer: function(object, elapsedTime) {
+      var height, width;
+      width = I.screen.width / 8;
+      height = I.screen.height / 3;
+      I.deadzone = Point(width, height);
+      return focusOn(object, elapsedTime);
+    }
+  };
+  self = Core(I).extend({
+    follow: function(object, type) {
+      if (type == null) {
+        type = "centered";
+      }
+      currentObject = object;
+      return currentType = type;
+    },
+    objectFilterChain: function(fn) {
+      return objectFilters.push(fn);
+    },
+    transformFilterChain: function(fn) {
+      return transformFilters.push(fn);
+    },
+    screenToWorld: function(point) {
+      return self.transform().inverse().transformPoint(point);
+    }
+  });
+  self.attrAccessor("transform");
+  self.bind("afterUpdate", function(elapsedTime) {
+    if (currentObject) {
+      followTypes[currentType](currentObject, elapsedTime);
+    }
+    I.x = I.x.clamp(I.cameraBounds.left + I.screen.width / 2, I.cameraBounds.right - I.screen.width / 2);
+    I.y = I.y.clamp(I.cameraBounds.top + I.screen.height / 2, I.cameraBounds.bottom - I.screen.height / 2);
+    return I.transform = Matrix.translate(I.screen.width / 2 - I.x.floor(), I.screen.height / 2 - I.y.floor());
+  });
+  self.bind("draw", function(canvas, objects) {
+    return canvas.withTransform(Matrix.translate(I.screen.x, I.screen.y), function(canvas) {
+      var transform;
+      canvas.clip(0, 0, I.screen.width, I.screen.height);
+      objects = objectFilters.pipeline(objects);
+      transform = transformFilters.pipeline(self.transform().copy());
+      canvas.withTransform(transform, function(canvas) {
+        self.trigger("beforeDraw", canvas);
+        return objects.invoke("draw", canvas);
+      });
+      return self.trigger('flash', canvas);
+    });
+  });
+  self.bind("overlay", function(canvas, objects) {
+    return canvas.withTransform(Matrix.translate(I.screen.x, I.screen.y), function(canvas) {
+      canvas.clip(0, 0, I.screen.width, I.screen.height);
+      objects = objectFilters.pipeline(objects);
+      return objects.invoke("trigger", "overlay", canvas);
+    });
+  });
+  self.include("Ageable", "Bounded");
+  _ref = Camera.defaultModules;
+  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+    moduleName = _ref[_i];
+    self.include("Camera." + moduleName);
+  }
+  return self;
+};
+
+Object.extend(Camera, oldCamera);
+
+Camera.defaultModules = ["ZSort", "Zoom", "Rotate", "Shake", "Flash", "Fade", "Transition"];
+
+Camera.Transition = function(I, self) {
+  var defaultOptions, transitionProgress, transitions;
+  Object.reverseMerge(I, {
+    transitionActive: null,
+    transitionStart: null,
+    transitionEnd: null
+  });
+  defaultOptions = {
+    color: "white"
+  };
+  transitionProgress = function() {
+    return ((I.age - I.transitionStart) / (I.transitionEnd - I.transitionStart)).clamp(0, 1);
+  };
+  transitions = {
+    angle: function(_arg) {
+      var canvas, color, p0, p1, p2, p3, p4, screenSize, t;
+      canvas = _arg.canvas, t = _arg.t, screenSize = _arg.screenSize, color = _arg.color;
+      p0 = Point(t * (screenSize.x * 2), screenSize.y / 2);
+      p1 = p0.subtract(Point(screenSize.x, screenSize.y / 2));
+      p2 = p1.subtract(Point(screenSize.x, 0));
+      p3 = p2.add(Point(0, screenSize.y));
+      p4 = p3.add(Point(screenSize.x, 0));
+      return canvas.drawPoly({
+        points: [p0, p1, p2, p3, p4],
+        color: color
+      });
+    },
+    square: function(_arg) {
+      var canvas, color, height, screenSize, t, width;
+      canvas = _arg.canvas, t = _arg.t, screenSize = _arg.screenSize, color = _arg.color;
+      width = 50;
+      height = 50;
+      return (screenSize.y / height).ceil().times(function(y) {
+        return (screenSize.x / width).ceil().times(function(x) {
+          var cellProgress;
+          cellProgress = (2 * t - (x + y).mod(2)).clamp(0, 1);
+          return canvas.drawRect({
+            x: x * width,
+            y: y * height,
+            width: width,
+            height: height * cellProgress,
+            color: color
+          });
+        });
+      });
+    },
+    line: function(_arg) {
+      var canvas, color, height, screenSize, t;
+      canvas = _arg.canvas, t = _arg.t, screenSize = _arg.screenSize, color = _arg.color;
+      height = 50;
+      return (screenSize.y / height).ceil().times(function(y) {
+        return canvas.drawRect({
+          x: 0,
+          y: y * height,
+          width: screenSize.x,
+          height: height * t,
+          color: color
+        });
+      });
+    }
+  };
+  self.on("overlay", function(canvas) {
+    var transitionName;
+    if (transitionName = I.transitionActive) {
+      return transitions[transitionName](Object.extend({
+        canvas: canvas,
+        screenSize: Point(I.screen.width, I.screen.height),
+        t: transitionProgress()
+      }, I.transitionOptions));
+    }
+  });
+  return {
+    transition: function(_arg) {
+      var duration, name, options, _ref;
+      _ref = _arg != null ? _arg : {}, name = _ref.name, duration = _ref.duration, options = _ref.options;
+      if (name == null) {
+        name = "angle";
+      }
+      if (duration == null) {
+        duration = 1;
+      }
+      I.transitionActive = name;
+      I.transitionStart = I.age;
+      I.transitionEnd = I.age + duration;
+      return I.transitionOptions = Object.extend({}, defaultOptions, options);
+    }
+  };
+};
+
+CameraTarget = function(I) {
+  var self;
+  if (I == null) {
+    I = {};
+  }
+  Object.reverseMerge(I, {
+    target: "Player.controller=0",
+    lead: 1.25
+  });
+  self = GameObject(I).extend({
+    draw: function() {}
+  });
+  self.on("update", function(canvas) {
+    var position, target, targetPosition, targetVelocity;
+    if (target = engine.first(I.target)) {
+      targetPosition = target.position();
+      targetVelocity = target.velocity();
+      position = targetPosition.add(targetVelocity.scale(I.lead));
+      I.x = position.x;
+      return I.y = position.y;
+    }
+  });
+  return self;
 };
 
 Player = function(I) {

@@ -4,13 +4,14 @@ Camera.Transition = (I, self) ->
     transitionStart: null
     transitionEnd: null
 
+  defaultOptions =
+    color: "white"
+
   transitionProgress = ->
     ((I.age - I.transitionStart) / (I.transitionEnd - I.transitionStart)).clamp(0, 1)
 
   transitions =
-    angle: ({canvas, t, screenSize}) ->
-      color = "white"
-
+    angle: ({canvas, t, screenSize, color}) ->
       # Leading point at the center
       p0 = Point(t * (screenSize.x * 2), screenSize.y / 2)
 
@@ -23,11 +24,9 @@ Camera.Transition = (I, self) ->
         points: [p0, p1, p2, p3, p4]
         color: color
 
-    square: ({canvas, t, screenSize}) ->
+    square: ({canvas, t, screenSize, color}) ->
       width = 50
       height = 50
-
-      color = "white"
 
       (screenSize.y / height).ceil().times (y) ->
         (screenSize.x / width).ceil().times (x) ->
@@ -40,10 +39,8 @@ Camera.Transition = (I, self) ->
             height: height * cellProgress
             color: color
 
-    line: ({canvas, t, screenSize}) ->
+    line: ({canvas, t, screenSize, color}) ->
       height = 50
-
-      color = "white"
 
       (screenSize.y / height).ceil().times (y) ->
         canvas.drawRect
@@ -58,11 +55,11 @@ Camera.Transition = (I, self) ->
 
   self.on "overlay", (canvas) ->
     if transitionName = I.transitionActive
-      transitions[transitionName]
+      transitions[transitionName] Object.extend(
         canvas: canvas
         screenSize: Point(I.screen.width, I.screen.height)
         t: transitionProgress()
-        options: I.transitionOptions
+      , I.transitionOptions)
 
   transition: ({name, duration, options}={}) ->
     name ?= "angle"
@@ -71,4 +68,4 @@ Camera.Transition = (I, self) ->
     I.transitionActive = name
     I.transitionStart = I.age
     I.transitionEnd = I.age + duration
-    I.transitionOptions = options ? {}
+    I.transitionOptions = Object.extend({}, defaultOptions, options)
